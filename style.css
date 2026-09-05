@@ -344,8 +344,8 @@ a:hover{ text-decoration:underline; }
 }
 
 /* ─────────── figures ─────────── */
-/* The artwork is keyed to alpha, so it sits straight on the page rather than
-   inside a white card. A card here would just reintroduce the white block. */
+/* The artwork keeps the paper's own white ground, at native colour. Every
+   figure sits on a white section, so no card is needed to separate it. */
 .fig{ margin:0; }
 .fig img{ width:100%; }
 .fig.slim{ max-width:680px; margin-inline:auto; }
