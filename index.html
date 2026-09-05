@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CHAT — Conversational Human Audio-visual Talking Dialogue Generation</title>
 <meta name="description" content="CHAT (ECCV 2026) generates diverse, paired, mutually responsive audio-visual dialogue clips from a single textual prompt.">
-<link rel="icon" href="assets/logo.webp">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="alternate icon" href="assets/logo.webp">
 <meta property="og:title" content="CHAT — Conversational Human Audio-visual Talking Dialogue Generation">
 <meta property="og:description" content="ECCV 2026. A whole dyadic conversation, from one line of text.">
 <meta property="og:image" content="https://junhaosong.com/chat/assets/teaser.webp">
@@ -20,7 +21,7 @@
 
 <header class="nav" id="nav">
   <div class="nav-in">
-    <a class="nav-brand" href="#top"><img src="assets/logo.webp" alt="" width="284" height="360" aria-hidden="true"><span>CHAT</span></a>
+    <a class="nav-brand" href="#top"><img src="assets/mark.svg" alt="" width="24" height="30" aria-hidden="true"><span>CHAT</span></a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#results">Results</a>
       <a href="#overview">Overview</a>
@@ -38,8 +39,9 @@
 <section class="hero" id="top">
   <img class="hero-mark" src="assets/logo.webp" alt="The CHAT project mark"
        width="284" height="360" data-anim="up">
-  <p class="eyebrow" data-anim="up" data-delay="1">ECCV 2026</p>
+  <p class="eyebrow" data-anim="up" data-delay="1">European Conference on Computer Vision (ECCV) 2026</p>
   <div class="hero-stage" data-anim="up" data-delay="2">
+    <div class="hero-faces" id="heroFaces" aria-hidden="true"></div>
     <canvas class="hero-ring" id="heroRing" aria-hidden="true"></canvas>
     <h1 class="wordmark" aria-label="CHAT">
       <span class="wm-face"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></span>
@@ -144,6 +146,9 @@
     large screen. Every number on this page is measured before that step. The two
     speakers' 24&nbsp;kHz tracks are brought to the same loudness before they are mixed,
     so neither voice sits under the other, and every clip is normalised to one level.
+    Each timeline is drawn from that clip's own generated unit list, except the
+    illustrated one, whose list was not kept and whose turns are measured back from
+    the clip by pitch.
   </p>
 </section>
 

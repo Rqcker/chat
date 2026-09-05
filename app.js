@@ -140,7 +140,7 @@
      sits inside the other speaker's sentence bar, on a timeline both faces
      share. No timings are drawn by hand.
      ─────────────────────────────────────────────────────────────── */
-  var TURNS = {"cafe":[{"s":"i","k":"sent","a":0.0,"b":3.38},{"s":"j","k":"word","a":1.44,"b":1.94},{"s":"j","k":"sent","a":3.57,"b":8.34},{"s":"i","k":"word","a":5.7,"b":6.2},{"s":"i","k":"sent","a":8.56,"b":9.96}],"hallway":[{"s":"i","k":"sent","a":0.0,"b":5.2},{"s":"j","k":"word","a":2.35,"b":2.85},{"s":"j","k":"sent","a":5.45,"b":9.96},{"s":"i","k":"word","a":7.86,"b":8.36}],"office":[{"s":"i","k":"sent","a":0.0,"b":7.09},{"s":"j","k":"word","a":3.3,"b":3.8},{"s":"j","k":"sent","a":7.31,"b":9.96}],"kitchen":[{"s":"i","k":"sent","a":0.0,"b":6.59},{"s":"j","k":"word","a":3.05,"b":3.55},{"s":"j","k":"sent","a":6.78,"b":9.96}]};
+  var TURNS = {"cafe":[{"s":"i","k":"sent","a":0.0,"b":3.38},{"s":"j","k":"word","a":1.44,"b":1.94},{"s":"j","k":"sent","a":3.57,"b":8.34},{"s":"i","k":"word","a":5.7,"b":6.2},{"s":"i","k":"sent","a":8.56,"b":9.96}],"hallway":[{"s":"i","k":"sent","a":0.0,"b":5.2},{"s":"j","k":"word","a":2.35,"b":2.85},{"s":"j","k":"sent","a":5.45,"b":9.96},{"s":"i","k":"word","a":7.86,"b":8.36}],"office":[{"s":"i","k":"sent","a":0.0,"b":7.09},{"s":"j","k":"word","a":3.3,"b":3.8},{"s":"j","k":"sent","a":7.31,"b":9.96}],"kitchen":[{"s":"i","k":"sent","a":0.0,"b":6.59},{"s":"j","k":"word","a":3.05,"b":3.55},{"s":"j","k":"sent","a":6.78,"b":9.96}],"illustrated":[{"s":"i","k":"sent","a":0.0,"b":2.57},{"s":"i","k":"word","a":4.54,"b":5.16},{"s":"j","k":"word","a":5.42,"b":6.16},{"s":"j","k":"word","a":6.4,"b":6.83},{"s":"j","k":"sent","a":7.12,"b":8.37},{"s":"i","k":"word","a":9.23,"b":9.65}]};
   var SPAN = 9.96;
   var turnsFig = document.getElementById("turns");
   var lanes = turnsFig ? { i: turnsFig.querySelector('[data-lane="i"]'),
@@ -268,6 +268,54 @@
       raf = live ? requestAnimationFrame(loop) : 0;
     }
     raf = requestAnimationFrame(loop);
+  })();
+
+  /* ── 1e. the identities orbiting the wordmark ────────────────────
+     Fourteen faces, each a frame of a generated clip, twelve photorealistic
+     and two illustrated. They orbit wide of the type and dissolve at the top
+     and bottom of the circle, so what is left is a wing on either side.
+     ─────────────────────────────────────────────────────────────── */
+  (function () {
+    var host = document.getElementById("heroFaces");
+    if (!host) return;
+    var N = 14, COLS = 7, ROWS = 2, PERIOD = 190;
+    var tiles = [];
+    for (var k = 0; k < N; k++) {
+      var el = document.createElement("i");
+      var cx = k % COLS, cy = Math.floor(k / COLS);
+      el.style.backgroundPosition = (cx * 100 / (COLS - 1)).toFixed(3) + "% "
+                                  + (cy * 100 / (ROWS - 1)).toFixed(3) + "%";
+      host.appendChild(el); tiles.push(el);
+    }
+    function place(now) {
+      // An ellipse, not a circle: the hero is far wider than it is tall, and a
+      // circle of this radius would carry faces up behind the nav.
+      var RX = host.clientWidth * 0.46, RY = host.clientWidth * 0.30;
+      var base = (now / 1000) / PERIOD * Math.PI * 2;
+      for (var i = 0; i < N; i++) {
+        var th = base + (i / N) * Math.PI * 2;
+        var f = Math.abs(Math.sin(th));
+        var op = Math.min(Math.max((f - 0.60) / 0.28, 0), 1);
+        op = op * op * (3 - 2 * op);                    // ease the ends
+        var sc = 0.86 + 0.14 * op;
+        var el = tiles[i];
+        el.style.transform = "translate(" + (Math.sin(th) * RX).toFixed(1) + "px,"
+                           + (-Math.cos(th) * RY).toFixed(1) + "px) scale(" + sc.toFixed(3) + ")";
+        el.style.opacity = (op * 0.62).toFixed(3);
+      }
+    }
+    if (reduced) { place(0); return; }
+    var live = true, raf = 0;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          live = e.isIntersecting;
+          if (live && !raf) raf = requestAnimationFrame(spin);
+        });
+      }, { threshold: 0 }).observe(host);
+    }
+    function spin(now) { place(now); raf = live ? requestAnimationFrame(spin) : 0; }
+    raf = requestAnimationFrame(spin);
   })();
 
   /* ── 2. copy BibTeX ──────────────────────────────────────────────── */

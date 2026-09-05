@@ -165,6 +165,28 @@ a:hover{ text-decoration:underline; }
 /* The hero stage holds the ring behind the wordmark; the ring is painted, the
    type sits above it. */
 .hero-stage{ position:relative; }
+/* Generated identities, orbiting wide of the wordmark. They fade out as they
+   pass the poles, so the vertical axis the type occupies is always clear and
+   the ring reads as two wings rather than a wheel. */
+.hero-faces{
+  --tile: clamp(46px, 5.4vw, 78px);
+  position:absolute; left:50%; top:50%; translate:-50% -50%;
+  width:min(1120px, 96vw); height:min(1120px, 96vw);
+  pointer-events:none;
+}
+.hero-faces i{
+  position:absolute; left:50%; top:50%;
+  width:var(--tile); height:var(--tile);
+  margin:calc(var(--tile) / -2);
+  border-radius:calc(var(--tile) * 0.26);
+  background-image:url(assets/faces.webp);
+  background-size:700% 200%;
+  box-shadow:0 1px 2px rgba(0,0,0,.05), 0 10px 28px rgba(0,0,0,.08);
+  opacity:0;
+  will-change:transform, opacity;
+}
+@media (max-width:760px){ .hero-faces{ display:none; } }
+
 .hero-ring{
   position:absolute; left:50%; top:50%; translate:-50% -50%;
   width:min(600px, 88vw); height:min(600px, 88vw);
@@ -657,8 +679,17 @@ footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
 
 
 /* ─────────── project mark ─────────── */
-.nav-brand img{ width:19px; height:auto; display:block; }
-.nav-brand span{ display:block; }
+/* The full shield carries four icons inside four quadrants; below about 40px
+   those icons turn to noise, so the nav uses a simplified cut of the same mark:
+   shield, rim, four colours, no interior. */
+.nav-brand img{
+  width:20px; height:25px; display:block;
+  transition:transform .25s var(--ease);
+}
+.nav-brand:hover img{ transform:translateY(-1px) scale(1.05); }
+.nav-brand span{
+  display:block; font-weight:700; letter-spacing:-0.014em;
+}
 
 .hero-mark{
   width:clamp(52px, 6vw, 72px); height:auto;
