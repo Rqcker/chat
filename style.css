@@ -162,15 +162,38 @@ a:hover{ text-decoration:underline; }
 /* The wordmark reproduces the paper's own \chat macro: four letters, four
    blues, and the same negative kerning after each one (C -0.3em, then
    -0.35em). Per-letter colour, so no gradient and no fill-colour tricks. */
+/* The hero stage holds the ring behind the wordmark; the ring is painted, the
+   type sits above it. */
+.hero-stage{ position:relative; }
+.hero-ring{
+  position:absolute; left:50%; top:50%; translate:-50% -50%;
+  width:min(600px, 88vw); height:min(600px, 88vw);
+  pointer-events:none;
+}
+
 .wordmark{
+  position:relative; z-index:1;
   margin:0;
   font-size:clamp(80px,16vw,188px);
   line-height:.9;
   letter-spacing:0;
   font-weight:700;
-  display:flex; justify-content:center;
 }
-.wordmark span{ display:inline-block; }
+.wm-face, .wm-reflect{ display:flex; justify-content:center; }
+.wordmark span span{ display:inline-block; }
+/* The paper and the poster set CHAT over its own reflection. Same idea here:
+   a mirrored copy, faded out down the drop. */
+.wm-reflect{
+  position:absolute; left:0; right:0; top:100%;
+  transform:scaleY(-1);
+  margin-top:-0.161em;
+  opacity:.30;
+  /* The mask is resolved in the element's own box, before scaleY(-1) flips it,
+     so it runs to top here in order to land opaque against the real letters. */
+  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,.92), transparent 36%);
+          mask-image:linear-gradient(to top, rgba(0,0,0,.92), transparent 36%);
+  pointer-events:none; user-select:none;
+}
 /* The paper's kerns (-0.3em, then -0.35em) are set at body size against a bold
    serif; carried literally to a 188px sans they collide. The ratio between them
    is kept and the magnitude scaled to a tight logotype. */
@@ -179,7 +202,7 @@ a:hover{ text-decoration:underline; }
 .wordmark .a{ color:#0062E6; margin-right:-0.070em; }
 .wordmark .t{ color:#0067BC; }
 .hero-sub{
-  margin:clamp(16px,2.6vh,30px) auto 0; max-width:16ch;
+  margin:clamp(64px,8.5vh,112px) auto 0; max-width:16ch;
   font-size:clamp(27px,4vw,48px);
   line-height:1.08; letter-spacing:-0.026em; font-weight:600;
 }
@@ -450,8 +473,8 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 .poster:hover img{ transform:scale(1.014); }
 
 /* ─────────── limitations ─────────── */
-.limits{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,3.4vw,52px); }
-@media (max-width:860px){ .limits{ grid-template-columns:1fr; } }
+.limits{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(26px,3.4vw,56px); }
+@media (max-width:760px){ .limits{ grid-template-columns:1fr; } }
 .limits h3{
   margin:0 0 9px; font-size:20px; font-weight:600; letter-spacing:-0.015em;
   padding-top:20px; border-top:1px solid var(--hair);
@@ -762,13 +785,23 @@ footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
    speaker's sentence bar is the thing to see, and it is hard to see in the video
    alone. Timings come from the generated plan, not from anything hand-drawn. */
 .turns{
+  position:relative;
   margin:0 0 22px; padding:0;
   /* Height is reserved whether or not a clip has a published unit list, so
-     switching to one that has none does not shift the tabs under it. */
+     switching to one that has none does not shift the tabs under it. The empty
+     state is carried by the children, not by opacity on the figure: the figure
+     is a reveal target, and GSAP writes opacity there inline. */
   min-height:86px;
-  opacity:0; transition:opacity .4s var(--ease);
 }
-.turns.ready{ opacity:1; }
+.turns:not(.ready) .turns-grid{ visibility:hidden; }
+/* Sits over the hidden lanes rather than under them, so the tabs below do not
+   move when a clip without a unit list is selected. */
+.turns-empty{
+  position:absolute; left:0; top:30px; margin:0; max-width:56ch;
+  font-size:13px; line-height:1.55; color:var(--ink-3); letter-spacing:0;
+  display:none;
+}
+.turns:not(.ready) .turns-empty{ display:block; }
 .turns-cap{
   font-size:12px; letter-spacing:.02em; color:var(--ink-3);
   margin:0 0 10px;

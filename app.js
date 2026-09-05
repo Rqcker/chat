@@ -140,7 +140,7 @@
      sits inside the other speaker's sentence bar, on a timeline both faces
      share. No timings are drawn by hand.
      ─────────────────────────────────────────────────────────────── */
-  var TURNS = {"cafe":[{"s":"i","k":"sent","a":0.0,"b":3.38},{"s":"j","k":"word","a":1.44,"b":1.94},{"s":"j","k":"sent","a":3.57,"b":8.34},{"s":"i","k":"word","a":5.7,"b":6.2},{"s":"i","k":"sent","a":8.56,"b":9.96}],"hallway":[{"s":"i","k":"sent","a":0.0,"b":5.2},{"s":"j","k":"word","a":2.35,"b":2.85},{"s":"j","k":"sent","a":5.45,"b":9.96},{"s":"i","k":"word","a":7.86,"b":8.36}],"studio":[{"s":"i","k":"sent","a":0.0,"b":7.88},{"s":"j","k":"word","a":3.69,"b":4.19},{"s":"j","k":"sent","a":8.14,"b":9.96}],"living":[{"s":"i","k":"sent","a":0.0,"b":7.29},{"s":"j","k":"word","a":3.39,"b":3.89},{"s":"j","k":"sent","a":7.54,"b":9.96},{"s":"i","k":"word","a":9.47,"b":9.96}],"classroom":[{"s":"i","k":"sent","a":0.0,"b":8.01},{"s":"j","k":"word","a":3.76,"b":4.26},{"s":"j","k":"sent","a":8.23,"b":9.96}]};
+  var TURNS = {"cafe":[{"s":"i","k":"sent","a":0.0,"b":3.38},{"s":"j","k":"word","a":1.44,"b":1.94},{"s":"j","k":"sent","a":3.57,"b":8.34},{"s":"i","k":"word","a":5.7,"b":6.2},{"s":"i","k":"sent","a":8.56,"b":9.96}],"hallway":[{"s":"i","k":"sent","a":0.0,"b":5.2},{"s":"j","k":"word","a":2.35,"b":2.85},{"s":"j","k":"sent","a":5.45,"b":9.96},{"s":"i","k":"word","a":7.86,"b":8.36}],"office":[{"s":"i","k":"sent","a":0.0,"b":7.09},{"s":"j","k":"word","a":3.3,"b":3.8},{"s":"j","k":"sent","a":7.31,"b":9.96}],"kitchen":[{"s":"i","k":"sent","a":0.0,"b":6.59},{"s":"j","k":"word","a":3.05,"b":3.55},{"s":"j","k":"sent","a":6.78,"b":9.96}]};
   var SPAN = 9.96;
   var turnsFig = document.getElementById("turns");
   var lanes = turnsFig ? { i: turnsFig.querySelector('[data-lane="i"]'),
@@ -185,6 +185,90 @@
     requestAnimationFrame(tickTurns);
   }
   if (turnsFig) { drawTurns(clips[0] && clips[0].dataset.clip); requestAnimationFrame(tickTurns); }
+
+  /* ── 1d. the conversation ring ───────────────────────────────────
+     A circular waveform around the wordmark. The left arc is one speaker,
+     the right arc the other, and which arc is live follows the real turn
+     schedule of the first demo clip, looping. It is silent, and it is the
+     same structure the timeline under the player draws, so the hero states
+     the paper's idea before a word of it is read.
+     ─────────────────────────────────────────────────────────────── */
+  (function () {
+    var cv = document.getElementById("heroRing");
+    if (!cv) return;
+    var ctx = cv.getContext("2d");
+    var N = 132, SPAN = 9.96;
+    var schedule = (TURNS && TURNS.cafe) || [];
+    var phase = [];
+    for (var k = 0; k < N; k++) phase.push((k * 12.9898) % 1);
+
+    var W = 0, Hgt = 0, dpr = 1;
+    function size() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var r = cv.getBoundingClientRect();
+      W = r.width; Hgt = r.height;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(Hgt * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+    window.addEventListener("resize", size);
+
+    var gi = 0.16, gj = 0.16;
+    function draw(now) {
+      var t = (now / 1000) % SPAN;
+      var wantI = 0.16, wantJ = 0.16;
+      for (var u = 0; u < schedule.length; u++) {
+        var s = schedule[u];
+        if (t >= s.a && t <= s.b) {
+          var lvl = s.k === "word" ? 0.62 : 1;
+          if (s.s === "i") wantI = Math.max(wantI, lvl); else wantJ = Math.max(wantJ, lvl);
+        }
+      }
+      gi += (wantI - gi) * 0.12; gj += (wantJ - gj) * 0.12;
+
+      ctx.clearRect(0, 0, W, Hgt);
+      var cx = W / 2, cy = Hgt / 2;
+      var S = Math.min(W, Hgt);
+      var R = S * 0.375;
+      var spin = (now / 1000) * 0.026;
+      for (var i = 0; i < N; i++) {
+        var th = (i / N) * Math.PI * 2 + spin;
+        // Crossfade the two speakers around the circle rather than cutting at
+        // the poles, so the ring reads as one instrument with two ends.
+        var w = (Math.sin(th) + 1) / 2;
+        var g = gi * (1 - w) + gj * w;
+        var p = phase[i] * Math.PI * 2;
+        var env = 0.46 + 0.28 * Math.sin(now / 560 + p * 3.1)
+                       + 0.26 * Math.sin(now / 230 + p * 7.7);
+        var len = S * 0.010 + env * g * S * 0.052;
+        var x0 = cx + Math.sin(th) * R, y0 = cy - Math.cos(th) * R;
+        var x1 = cx + Math.sin(th) * (R + len), y1 = cy - Math.cos(th) * (R + len);
+        var a = 0.05 + g * 0.15;
+        var mix = Math.min(Math.max((g - 0.2) / 0.5, 0), 1);
+        ctx.strokeStyle = "rgba(" + Math.round(134 - 134 * mix) + ","
+                        + Math.round(134 - 21 * mix) + ","
+                        + Math.round(139 + 88 * mix) + "," + a.toFixed(3) + ")";
+        ctx.lineWidth = 1.6; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+      }
+    }
+
+    if (reduced) { draw(0); return; }
+    var live = true, raf = 0;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          live = e.isIntersecting;
+          if (live && !raf) raf = requestAnimationFrame(loop);
+        });
+      }, { threshold: 0 }).observe(cv);
+    }
+    function loop(now) {
+      draw(now);
+      raf = live ? requestAnimationFrame(loop) : 0;
+    }
+    raf = requestAnimationFrame(loop);
+  })();
 
   /* ── 2. copy BibTeX ──────────────────────────────────────────────── */
   var copy = document.getElementById("copybib");

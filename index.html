@@ -39,7 +39,13 @@
   <img class="hero-mark" src="assets/logo.webp" alt="The CHAT project mark"
        width="284" height="360" data-anim="up">
   <p class="eyebrow" data-anim="up" data-delay="1">ECCV 2026</p>
-  <h1 class="wordmark" data-anim="up" data-delay="2" aria-label="CHAT"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></h1>
+  <div class="hero-stage" data-anim="up" data-delay="2">
+    <canvas class="hero-ring" id="heroRing" aria-hidden="true"></canvas>
+    <h1 class="wordmark" aria-label="CHAT">
+      <span class="wm-face"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></span>
+      <span class="wm-reflect" aria-hidden="true"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></span>
+    </h1>
+  </div>
   <p class="hero-sub" data-anim="up" data-delay="3">
     A whole conversation.<br class="br-m"> From one line of text.
   </p>
@@ -78,7 +84,7 @@
     <p class="kicker" data-anim="up">Generated dialogues</p>
     <h2 class="title" data-anim="up" data-delay="1">Watch them take turns.</h2>
     <p class="sub" data-anim="up" data-delay="2">
-      Six prompts, six conversations, twelve identities that were never paired by hand.
+      Five prompts, five conversations, ten identities that were never paired by hand.
       Both faces in a clip are generated as a responsive pair, so the one listening
       reacts to the one speaking, inside the same clip.
     </p>
@@ -88,9 +94,8 @@
     <div class="player" id="player">
       <video data-clip="cafe" class="on" src="assets/video/cafe.mp4" poster="assets/video/cafe.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation in a cafe"></video>
       <video data-clip="hallway" src="assets/video/hallway.mp4" poster="assets/video/hallway.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an apartment hallway"></video>
-      <video data-clip="studio" src="assets/video/studio.mp4" poster="assets/video/studio.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a studio"></video>
-      <video data-clip="living" src="assets/video/living.mp4" poster="assets/video/living.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a living room"></video>
-      <video data-clip="classroom" src="assets/video/classroom.mp4" poster="assets/video/classroom.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a classroom"></video>
+      <video data-clip="office" src="assets/video/office.mp4" poster="assets/video/office.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an office"></video>
+      <video data-clip="kitchen" src="assets/video/kitchen.mp4" poster="assets/video/kitchen.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a kitchen"></video>
       <video data-clip="illustrated" src="assets/video/illustrated.mp4" poster="assets/video/illustrated.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two illustrated identities"></video>
       <div class="volume" id="volume">
         <button class="vol-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
@@ -114,32 +119,31 @@
       <span class="turns-name">Right</span> <div class="lane" data-lane="j"></div>
       <span></span> <div class="turns-axis"><i>0s</i><i>5s</i><i>10s</i></div>
     </div>
+    <p class="turns-empty">No unit list was kept for this clip, so there is no timeline to draw.</p>
   </figure>
 
   <div class="segmented" role="tablist" aria-label="Examples" data-anim="up">
     <button role="tab" aria-selected="true" data-clip="cafe">Cafe</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="hallway">Hallway</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="studio">Studio</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="living">Living room</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="classroom">Classroom</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="office">Office</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="kitchen">Kitchen</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="illustrated">Illustrated</button>
   </div>
 
   <div class="clip-note" data-anim="up">
     <p data-note="cafe" class="on">Five turns in ten seconds. Each speaker talks twice and drops a back-channel into the other's turn, all on one shared timeline.</p>
     <p data-note="hallway">Both sides interrupt politely: an "uh-huh" at two seconds, a "yeah" at eight, each landing inside the other speaker's sentence.</p>
-    <p data-note="studio">One speaker holds the floor for eight seconds. The listener is generated for that whole stretch, not frozen, and answers at the end.</p>
-    <p data-note="living">Two generations talking. The voices are sampled independently of the faces, so a pair like this is a draw from the model, not a casting choice.</p>
-    <p data-note="classroom">A tutor and a student. The student's reply opens with a hesitation, which the audio stage renders rather than smoothing away.</p>
+    <p data-note="office">A disagreement about which database to use. The reply cuts in as soon as the first speaker stops, with a back-channel halfway through.</p>
+    <p data-note="kitchen">Two male voices this time. Voices are sampled independently of faces, so a same-gender pair is as likely a draw as a mixed one.</p>
     <p data-note="illustrated">Identities need not be photorealistic. The same method drives illustrated faces with no change. This clip comes from the conference video, so it is lower resolution than the others.</p>
   </div>
 
   <p class="foot provenance" data-anim="up">
     Each clip is the full CHAT output for one prompt, at 512&nbsp;px per face, then
     passed through the CodeFormer face upscaler that Hallo2 ships, so it holds up on a
-    large screen. Every number on this page is measured before that step. Both speakers'
-    audio tracks are mixed at their own level, and each clip is normalised to the same
-    loudness.
+    large screen. Every number on this page is measured before that step. The two
+    speakers' 24&nbsp;kHz tracks are brought to the same loudness before they are mixed,
+    so neither voice sits under the other, and every clip is normalised to one level.
   </p>
 </section>
 
@@ -478,6 +482,12 @@
       <h3>Scope</h3>
       <p>English only for now, and the downstream study uses REACT 2024, on which the
          refinement block is pre-trained.</p>
+    </div>
+    <div data-anim="up" data-delay="3">
+      <h3>Voice and face</h3>
+      <p>Identity descriptors carry no gender, so a face and a voice are drawn
+         independently and need not agree. The clips above were picked from runs
+         where they do.</p>
     </div>
   </div>
 </section>
