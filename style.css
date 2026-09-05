@@ -29,6 +29,8 @@
 html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
 @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
 
+main{ overflow-x:clip; }
+
 body{
   margin:0;
   background:var(--bg);
@@ -111,9 +113,12 @@ a:hover{ text-decoration:underline; }
   max-width:none; background:var(--bg-2);
   padding-inline:0;
   display:grid;
-  grid-template-columns:1fr min(var(--w-wide), 100%) 1fr;
+  grid-template-columns:1fr minmax(0, min(var(--w-wide), 100%)) 1fr;
 }
-.band > *{ grid-column:2; padding-inline:var(--gut); }
+/* min-width:0 stops a wide child (a scrollable table) from widening the track,
+   which is a grid item's default behaviour and shows up as page-level
+   horizontal overflow on a phone. */
+.band > *{ grid-column:2; padding-inline:var(--gut); min-width:0; }
 
 .sec-head{ max-width:760px; margin:0 0 clamp(40px,6vh,72px); }
 .sec-head.narrow{ max-width:620px; }
@@ -224,7 +229,7 @@ a:hover{ text-decoration:underline; }
 /* ─────────── video player ─────────── */
 .player-wrap{ margin-bottom:22px; }
 .player{
-  position:relative; aspect-ratio:1600/750;
+  position:relative; aspect-ratio:2/1;
   border-radius:clamp(14px,1.6vw,22px); overflow:hidden;
   background:#000;
   box-shadow:0 2px 8px rgba(0,0,0,.05), 0 20px 64px rgba(0,0,0,.09);
@@ -234,11 +239,7 @@ a:hover{ text-decoration:underline; }
   opacity:0; transition:opacity .45s var(--ease);
 }
 .player video.on{ opacity:1; }
-/* the only nod to the two-speaker split, and it is nearly invisible */
-.player::after{
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(90deg,transparent 49.75%,rgba(255,255,255,.22) 50%,transparent 50.25%);
-}
+/* the seam between the two speakers is baked into the encode */
 
 .segmented{
   display:inline-flex; padding:2px; gap:2px;
@@ -354,10 +355,14 @@ a:hover{ text-decoration:underline; }
 .table-card{
   background:#fff; border-radius:18px;
   box-shadow:0 2px 8px rgba(0,0,0,.04), 0 14px 44px rgba(0,0,0,.06);
-  overflow:hidden;
+  /* The tables keep nowrap cells, so the card is the scroll container and must
+     never grow past its column, grid item or not. */
+  width:100%; max-width:100%; min-width:0;
+  overflow-x:auto; overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
 }
 .band .table-card{ box-shadow:0 2px 8px rgba(0,0,0,.05), 0 14px 44px rgba(0,0,0,.07); }
-.table-card.narrow{ max-width:860px; margin-inline:auto; }
+.table-card.narrow{ max-width:min(860px, 100%); margin-inline:auto; }
 .table-card + .two-up, .table-card + .fig{ margin-top:26px; }
 .prose + .table-card, .prose + .fig{ margin-top:clamp(40px,6vh,68px); }
 .table-card + .fig, .two-up + .fig{ margin-top:clamp(40px,6vh,68px); }
@@ -396,9 +401,7 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 
 .two-up{ display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:26px; }
 @media (max-width:960px){ .two-up{ grid-template-columns:1fr; } }
-@media (max-width:720px){
-  .table-card{ overflow-x:auto; }
-}
+
 
 /* ─────────── stats ─────────── */
 .stats{
@@ -504,3 +507,112 @@ footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
   :root{ --ink-2:#3a3a3f; --ink-3:#54545a; --hair:#8e8e93; }
   .nav{ background:#fff; backdrop-filter:none; -webkit-backdrop-filter:none; }
 }
+
+/* ─────────── mechanism panels ───────────────────────────────
+   Each panel draws the rule the paper states. Scroll scrubs the
+   variable the rule is written in: the playhead, the denoising
+   step, the blend window. Nothing here is decorative.
+   ─────────────────────────────────────────────────────────── */
+.mech{
+  display:grid; grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
+  min-width:0;
+  gap:clamp(28px,5vw,74px); align-items:center;
+  padding:clamp(44px,6vh,76px) 0;
+  border-top:1px solid var(--hair);
+}
+.mech:first-of-type{ border-top:0; padding-top:0; }
+.mech.reverse .mech-copy{ order:2; }
+.mech.reverse .mech-vis{ order:1; }
+@media (max-width:900px){
+  .mech{ grid-template-columns:1fr; gap:26px; }
+  .mech.reverse .mech-copy{ order:1; }
+  .mech.reverse .mech-vis{ order:2; }
+}
+
+.mech-n{
+  margin:0 0 10px; font-family:var(--mono); font-size:12px;
+  letter-spacing:.06em; color:var(--blue);
+}
+.mech-copy{ min-width:0; }
+.mech-copy h3{
+  margin:0 0 12px; font-size:clamp(23px,2.5vw,30px);
+  line-height:1.15; letter-spacing:-0.022em; font-weight:600;
+}
+.mech-copy p{
+  margin:0 0 14px; font-size:17px; line-height:1.52;
+  color:var(--ink-2); letter-spacing:-0.003em; max-width:44ch;
+}
+.mech-formula{
+  margin:0 !important; padding:12px 16px; max-width:100%;
+  overflow-x:auto;
+  background:#fff; border-radius:10px;
+  font-family:var(--mono); font-size:13px !important; line-height:1.6 !important;
+  color:var(--ink) !important; letter-spacing:0 !important;
+  display:inline-block;
+}
+.mech-formula sub, .mech-formula sup{ font-size:.78em; }
+
+.mech-vis{ width:100%; min-width:0; }
+.mech-vis svg{ width:100%; height:auto; overflow:hidden; }
+
+/* shared type inside the diagrams */
+.tl-lab, .sc-lab, .bl-lab, .sc-read, .bl-a{
+  font-family:var(--mono); font-size:11px; fill:var(--ink-3);
+  letter-spacing:.06em;
+}
+.sc-read, .bl-a{ fill:var(--blue); text-anchor:end; }
+.bl-a, .bl-lab{ text-anchor:middle; }
+.sc-end{ text-anchor:end; }
+
+/* 1 · timeline */
+.tl-grid line{ stroke:var(--hair-soft); stroke-width:1; }
+.tl-blocks rect{ rx:4; }
+.tl-blocks .say{ fill:#c9ccd2; transition:fill .25s linear; }
+.tl-blocks .say.live{ fill:var(--blue); }
+.tl-blocks .bc{ fill:#dfe2e7; transition:fill .25s linear; }
+.tl-blocks .bc.live{ fill:#8fc3f5; }
+.tl-blocks text{
+  font-family:var(--mono); font-size:9px; fill:var(--ink-3);
+  text-anchor:middle; letter-spacing:.04em;
+}
+.tl-head{ stroke:var(--ink); stroke-width:1.5; }
+
+/* 2 · scales */
+.sc-rows rect{ rx:2.5; fill:#d7dae0; transition:fill .3s linear, opacity .3s linear; }
+.sc-rows rect.on{ fill:var(--blue); }
+.sc-rows .sc-rowlab{
+  font-family:var(--mono); font-size:11px; fill:var(--ink-3);
+  letter-spacing:.06em; text-anchor:end;
+}
+.sc-axis line{ stroke:var(--hair); stroke-width:1; }
+.sc-head{ stroke:var(--ink); stroke-width:1.5; }
+
+/* 3 · blend */
+.bl-bars rect{ rx:3; }
+.bl-seam{ stroke:var(--hair); stroke-width:1; stroke-dasharray:3 3; }
+.bl-curve{ fill:rgba(0,113,227,.10); stroke:var(--blue); stroke-width:1.5; }
+
+@media (prefers-reduced-motion: reduce){
+  .tl-head, .sc-head{ opacity:.35; }
+}
+
+/* ─────────── sound toggle ─────────── */
+.sound{
+  position:absolute; right:14px; bottom:14px; z-index:3;
+  display:inline-flex; align-items:center; gap:7px;
+  appearance:none; border:0; cursor:pointer;
+  background:rgba(0,0,0,.44); color:#fff;
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  padding:8px 14px; border-radius:980px;
+  font-family:inherit; font-size:13px; letter-spacing:0;
+  transition:background .25s var(--ease), transform .18s var(--ease);
+}
+.sound:hover{ background:rgba(0,0,0,.6); }
+.sound:active{ transform:scale(.96); }
+.sound svg{ width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; }
+.sound .spk{ fill:currentColor; stroke:none; }
+.sound .waves{ opacity:0; transition:opacity .2s var(--ease); }
+.sound .slash{ opacity:1; transition:opacity .2s var(--ease); }
+.sound[aria-pressed="true"] .waves{ opacity:1; }
+.sound[aria-pressed="true"] .slash{ opacity:0; }
+@media (max-width:560px){ .sound span{ display:none; } .sound{ padding:9px; } }

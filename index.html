@@ -84,25 +84,33 @@
 
   <div class="player-wrap" data-anim="up">
     <div class="player" id="player">
-      <video data-clip="d2_turntaking" class="on" src="assets/video/d2_turntaking.mp4" poster="assets/video/d2_turntaking.jpg" muted loop playsinline preload="metadata" aria-label="Turn-taking example"></video>
-      <video data-clip="d3_listening" src="assets/video/d3_listening.mp4" poster="assets/video/d3_listening.jpg" muted loop playsinline preload="none" aria-label="Listening example"></video>
-      <video data-clip="d1_grid" src="assets/video/d1_grid.mp4" poster="assets/video/d1_grid.jpg" muted loop playsinline preload="none" aria-label="Diversity example"></video>
-      <video data-clip="d4_stylised" src="assets/video/d4_stylised.mp4" poster="assets/video/d4_stylised.jpg" muted loop playsinline preload="none" aria-label="Stylised identities example"></video>
+      <video data-clip="hq_a" class="on" src="assets/video/hq_a.mp4" poster="assets/video/hq_a.jpg" muted loop playsinline preload="metadata" aria-label="A generated dyadic conversation"></video>
+      <video data-clip="hq_b" src="assets/video/hq_b.mp4" poster="assets/video/hq_b.jpg" muted loop playsinline preload="none" aria-label="A second generated conversation"></video>
+      <video data-clip="hq_c" src="assets/video/hq_c.mp4" poster="assets/video/hq_c.jpg" muted loop playsinline preload="none" aria-label="A third generated conversation"></video>
+      <video data-clip="d4_stylised" src="assets/video/d4_stylised.mp4" poster="assets/video/d4_stylised.jpg" muted loop playsinline preload="none" aria-label="Generated conversation with illustrated identities"></video>
+      <button class="sound" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path class="spk" d="M4 8h3l4-3.5v11L7 12H4z"/>
+          <g class="waves"><path d="M13.4 7.4a3.6 3.6 0 0 1 0 5.2"/><path d="M15.6 5.4a6.6 6.6 0 0 1 0 9.2"/></g>
+          <line class="slash" x1="4.6" y1="15.6" x2="15.8" y2="4.4"/>
+        </svg>
+        <span>Sound</span>
+      </button>
     </div>
   </div>
 
   <div class="segmented" role="tablist" aria-label="Examples" data-anim="up">
-    <button role="tab" aria-selected="true" data-clip="d2_turntaking">Turn-taking</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d3_listening">Listening</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d1_grid">Diversity</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d4_stylised">Stylised</button>
+    <button role="tab" aria-selected="true" data-clip="hq_a">Conversation I</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq_b">Conversation II</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq_c">Conversation III</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d4_stylised">Illustrated</button>
   </div>
 
   <div class="clip-note" data-anim="up">
-    <p data-note="d2_turntaking" class="on">Sentences and back-channels are placed on one shared timeline, so speaking and listening alternate the way they do in a real exchange.</p>
-    <p data-note="d3_listening">A listener is not a still frame. The silent segments are generated too, and the boundaries between them are blended away.</p>
-    <p data-note="d1_grid">One prompt yields many different conversations, with different content and different faces.</p>
-    <p data-note="d4_stylised">Identities need not be photorealistic. The same method drives illustrated faces without any change.</p>
+    <p data-note="hq_a" class="on">Both sides are generated together. Sentences and back-channels sit on one shared timeline, so the turn passes between them the way it does in a real exchange. Turn the sound on to hear the synthesised speech.</p>
+    <p data-note="hq_b">A listener is not a still frame. The silent stretches are generated too, and the joins between segments are blended away.</p>
+    <p data-note="hq_c">One prompt yields many conversations, each with different content and different faces.</p>
+    <p data-note="d4_stylised">Identities need not be photorealistic. The same method drives illustrated faces with no change.</p>
   </div>
 </section>
 
@@ -156,6 +164,8 @@
     synthesises the responsive face-video pair.
   </p>
 
+
+
   <figure class="fig slim" data-anim="up">
     <img src="assets/resolutions.webp" alt="The responsive facial behaviour generation sub-block: identity and partner behaviour are downsampled to several scales, fused by cross-attention, and injected into the diffusion transformer across denoising steps." width="756" height="526" loading="lazy">
   </figure>
@@ -165,6 +175,84 @@
     and fine last, so early steps settle the shape of a movement and later steps
     bring in the detail.
   </p>
+</section>
+
+<!-- ══════════════ MECHANISM PANELS ══════════════ -->
+<section class="section band" id="mechanism">
+  <header class="sec-head narrow">
+    <p class="kicker" data-anim="up">Inside</p>
+    <h2 class="title" data-anim="up" data-delay="1">Three mechanisms, drawn.</h2>
+    <p class="sub" data-anim="up" data-delay="2">
+      Each diagram below is the actual rule the paper specifies, animated as you
+      scroll rather than described in prose.
+    </p>
+  </header>
+
+  <!-- 1 · shared timeline -->
+  <div class="mech" id="mechTimeline">
+    <div class="mech-copy">
+      <p class="mech-n">01</p>
+      <h3>One timeline, two speakers</h3>
+      <p>Sentences and back-channels are laid on a single shared timeline. While one
+         speaker holds the turn the other is silent, apart from the short interactive
+         words that keep the exchange alive.</p>
+      <p class="mech-formula"><span>W</span><sub>inter</sub> = { uh-huh, hmm, okay, yeah }</p>
+    </div>
+    <div class="mech-vis">
+      <svg viewBox="0 0 640 210" role="img" aria-label="Two speaker tracks on a shared timeline, alternating turns with short back-channels.">
+        <g class="tl-grid"></g>
+        <text class="tl-lab" x="0" y="58">speaker i</text>
+        <text class="tl-lab" x="0" y="152">speaker j</text>
+        <g class="tl-blocks"></g>
+        <line class="tl-head" x1="70" y1="26" x2="70" y2="184"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 2 · coarse to fine -->
+  <div class="mech reverse" id="mechScale">
+    <div class="mech-copy">
+      <p class="mech-n">02</p>
+      <h3>Coarse first, fine last</h3>
+      <p>The partner's behaviour is fused with the identity at several spatial scales.
+         Early denoising steps receive only the coarsest scale, which fixes the shape
+         of a movement. Finer scales join as the steps go on, bringing in detail.</p>
+      <p class="mech-formula">l(t) = max(1, ⌈L·t / T⌉) &nbsp;·&nbsp; Φ(t) = ⋃<sub>l=l(t)</sub><sup>L</sup> C(l)</p>
+    </div>
+    <div class="mech-vis">
+      <svg viewBox="0 0 640 230" role="img" aria-label="Three spatial scales. As the denoising step falls from T to zero, finer scales are added to the injected set.">
+        <g class="sc-rows"></g>
+        <g class="sc-axis">
+          <line x1="70" y1="206" x2="612" y2="206"/>
+          <text class="sc-lab" x="70" y="224">t = T</text>
+          <text class="sc-lab sc-end" x="612" y="224">t = 0</text>
+        </g>
+        <line class="sc-head" x1="70" y1="16" x2="70" y2="200"/>
+        <text class="sc-read" x="612" y="12"></text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 3 · boundary blend -->
+  <div class="mech" id="mechBlend">
+    <div class="mech-copy">
+      <p class="mech-n">03</p>
+      <h3>No visible seam</h3>
+      <p>Segments are refined separately, so their join could show. A half-Gaussian
+         cross-fade over a narrow window blends the two sides, weighted equally at the
+         boundary itself and decaying outwards.</p>
+      <p class="mech-formula">α(τ) = ½ exp( −(τ−1)² / 2σ² ), &nbsp; σ = W/3</p>
+    </div>
+    <div class="mech-vis">
+      <svg viewBox="0 0 640 210" role="img" aria-label="Two adjacent segments meeting at a boundary, with a half-Gaussian cross-fade weight applied across a narrow window.">
+        <g class="bl-bars"></g>
+        <path class="bl-curve" d=""/>
+        <line class="bl-seam" x1="320" y1="76" x2="320" y2="166"/>
+        <text class="bl-lab" x="320" y="186">boundary</text>
+        <text class="bl-a" x="320" y="20">α = 0.50</text>
+      </svg>
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════ OVERVIEW / ABSTRACT ══════════════ -->

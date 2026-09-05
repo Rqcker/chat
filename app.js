@@ -38,8 +38,9 @@
     clips.forEach(function (v) {
       var on = v.dataset.clip === key;
       v.classList.toggle("on", on);
+      v.muted = !soundOn;
       if (on) { if (v.preload === "none") v.preload = "auto"; play(v); }
-      else v.pause();
+      else { v.pause(); v.currentTime = 0; }
     });
     notes.forEach(function (p) { p.classList.toggle("on", p.dataset.note === key); });
   }
@@ -71,6 +72,28 @@
         else clips.forEach(function (v) { v.pause(); });
       });
     }, { threshold: 0.25 }).observe(player);
+  }
+
+  /* ── 1b. sound ───────────────────────────────────────────────────
+     Clips start muted because browsers require it. The toggle is the
+     only way to hear the synthesised speech, which is half the paper.
+     ─────────────────────────────────────────────────────────────── */
+  var soundBtn = document.getElementById("soundBtn");
+  var soundOn = false;
+  function applySound() {
+    clips.forEach(function (v) { v.muted = !soundOn; });
+    if (soundBtn) {
+      soundBtn.setAttribute("aria-pressed", String(soundOn));
+      soundBtn.setAttribute("aria-label", soundOn ? "Turn sound off" : "Turn sound on");
+    }
+  }
+  if (soundBtn) {
+    soundBtn.addEventListener("click", function () {
+      soundOn = !soundOn;
+      applySound();
+      var cur = clips.filter(function (v) { return v.classList.contains("on"); })[0];
+      if (soundOn && cur) play(cur);
+    });
   }
 
   /* ── 2. copy BibTeX ──────────────────────────────────────────────── */
@@ -224,6 +247,190 @@
       scrollTrigger: { trigger: el, start: "top 86%", once: true }
     });
   });
+
+  /* ── 8. mechanism panels ─────────────────────────────────────────
+     Three diagrams, each scrubbed by scroll. The variable being
+     scrubbed is the one the paper's own rule is written in.
+     ─────────────────────────────────────────────────────────────── */
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  /* 8a · shared timeline -------------------------------------------------
+     Turns alternate; the holder of the turn speaks while the other drops to
+     short back-channels drawn from W_inter. */
+  (function timeline() {
+    var svg = document.querySelector("#mechTimeline svg");
+    if (!svg) return;
+    var grid = svg.querySelector(".tl-grid");
+    var blocks = svg.querySelector(".tl-blocks");
+    var head = svg.querySelector(".tl-head");
+    var X0 = 70, X1 = 612, W = X1 - X0;
+    var ROW = { i: 44, j: 138 }, H = 26;
+
+    for (var g = 0; g <= 10; g++) {
+      var gx = X0 + (W * g) / 10;
+      el("line", { x1: gx, y1: 26, x2: gx, y2: 184 }, grid);
+    }
+
+    // [speaker, start, length] in normalised time, plus back-channels
+    var TURNS = [
+      ["i", 0.00, 0.20], ["j", 0.21, 0.15], ["i", 0.37, 0.12],
+      ["j", 0.50, 0.22], ["i", 0.73, 0.14], ["j", 0.88, 0.12]
+    ];
+    var WORDS = ["uh-huh", "hmm", "okay", "yeah"];
+    var items = [];
+
+    TURNS.forEach(function (t, idx) {
+      var who = t[0], other = who === "i" ? "j" : "i";
+      var x = X0 + W * t[1], w = W * t[2];
+      var r = el("rect", { x: x, y: ROW[who], width: w, height: H, class: "say" }, blocks);
+      items.push({ node: r, a: t[1], b: t[1] + t[2] });
+
+      // one back-channel from the listener, mid-turn
+      if (idx < TURNS.length - 1) {
+        var bw = 34, bx = x + w * 0.55;
+        var b = el("rect", { x: bx, y: ROW[other] + 7, width: bw, height: 12, class: "bc" }, blocks);
+        var lab = el("text", { x: bx + bw / 2, y: ROW[other] + 34 }, blocks);
+        lab.textContent = WORDS[idx % WORDS.length];
+        var ba = (bx - X0) / W;
+        items.push({ node: b, a: ba, b: ba + bw / W });
+      }
+    });
+
+    function render(p) {
+      var hx = X0 + W * p;
+      head.setAttribute("x1", hx); head.setAttribute("x2", hx);
+      items.forEach(function (it) {
+        it.node.classList.toggle("live", p >= it.a && p <= it.b);
+      });
+    }
+    render(0);
+
+    if (reduced) { render(0.42); return; }
+    var st = { p: 0 };
+    gsap.to(st, {
+      p: 1, ease: "none",
+      onUpdate: function () { render(st.p); },
+      scrollTrigger: { trigger: "#mechTimeline", start: "top 78%", end: "bottom 46%", scrub: 0.5 }
+    });
+  })();
+
+  /* 8b · coarse-to-fine ---------------------------------------------------
+     l(t) = max(1, ceil(L*t/T)); the injected set is every scale from l(t)
+     up to L. Higher l is lower spatial resolution, so the coarsest scale is
+     alone at t = T and the finest joins last. */
+  (function scales() {
+    var svg = document.querySelector("#mechScale svg");
+    if (!svg) return;
+    var rows = svg.querySelector(".sc-rows");
+    var head = svg.querySelector(".sc-head");
+    var read = svg.querySelector(".sc-read");
+    var X0 = 70, X1 = 612, W = X1 - X0;
+    var L = 3, T = 50;                       // matches the released checkpoint
+    var cells = [];
+
+    for (var l = 1; l <= L; l++) {
+      var y = 26 + (l - 1) * 58;
+      var n = [16, 8, 4][l - 1];             // finer scale = more, smaller cells
+      var cw = (W - (n - 1) * 4) / n;
+      var lab = el("text", { x: X0 - 14, y: y + 22, class: "sc-rowlab" }, rows);
+      lab.textContent = "l = " + l;
+      var row = [];
+      for (var c = 0; c < n; c++) {
+        row.push(el("rect", {
+          x: X0 + c * (cw + 4), y: y, width: cw, height: 34
+        }, rows));
+      }
+      cells.push(row);
+    }
+
+    function render(p) {
+      var t = Math.round(T * (1 - p));               // t runs T -> 0
+      var lt = Math.max(1, Math.ceil((L * t) / T));  // the paper's schedule
+      cells.forEach(function (row, idx) {
+        var l = idx + 1;
+        var on = l >= lt;                            // union from l(t) to L
+        row.forEach(function (r) { r.classList.toggle("on", on); });
+      });
+      var hx = X0 + W * p;
+      head.setAttribute("x1", hx); head.setAttribute("x2", hx);
+      read.textContent = "t = " + t + "   l(t) = " + lt;
+    }
+    render(0);
+
+    if (reduced) { render(0.55); return; }
+    var st = { p: 0 };
+    gsap.to(st, {
+      p: 1, ease: "none",
+      onUpdate: function () { render(st.p); },
+      scrollTrigger: { trigger: "#mechScale", start: "top 78%", end: "bottom 46%", scrub: 0.5 }
+    });
+  })();
+
+  /* 8c · boundary blend ---------------------------------------------------
+     alpha(tau) = 0.5*exp(-(tau-1)^2 / 2 sigma^2), sigma = W/3, so the weight
+     is exactly 0.5 at the boundary and decays outwards. */
+  (function blend() {
+    var svg = document.querySelector("#mechBlend svg");
+    if (!svg) return;
+    var bars = svg.querySelector(".bl-bars");
+    var curve = svg.querySelector(".bl-curve");
+    var readout = svg.querySelector(".bl-a");
+    // Geometry is sized so both halves fit inside the 640-wide viewBox:
+    // N * CW must not exceed MID.
+    var MID = 320, TOP = 82, BH = 78, N = 22, CW = 14;
+    var BASE = TOP - 8;          // the cross-fade curve sits above the bars
+
+    var left = [], right = [];
+    for (var k = 0; k < N; k++) {
+      left.push(el("rect", { x: MID - (k + 1) * CW, y: TOP, width: CW - 2, height: BH }, bars));
+      right.push(el("rect", { x: MID + k * CW + 2, y: TOP, width: CW - 2, height: BH }, bars));
+    }
+
+    // the two segments start as distinct greys; blending pulls them together
+    var A = [214, 217, 223], B = [151, 157, 168];
+    function mix(a, b, w) {
+      return "rgb(" + a.map(function (v, i) { return Math.round(v + (b[i] - v) * w); }).join(",") + ")";
+    }
+
+    function render(p) {
+      var Wwin = Math.max(1, Math.round(10 * p));   // window grows 0 -> 10 frames
+      var sigma = Wwin / 3;
+      var pts = [];
+      for (var k = 0; k < N; k++) {
+        var tau = k + 1;
+        var a = tau <= Wwin ? 0.5 * Math.exp(-Math.pow(tau - 1, 2) / (2 * sigma * sigma)) : 0;
+        left[k].setAttribute("fill", mix(A, B, a));
+        right[k].setAttribute("fill", mix(B, A, a));
+        if (tau <= Math.max(Wwin, 1)) {
+          pts.push([MID - (k + 0.5) * CW, BASE - a * 52]);
+          pts.push([MID + (k + 0.5) * CW, BASE - a * 52]);
+        }
+      }
+      pts.sort(function (u, v) { return u[0] - v[0]; });
+      if (pts.length > 2) {
+        var d = "M " + pts[0][0].toFixed(1) + " " + BASE;
+        pts.forEach(function (q) { d += " L " + q[0].toFixed(1) + " " + q[1].toFixed(1); });
+        d += " L " + pts[pts.length - 1][0].toFixed(1) + " " + BASE + " Z";
+        curve.setAttribute("d", d);
+      } else curve.setAttribute("d", "");
+      readout.textContent = p > 0.04 ? "W = " + Wwin + "   α(1) = 0.50" : "no blending";
+    }
+    render(0);
+
+    if (reduced) { render(1); return; }
+    var st = { p: 0 };
+    gsap.to(st, {
+      p: 1, ease: "none",
+      onUpdate: function () { render(st.p); },
+      scrollTrigger: { trigger: "#mechBlend", start: "top 76%", end: "bottom 50%", scrub: 0.5 }
+    });
+  })();
 
   /* ── 8. keep positions honest once media has loaded ──────────────── */
   window.addEventListener("load", function () { ScrollTrigger.refresh(); });
