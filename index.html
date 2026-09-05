@@ -3,461 +3,366 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHAT · Conversational Human Audio-visual Talking Dialogue Generation</title>
+<title>CHAT — Conversational Human Audio-visual Talking Dialogue Generation</title>
 <meta name="description" content="CHAT (ECCV 2026) generates diverse, paired, mutually responsive audio-visual dialogue clips from a single textual prompt.">
 <link rel="icon" href="assets/logo.webp">
-<meta property="og:title" content="CHAT · Conversational Human Audio-visual Talking Dialogue Generation">
-<meta property="og:description" content="ECCV 2026. Dyadic interactive audio-visual dialogue generation from a single textual prompt.">
+<meta property="og:title" content="CHAT — Conversational Human Audio-visual Talking Dialogue Generation">
+<meta property="og:description" content="ECCV 2026. A whole dyadic conversation, from one line of text.">
 <meta property="og:image" content="https://junhaosong.com/chat/assets/teaser.webp">
 <meta property="og:url" content="https://junhaosong.com/chat/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="grain" aria-hidden="true"></div>
-<div class="scroll-rail" aria-hidden="true"><span id="scrollbar"></span></div>
+<a class="skip" href="#main">Skip to content</a>
 
-<nav class="dock" aria-label="Section navigation">
-  <a href="#top" data-dock="top"><i></i><span>Top</span></a>
-  <a href="#demo" data-dock="demo"><i></i><span>Results</span></a>
-  <a href="#abstract" data-dock="abstract"><i></i><span>Abstract</span></a>
-  <a href="#method" data-dock="method"><i></i><span>Method</span></a>
-  <a href="#numbers" data-dock="numbers"><i></i><span>Benchmarks</span></a>
-  <a href="#dataset" data-dock="dataset"><i></i><span>Dataset</span></a>
-  <a href="#cite" data-dock="cite"><i></i><span>Cite</span></a>
-</nav>
-
-<!-- ─────────────────────────── HERO ─────────────────────────── -->
-<header id="top" class="hero">
-  <canvas id="turnwave" aria-hidden="true"></canvas>
-  <div class="hero-bloom" aria-hidden="true"></div>
-
-  <div class="wrap hero-inner">
-    <p class="eyebrow rev" style="--d:0ms">
-      <span class="badge">ECCV 2026</span>
-      <span class="sep">/</span> Dyadic Interactive Audio-visual Dialogue Generation
-    </p>
-
-    <h1 class="rev" style="--d:80ms">
-      <span class="ch a">C</span><span class="ch h">H</span><span class="ch a2">A</span><span class="ch t">T</span>
-    </h1>
-
-    <p class="deck rev" style="--d:160ms">
-      Conversational Human <span class="nb">Audio-visual</span> Talking Dialogue Generation
-    </p>
-
-    <p class="lede rev" style="--d:220ms">
-      One textual prompt in. A pair of <em>mutually responsive</em> talking-face
-      clips out &mdash; two speakers who take turns, listen, and react to each
-      other, with no pre-defined script, audio or video.
-    </p>
-
-    <div class="authors rev" style="--d:300ms">
-      <p class="names">
-        <a href="https://junhaosong.com">Junhao Song</a><sup>1</sup>,
-        Lluis Guasch<sup>2</sup>,
-        Xilin He<sup>3</sup>,
-        Zhongyu Yang<sup>4</sup>,
-        Yingfang Yuan<sup>5</sup>,
-        Weicheng Xie<sup>6</sup>,
-        Linlin Shen<sup>7,8</sup>,
-        Haijun Lin<sup>9</sup>,
-        Shizhe Liu<sup>10</sup>,
-        Wei Pang<sup>4</sup>,
-        Siyang Song<sup>11,†</sup>
-      </p>
-      <p class="affil">
-        <span><sup>1</sup>Imperial College London, Computing</span>
-        <span><sup>2</sup>Imperial College London, Earth Science &amp; Engineering</span>
-        <span><sup>3</sup>MBZUAI</span>
-        <span><sup>4</sup>Heriot-Watt University</span>
-        <span><sup>5</sup>Northumbria University</span>
-        <span><sup>6,7,8</sup>Shenzhen University</span>
-        <span><sup>9</sup>Hunan Normal University</span>
-        <span><sup>10</sup>University of Oxford</span>
-        <span><sup>11</sup>University of Exeter</span>
-        <span class="corr"><sup>&dagger;</sup>Corresponding author</span>
-      </p>
-    </div>
-
-    <div class="actions rev" style="--d:380ms">
-      <a class="pill primary" href="#demo">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l8-4.5z"/></svg>
-        Watch results
-      </a>
-      <a class="pill" href="assets/poster.webp" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M5 5.5h6M5 8h6M5 10.5h3.5"/></svg>
-        Poster
-      </a>
-      <span class="pill ghost" aria-disabled="true">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 11.5L2.5 8 6 4.5M10 4.5L13.5 8 10 11.5"/></svg>
-        Code &middot; coming soon
-      </span>
-      <span class="pill ghost" aria-disabled="true">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0l3-3m-3 3L5 7M3 13h10"/></svg>
-        Dataset &middot; coming soon
-      </span>
-    </div>
-  </div>
-
-  <div class="hero-foot wrap" aria-hidden="true">
-    <span class="mono">turn-taking · listening · mutual response</span>
-    <span class="mono scrollcue">scroll <i></i></span>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="nav-brand" href="#top">CHAT</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#results">Results</a>
+      <a href="#overview">Overview</a>
+      <a href="#pipeline">How it works</a>
+      <a href="#benchmarks">Benchmarks</a>
+      <a href="#dataset">Dataset</a>
+    </nav>
+    <a class="nav-cta" href="#cite">Cite</a>
   </div>
 </header>
 
-<!-- ─────────────────────────── TEASER ─────────────────────────── -->
-<section class="bleed reveal">
-  <figure class="fig">
-    <img src="assets/teaser.webp" alt="CHAT compared with condition-driven face video generation, face video editing, facial reaction generation and interactive talking face pair generation. CHAT generates verbally and non-verbally interactive dyadic conversations from a single prompt." loading="lazy" width="2000" height="805">
-    <figcaption>
-      <b>The task.</b> Existing methods animate a face from a given condition, edit an
-      existing video, or react to a given partner. CHAT generates the whole dyadic
-      conversation &mdash; both speakers, both channels &mdash; from one anonymous prompt.
-    </figcaption>
+<main id="main">
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero" id="top">
+  <p class="eyebrow" data-anim="up">ECCV 2026</p>
+  <h1 class="wordmark" data-anim="up" data-delay="1">CHAT</h1>
+  <p class="hero-sub" data-anim="up" data-delay="2">
+    A whole conversation.<br class="br-m"> From one line of text.
+  </p>
+  <p class="hero-note" data-anim="up" data-delay="3">
+    Conversational Human Audio-visual Talking Dialogue Generation
+  </p>
+  <div class="hero-cta" data-anim="up" data-delay="4">
+    <a class="btn" href="#results">See it in motion</a>
+    <a class="btn ghost" href="assets/poster.webp" target="_blank" rel="noopener">Read the poster ›</a>
+  </div>
+</section>
+
+<!-- teaser, scaling in on scroll -->
+<section class="reveal-stage">
+  <figure class="reveal-figure" id="teaserFig">
+    <img src="assets/teaser.webp" alt="CHAT compared with condition-driven face video generation, face video editing, facial reaction generation and interactive talking-face pair generation." width="2000" height="805">
+  </figure>
+  <p class="caption wide" data-anim="up">
+    Other methods animate one face from a condition, edit a clip you already have,
+    or react to a partner you supply. CHAT writes the conversation, speaks it, and
+    performs both sides.
+  </p>
+</section>
+
+<!-- ══════════════ STATEMENT ══════════════ -->
+<section class="statement">
+  <h2 class="lead" data-anim="line">
+    Two people. Talking, listening, answering each other.
+    <span class="dim">No script. No reference video. Nothing but a prompt.</span>
+  </h2>
+</section>
+
+<!-- ══════════════ RESULTS ══════════════ -->
+<section class="section" id="results">
+  <header class="sec-head">
+    <p class="kicker" data-anim="up">Generated dialogues</p>
+    <h2 class="title" data-anim="up" data-delay="1">Watch them take turns.</h2>
+    <p class="sub" data-anim="up" data-delay="2">
+      Every clip is produced end to end from a text prompt. Both faces are generated
+      as a responsive pair, so the one listening reacts to the one speaking, inside
+      the same clip.
+    </p>
+  </header>
+
+  <div class="player-wrap" data-anim="up">
+    <div class="player" id="player">
+      <video data-clip="d2_turntaking" class="on" src="assets/video/d2_turntaking.mp4" poster="assets/video/d2_turntaking.jpg" muted loop playsinline preload="metadata" aria-label="Turn-taking example"></video>
+      <video data-clip="d3_listening" src="assets/video/d3_listening.mp4" poster="assets/video/d3_listening.jpg" muted loop playsinline preload="none" aria-label="Listening example"></video>
+      <video data-clip="d1_grid" src="assets/video/d1_grid.mp4" poster="assets/video/d1_grid.jpg" muted loop playsinline preload="none" aria-label="Diversity example"></video>
+      <video data-clip="d4_stylised" src="assets/video/d4_stylised.mp4" poster="assets/video/d4_stylised.jpg" muted loop playsinline preload="none" aria-label="Stylised identities example"></video>
+    </div>
+  </div>
+
+  <div class="segmented" role="tablist" aria-label="Examples" data-anim="up">
+    <button role="tab" aria-selected="true" data-clip="d2_turntaking">Turn-taking</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d3_listening">Listening</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d1_grid">Diversity</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d4_stylised">Stylised</button>
+  </div>
+
+  <div class="clip-note" data-anim="up">
+    <p data-note="d2_turntaking" class="on">Sentences and back-channels are placed on one shared timeline, so speaking and listening alternate the way they do in a real exchange.</p>
+    <p data-note="d3_listening">A listener is not a still frame. The silent segments are generated too, and the boundaries between them are blended away.</p>
+    <p data-note="d1_grid">One prompt yields many different conversations, with different content and different faces.</p>
+    <p data-note="d4_stylised">Identities need not be photorealistic. The same method drives illustrated faces without any change.</p>
+  </div>
+</section>
+
+<!-- ══════════════ PIPELINE (pinned) ══════════════ -->
+<section class="pin-section" id="pipeline">
+  <div class="pin-inner">
+    <div class="pin-copy">
+      <p class="kicker">How it works</p>
+      <h2 class="title">Three stages.<br>One conversation.</h2>
+      <ol class="stages">
+        <li data-stage="0">
+          <span class="stage-n">01</span>
+          <h3>It writes the dialogue</h3>
+          <p>A language model turns one scenario prompt into multi-turn dyadic
+             scripts, each with a described identity for both speakers.</p>
+        </li>
+        <li data-stage="1">
+          <span class="stage-n">02</span>
+          <h3>It speaks both parts</h3>
+          <p>Back-channels, per-turn emotion, timing and a shared acoustic
+             environment are added, then synthesised as two voices on one timeline.</p>
+        </li>
+        <li data-stage="2">
+          <span class="stage-n">03</span>
+          <h3>It performs the faces</h3>
+          <p>Talking segments are rendered, listening segments generated, each face
+             made responsive to its partner, and every seam blended away.</p>
+        </li>
+      </ol>
+    </div>
+    <div class="pin-visual" aria-hidden="true">
+      <div class="orb-field">
+        <span class="orb o1"></span>
+        <span class="orb o2"></span>
+        <span class="orb o3"></span>
+      </div>
+      <div class="pin-label" data-label="0">text</div>
+      <div class="pin-label" data-label="1">audio</div>
+      <div class="pin-label" data-label="2">video</div>
+    </div>
+  </div>
+</section>
+
+<section class="section tight">
+  <figure class="fig card" data-anim="up">
+    <img src="assets/framework.webp" alt="The CHAT pipeline: textual dialogue generation, dyadic audio dialogue generation, and interactive facial behaviour generation." width="1618" height="782" loading="lazy">
+  </figure>
+  <p class="caption wide" data-anim="up">The full pipeline, end to end.</p>
+</section>
+
+<!-- ══════════════ OVERVIEW / ABSTRACT ══════════════ -->
+<section class="section band" id="overview">
+  <header class="sec-head narrow">
+    <p class="kicker" data-anim="up">Overview</p>
+    <h2 class="title" data-anim="up" data-delay="1">Why this matters.</h2>
+  </header>
+  <div class="prose" data-anim="up">
+    <p>
+      Large-scale dyadic interactive audio-visual dialogue datasets are the raw
+      material for interactive virtual agents and digital humans. Collecting them is
+      slow, expensive, and ethically sensitive.
+    </p>
+    <p>
+      CHAT generates them instead. It unifies large language models and talking-face
+      models with interactive audio and facial-behaviour refinement, producing
+      aligned dyadic clips with diverse content and diverse identities from a single
+      prompt. It outperforms existing methods built for related tasks under both
+      objective and subjective evaluation.
+    </p>
+    <p>
+      The synthesised <b>CHAT-AVD-50k</b> dataset then works as pre-training data for
+      downstream interactive head generation, improving both PerFRDiff and ReactDiff
+      on REACT 2024.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ BENCHMARKS ══════════════ -->
+<section class="section" id="benchmarks">
+  <header class="sec-head">
+    <p class="kicker" data-anim="up">Benchmarks</p>
+    <h2 class="title" data-anim="up" data-delay="1">Measured against the closest work.</h2>
+    <p class="sub" data-anim="up" data-delay="2">
+      No existing method addresses this task directly, so CHAT is compared with recent
+      methods for the nearest related tasks, all given the same prompts and audio and
+      standardised on the first ten seconds. Means over 1000 generated dialogues.
+    </p>
+  </header>
+
+  <div class="table-card" data-anim="up">
+    <table>
+      <caption>Quantitative comparison</caption>
+      <thead>
+        <tr>
+          <th scope="col">Method</th>
+          <th scope="col">FID<i>↓</i></th><th scope="col">FVD<i>↓</i></th>
+          <th scope="col">LSE-C<i>↑</i></th><th scope="col">LSE-D<i>↓</i></th>
+          <th scope="col">FRCorr<i>↑</i></th><th scope="col">FRDiv<i>↑</i></th>
+          <th scope="col">CSIM<i>↑</i></th><th scope="col">LPIPS<i>↓</i></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Hallo3</th><td>20.56</td><td class="second">362.23</td><td>4.61</td><td>10.41</td><td class="na">N/A</td><td class="na">N/A</td><td>0.79</td><td>0.55</td></tr>
+        <tr><th scope="row">SadTalker</th><td>22.53</td><td>385.51</td><td class="second">6.85</td><td class="second">8.17</td><td class="na">N/A</td><td class="na">N/A</td><td>0.81</td><td>0.48</td></tr>
+        <tr><th scope="row">DIM</th><td>36.52</td><td>460.35</td><td>6.82</td><td>8.89</td><td>31.02</td><td>12.55</td><td class="second">0.83</td><td>0.52</td></tr>
+        <tr><th scope="row">EDTalk</th><td class="second">18.74</td><td>619.92</td><td>5.62</td><td>9.61</td><td class="na">N/A</td><td class="na">N/A</td><td>0.78</td><td class="best">0.36</td></tr>
+        <tr><th scope="row">ReactDiff</th><td>21.36</td><td>386.22</td><td>5.23</td><td>9.02</td><td class="second">48.05</td><td class="second">15.31</td><td>0.77</td><td>0.58</td></tr>
+        <tr class="ours">
+          <th scope="row">CHAT</th>
+          <td class="best">17.33</td><td>365.03</td><td class="best">6.89</td><td class="best">8.07</td>
+          <td class="best">50.02</td><td class="best">15.34</td><td class="best">0.85</td><td class="second">0.38</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="foot">Best in bold, second underlined. FRCorr and FRDiv are ×10⁻². N/A marks a metric a method cannot produce.</p>
+  </div>
+
+  <div class="two-up">
+    <div class="table-card" data-anim="up">
+      <table class="compact">
+        <caption>User study · 60 participants · 1–5</caption>
+        <thead><tr><th scope="col">Method</th><th scope="col">Visual</th><th scope="col">Audio</th><th scope="col">Sync</th><th scope="col">Expr.</th><th scope="col">Interact.</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Hallo3</th><td>4.5</td><td>3.5</td><td>3.9</td><td>3.8</td><td>2.5</td></tr>
+          <tr><th scope="row">SadTalker</th><td>2.5</td><td>3.7</td><td>1.2</td><td>2.0</td><td>1.3</td></tr>
+          <tr><th scope="row">DIM</th><td>3.7</td><td>3.1</td><td>3.4</td><td>2.8</td><td>3.6</td></tr>
+          <tr><th scope="row">EDTalk</th><td>2.2</td><td>3.6</td><td>2.3</td><td>2.8</td><td>2.7</td></tr>
+          <tr><th scope="row">ReactDiff</th><td>4.2</td><td>3.5</td><td>3.8</td><td>4.1</td><td>3.2</td></tr>
+          <tr class="ours"><th scope="row">CHAT</th><td class="best">4.6</td><td class="best">4.8</td><td class="best">4.6</td><td class="best">4.6</td><td class="best">4.8</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-card" data-anim="up" data-delay="1">
+      <table class="compact">
+        <caption>Ablation</caption>
+        <thead><tr><th scope="col">Variant</th><th scope="col">MCD<i>↓</i></th><th scope="col">Emo-Acc<i>↑</i></th><th scope="col">ViSQOL<i>↑</i></th><th scope="col">FID<i>↓</i></th></tr></thead>
+        <tbody>
+          <tr><th scope="row">w/o audio refinement</th><td>6.23</td><td>41.2%</td><td>2.97</td><td>21.34</td></tr>
+          <tr><th scope="row">w/o emotion</th><td>9.12</td><td>38.3%</td><td>2.67</td><td>23.45</td></tr>
+          <tr><th scope="row">w/o facial refinement</th><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>38.67</td></tr>
+          <tr><th scope="row">w/o boundary continuity</th><td class="na">—</td><td class="na">—</td><td class="na">—</td><td>18.56</td></tr>
+          <tr class="ours"><th scope="row">Full CHAT</th><td class="best">4.23</td><td class="best">78.4%</td><td class="best">3.98</td><td class="best">17.33</td></tr>
+        </tbody>
+      </table>
+      <p class="foot">A dash marks an audio metric a visual-only ablation leaves unchanged.</p>
+    </div>
+  </div>
+
+  <figure class="fig card" data-anim="up">
+    <img src="assets/qualitative_results.webp" alt="Qualitative comparison against talking-face and facial-reaction baselines." width="1866" height="996" loading="lazy">
+  </figure>
+  <p class="caption wide" data-anim="up">
+    Talking-face methods run twice give two unrelated monologues. Reaction methods
+    need a real speaker video as input. CHAT produces the pair as one exchange.
+  </p>
+</section>
+
+<!-- ══════════════ DATASET ══════════════ -->
+<section class="section band" id="dataset">
+  <header class="sec-head narrow">
+    <p class="kicker" data-anim="up">CHAT-AVD-50k</p>
+    <h2 class="title" data-anim="up" data-delay="1">A dataset that writes itself.</h2>
+  </header>
+
+  <div class="stats">
+    <div class="stat" data-anim="up"><b data-count="50000">50,000</b><span>dyadic dialogues</span></div>
+    <div class="stat" data-anim="up" data-delay="1"><b data-count="100000">100,000</b><span>paired clips</span></div>
+    <div class="stat" data-anim="up" data-delay="2"><b data-count="100000">100,000</b><span>identities</span></div>
+    <div class="stat" data-anim="up" data-delay="3"><b>1,388.9</b><span>hours</span></div>
+  </div>
+
+  <div class="prose center" data-anim="up">
+    <p>
+      Every clip carries turn-level emotion, scenario and speaker metadata, spanning
+      casual, professional, emotional, academic and social scenarios. As pre-training
+      data it lifts two different reaction models on the REACT 2024 benchmark.
+    </p>
+  </div>
+
+  <div class="table-card narrow" data-anim="up">
+    <table class="compact">
+      <caption>Downstream interactive head generation</caption>
+      <thead><tr><th scope="col">Pre-training</th><th scope="col">PerFRDiff FRCorr<i>↑</i></th><th scope="col">FRDist<i>↓</i></th><th scope="col">ReactDiff FRCorr<i>↑</i></th><th scope="col">FRDist<i>↓</i></th></tr></thead>
+      <tbody>
+        <tr><th scope="row">REACT 2024 only</th><td>37.21</td><td>94.72</td><td>24.19</td><td>86.70</td></tr>
+        <tr class="ours"><th scope="row">+ CHAT-AVD-50k</th><td class="best">40.11</td><td class="best">89.45</td><td class="best">26.12</td><td class="best">83.87</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <figure class="fig card slim" data-anim="up">
+    <img src="assets/resolutions.webp" alt="Generated identities across ages, genders and visual styles." width="758" height="526" loading="lazy">
   </figure>
 </section>
 
-<!-- ─────────────────────────── DEMO ─────────────────────────── -->
-<section id="demo" class="section">
-  <div class="wrap">
-    <div class="sechead reveal">
-      <span class="kicker mono">01 / Generated dialogues</span>
-      <h2>Two faces, one conversation</h2>
-      <p class="sub">
-        Every clip below is generated end to end from a text prompt. Nothing is
-        driven by a recorded video or a supplied script. Both sides are produced
-        as a responsive pair, so the listening face reacts to the speaker inside
-        the same clip.
-      </p>
-    </div>
-
-    <div class="tabs reveal" role="tablist" aria-label="Generated dialogue examples">
-      <button role="tab" id="tab-d2_turntaking" aria-controls="panel-d2_turntaking" aria-selected="true"  data-tab="d2_turntaking">Turn-taking</button>
-      <button role="tab" id="tab-d3_listening" aria-controls="panel-d3_listening" aria-selected="false" tabindex="-1" data-tab="d3_listening">Listening</button>
-      <button role="tab" id="tab-d1_grid" aria-controls="panel-d1_grid" aria-selected="false" tabindex="-1" data-tab="d1_grid">Diversity</button>
-      <button role="tab" id="tab-d4_stylised" aria-controls="panel-d4_stylised" aria-selected="false" tabindex="-1" data-tab="d4_stylised">Stylised identities</button>
-    </div>
-
-    <div class="stage reveal">
-      <div class="channel-marks" aria-hidden="true">
-        <span class="cm a">speaker <em>i</em></span>
-        <span class="cm b">speaker <em>j</em></span>
-      </div>
-
-      <div class="players">
-        <video role="tabpanel" id="panel-d2_turntaking" aria-labelledby="tab-d2_turntaking" data-panel="d2_turntaking" class="on" src="assets/video/d2_turntaking.mp4" poster="assets/video/d2_turntaking.jpg" muted loop playsinline preload="metadata"></video>
-        <video role="tabpanel" id="panel-d3_listening" aria-labelledby="tab-d3_listening" data-panel="d3_listening"  src="assets/video/d3_listening.mp4"  poster="assets/video/d3_listening.jpg"  muted loop playsinline preload="none"></video>
-        <video role="tabpanel" id="panel-d1_grid" aria-labelledby="tab-d1_grid" data-panel="d1_grid"       src="assets/video/d1_grid.mp4"       poster="assets/video/d1_grid.jpg"       muted loop playsinline preload="none"></video>
-        <video role="tabpanel" id="panel-d4_stylised" aria-labelledby="tab-d4_stylised" data-panel="d4_stylised"   src="assets/video/d4_stylised.mp4"   poster="assets/video/d4_stylised.jpg"   muted loop playsinline preload="none"></video>
-      </div>
-
-      <div class="stage-note">
-        <p data-note="d2_turntaking" class="on">The interactive audio refinement block places every sentence and back-channel on a shared timeline, so speaking and listening alternate the way they do in a real exchange.</p>
-        <p data-note="d3_listening">A listener is not a frozen frame. The silent-segment block keeps the non-speaking face alive across long stretches, and the continuity refinement removes the seams between segments.</p>
-        <p data-note="d1_grid">One prompt yields many distinct conversations, with different content and different facial identities, which is what makes the pipeline usable as a data source.</p>
-        <p data-note="d4_stylised">Identities need not be photorealistic. The same pipeline drives illustrated and stylised faces without changing the method.</p>
-      </div>
-    </div>
-
-    <p class="micro mono reveal">Clips are muted loops. Full narrated video and the complete set appear in the paper and supplementary material.</p>
-  </div>
+<!-- ══════════════ POSTER ══════════════ -->
+<section class="section" id="poster">
+  <header class="sec-head narrow">
+    <p class="kicker" data-anim="up">Poster</p>
+    <h2 class="title" data-anim="up" data-delay="1">ECCV 2026.</h2>
+  </header>
+  <a class="poster" href="assets/poster.webp" target="_blank" rel="noopener" data-anim="up">
+    <img src="assets/poster.webp" alt="CHAT ECCV 2026 conference poster" width="1500" height="1071" loading="lazy">
+  </a>
 </section>
 
-<!-- ─────────────────────────── ABSTRACT ─────────────────────────── -->
-<section id="abstract" class="section alt">
-  <div class="wrap two-col">
-    <div class="col-side reveal">
-      <span class="kicker mono">02 / Abstract</span>
-      <img class="mark" src="assets/logo.webp" alt="" loading="lazy">
-      <ul class="keywords mono">
-        <li>Audio-visual behaviour synthesis</li>
-        <li>Behavioural response generation</li>
-        <li>Diffusion model</li>
-        <li>Reaction generation</li>
-      </ul>
+<!-- ══════════════ LIMITATIONS ══════════════ -->
+<section class="section band">
+  <header class="sec-head narrow">
+    <p class="kicker" data-anim="up">Limitations</p>
+    <h2 class="title" data-anim="up" data-delay="1">What it does not do yet.</h2>
+  </header>
+  <div class="limits">
+    <div data-anim="up">
+      <h3>Cost</h3>
+      <p>Every clip runs a language model, a speech model and several video diffusion
+         passes. Here <i>scalable</i> means demographic coverage, not a cheap clip.</p>
     </div>
-    <div class="col-main reveal">
-      <p class="abstract">
-        Large-scale dyadic interactive audio-visual dialogue (DIAD) datasets provide
-        fundamental data resources for developing humanoid interactive virtual agents
-        and digital humans. However, collecting such data is time-consuming, expensive,
-        and ethically sensitive. To address this, we propose <b>CHAT</b>, a new dyadic
-        interactive audio-visual dialogue generation (DIADG) framework that generates
-        diverse, paired, and mutually responsive speech-face dialogue clips from a
-        single textual prompt. CHAT unifies large language models and talking face
-        models with interactive audio and facial behaviour refinement modules, enabling
-        the generation of aligned dyadic dialogue clips with diverse contents and facial
-        identities. Experiments show that CHAT outperforms existing related methods
-        designed for similar tasks under both objective and subjective evaluations.
-        Moreover, our synthesised <b>CHAT-AVD-50k</b> dataset serves as effective
-        pre-training data for downstream interactive head generation, consistently
-        improving PerFRDiff and ReactDiff on REACT 2024. CHAT offers a scalable
-        alternative to the costly and ethically sensitive collection of real dyadic
-        interaction data.
-      </p>
+    <div data-anim="up" data-delay="1">
+      <h3>Metrics</h3>
+      <p>The reaction metrics score facial behaviour, not turn-taking timing or
+         dialogue-level meaning. A metric for interaction quality is still open.</p>
+    </div>
+    <div data-anim="up" data-delay="2">
+      <h3>Scope</h3>
+      <p>English only for now, and the downstream study uses REACT 2024, on which the
+         refinement block is pre-trained.</p>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── METHOD ─────────────────────────── -->
-<section id="method" class="section">
-  <div class="wrap">
-    <div class="sechead reveal">
-      <span class="kicker mono">03 / Framework</span>
-      <h2>Three modules, one pipeline</h2>
-      <p class="sub">
-        A prompt becomes a dialogue, the dialogue becomes interactive speech, and the
-        speech drives a pair of face videos that answer one another.
-      </p>
-    </div>
+<!-- ══════════════ AUTHORS + CITE ══════════════ -->
+<section class="section" id="cite">
+  <header class="sec-head narrow">
+    <p class="kicker" data-anim="up">The team</p>
+    <h2 class="title" data-anim="up" data-delay="1">Cite this work.</h2>
+  </header>
 
-    <ol class="modules">
-      <li class="mod reveal" style="--d:0ms">
-        <span class="mono num">TDG</span>
-        <h3>Textual Dialogue Generation</h3>
-        <p>
-          A language model turns one scenario prompt into several multi-turn dyadic
-          scripts, each paired with two textual identity descriptors. Turns are
-          generated segment by segment, conditioned on what was said before.
-        </p>
-      </li>
-      <li class="mod reveal" style="--d:90ms">
-        <span class="mono num">DADG</span>
-        <h3>Dyadic Audio Dialogue Generation</h3>
-        <p>
-          The interactive audio refinement block adds back-channels
-          (<span class="mono">uh-huh, hmm, okay, yeah</span>), per-turn emotion,
-          timestamps and a shared sound environment, then synthesises the two
-          emotion-aware speech tracks on one timeline.
-        </p>
-      </li>
-      <li class="mod reveal" style="--d:180ms">
-        <span class="mono num">IFBG</span>
-        <h3>Interactive Facial Behaviour Generation</h3>
-        <p>
-          A talking-face model renders the speaking segments; the refinement block then
-          generates the silent listening segments, makes each face responsive to its
-          partner's behaviour, and blends the segment boundaries so the result reads
-          as one continuous exchange.
-        </p>
-      </li>
-    </ol>
+  <p class="authors" data-anim="up">
+    <a href="https://junhaosong.com">Junhao Song</a><sup>1</sup>,
+    Lluis Guasch<sup>2</sup>, Xilin He<sup>3</sup>, Zhongyu Yang<sup>4</sup>,
+    Yingfang Yuan<sup>5</sup>, Weicheng Xie<sup>6</sup>, Linlin Shen<sup>7,8</sup>,
+    Haijun Lin<sup>9</sup>, Shizhe Liu<sup>10</sup>, Wei Pang<sup>4</sup>,
+    Siyang Song<sup>11,†</sup>
+  </p>
+  <p class="affils" data-anim="up">
+    <span><sup>1</sup>Imperial College London, Computing</span>
+    <span><sup>2</sup>Imperial College London, Earth Science &amp; Engineering</span>
+    <span><sup>3</sup>MBZUAI</span>
+    <span><sup>4</sup>Heriot-Watt University</span>
+    <span><sup>5</sup>Northumbria University</span>
+    <span><sup>6,7,8</sup>Shenzhen University</span>
+    <span><sup>9</sup>Hunan Normal University</span>
+    <span><sup>10</sup>University of Oxford</span>
+    <span><sup>11</sup>University of Exeter</span>
+    <span class="corr"><sup>†</sup>Corresponding author</span>
+  </p>
 
-    <figure class="fig framed reveal">
-      <img src="assets/framework.webp" alt="The CHAT pipeline: TDG generates textual dialogue pairs and identity descriptors from a prompt; DADG converts each dialogue into interactive emotion-aware audio pairs; IFBG synthesises mutually responsive face video pairs." loading="lazy" width="1618" height="782">
-      <figcaption>
-        <b>The CHAT pipeline.</b> Dialogue pairs and identity descriptors from a single
-        prompt, interactive audio pairs through the refinement block, and mutually
-        responsive face video pairs assembled into a complete dialogue clip.
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ─────────────────────────── NUMBERS ─────────────────────────── -->
-<section id="numbers" class="section alt">
-  <div class="wrap">
-    <div class="sechead reveal">
-      <span class="kicker mono">04 / Evaluation</span>
-      <h2>Benchmarks</h2>
-      <p class="sub">
-        No existing method addresses this task directly, so CHAT is compared with recent
-        methods for the closest related tasks, all receiving the same prompts and audio.
-        Evaluation is standardised on the first ten seconds. Values are means over
-        1000 generated dialogues.
-      </p>
-    </div>
-
-    <div class="tablewrap reveal">
-      <table class="data">
-        <caption class="mono">Quantitative comparison &mdash; best in bold, second underlined</caption>
-        <thead>
-          <tr>
-            <th scope="col">Method</th>
-            <th scope="col">FID <span class="dir">↓</span></th>
-            <th scope="col">FVD <span class="dir">↓</span></th>
-            <th scope="col">LSE-C <span class="dir">↑</span></th>
-            <th scope="col">LSE-D <span class="dir">↓</span></th>
-            <th scope="col">FRCorr <span class="dir">↑</span></th>
-            <th scope="col">FRDiv <span class="dir">↑</span></th>
-            <th scope="col">CSIM <span class="dir">↑</span></th>
-            <th scope="col">LPIPS <span class="dir">↓</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">Hallo3</th><td>20.56</td><td><u>362.23</u></td><td>4.61</td><td>10.41</td><td class="na">N/A</td><td class="na">N/A</td><td>0.79</td><td>0.55</td></tr>
-          <tr><th scope="row">SadTalker</th><td>22.53</td><td>385.51</td><td><u>6.85</u></td><td><u>8.17</u></td><td class="na">N/A</td><td class="na">N/A</td><td>0.81</td><td>0.48</td></tr>
-          <tr><th scope="row">DIM</th><td>36.52</td><td>460.35</td><td>6.82</td><td>8.89</td><td>31.02</td><td>12.55</td><td><u>0.83</u></td><td>0.52</td></tr>
-          <tr><th scope="row">EDTalk</th><td><u>18.74</u></td><td>619.92</td><td>5.62</td><td>9.61</td><td class="na">N/A</td><td class="na">N/A</td><td>0.78</td><td><b>0.36</b></td></tr>
-          <tr><th scope="row">ReactDiff</th><td>21.36</td><td>386.22</td><td>5.23</td><td>9.02</td><td><u>48.05</u></td><td><u>15.31</u></td><td>0.77</td><td>0.58</td></tr>
-          <tr class="ours"><th scope="row">CHAT <span class="tag">ours</span></th><td><b>17.33</b></td><td>365.03</td><td><b>6.89</b></td><td><b>8.07</b></td><td><b>50.02</b></td><td><b>15.34</b></td><td><b>0.85</b></td><td><u>0.38</u></td></tr>
-        </tbody>
-      </table>
-      <p class="micro mono">FRCorr and FRDiv are reported ×10⁻². N/A marks a metric a method cannot produce.</p>
-    </div>
-
-    <div class="split">
-      <div class="tablewrap reveal">
-        <table class="data compact">
-          <caption class="mono">User study &mdash; 60 participants, 1&ndash;5 scale</caption>
-          <thead>
-            <tr>
-              <th scope="col">Method</th><th scope="col">Visual</th><th scope="col">Audio</th>
-              <th scope="col">Sync</th><th scope="col">Expr.</th><th scope="col">Interact.</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">Hallo3</th><td>4.5</td><td>3.5</td><td>3.9</td><td>3.8</td><td>2.5</td></tr>
-            <tr><th scope="row">SadTalker</th><td>2.5</td><td>3.7</td><td>1.2</td><td>2.0</td><td>1.3</td></tr>
-            <tr><th scope="row">DIM</th><td>3.7</td><td>3.1</td><td>3.4</td><td>2.8</td><td>3.6</td></tr>
-            <tr><th scope="row">EDTalk</th><td>2.2</td><td>3.6</td><td>2.3</td><td>2.8</td><td>2.7</td></tr>
-            <tr><th scope="row">ReactDiff</th><td>4.2</td><td>3.5</td><td>3.8</td><td>4.1</td><td>3.2</td></tr>
-            <tr class="ours"><th scope="row">CHAT <span class="tag">ours</span></th><td><b>4.6</b></td><td><b>4.8</b></td><td><b>4.6</b></td><td><b>4.6</b></td><td><b>4.8</b></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tablewrap reveal">
-        <table class="data compact">
-          <caption class="mono">Audio &amp; refinement ablation &mdash; Full CHAT</caption>
-          <thead>
-            <tr><th scope="col">Variant</th><th scope="col">MCD <span class="dir">↓</span></th><th scope="col">Emo-Acc <span class="dir">↑</span></th><th scope="col">ViSQOL <span class="dir">↑</span></th><th scope="col">FID <span class="dir">↓</span></th></tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">w/o interactive audio refinement</th><td>6.23</td><td>41.2%</td><td>2.97</td><td>21.34</td></tr>
-            <tr><th scope="row">w/o emotion representations</th><td>9.12</td><td>38.3%</td><td>2.67</td><td>23.45</td></tr>
-            <tr><th scope="row">w/o facial behaviour refinement</th><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td>38.67</td></tr>
-            <tr><th scope="row">w/o boundary continuity</th><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td>18.56</td></tr>
-            <tr class="ours"><th scope="row">Full CHAT</th><td><b>4.23</b></td><td><b>78.4%</b></td><td><b>3.98</b></td><td><b>17.33</b></td></tr>
-          </tbody>
-        </table>
-        <p class="micro mono">A dash marks an audio metric left unchanged by a visual-only ablation.</p>
-      </div>
-    </div>
-
-    <figure class="fig framed reveal">
-      <img src="assets/qualitative_results.webp" alt="Qualitative comparison. Talking-face methods used twice yield non-responsive pairs; facial reaction methods take a user-provided speaker video. CHAT generates mutually responsive audio-visual dialogue pairs." loading="lazy" width="1866" height="996">
-      <figcaption>
-        <b>Qualitative comparison.</b> Talking-face methods applied twice yield two
-        unrelated monologues, and reaction methods need a real speaker video as input.
-        CHAT produces the pair as one responsive exchange, so the listening face reacts
-        to the speaker within the same clip.
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ─────────────────────────── DATASET ─────────────────────────── -->
-<section id="dataset" class="section">
-  <div class="wrap">
-    <div class="sechead reveal">
-      <span class="kicker mono">05 / CHAT-AVD-50k</span>
-      <h2>A dataset the pipeline writes by itself</h2>
-    </div>
-
-    <div class="stats">
-      <div class="stat reveal" style="--d:0ms"><b>50,000</b><span>dyadic dialogues</span></div>
-      <div class="stat reveal" style="--d:70ms"><b>100,000</b><span>paired clips</span></div>
-      <div class="stat reveal" style="--d:140ms"><b>100,000</b><span>synthesised identities</span></div>
-      <div class="stat reveal" style="--d:210ms"><b>1,388.9</b><span>hours</span></div>
-    </div>
-
-    <p class="wide reveal">
-      Each clip carries turn-level emotion, scenario and speaker-identity metadata, and
-      the collection spans casual, professional, emotional, academic and social
-      interaction scenarios. Used as pre-training data for interactive head generation,
-      it improves two different reaction models on the REACT 2024 benchmark.
-    </p>
-
-    <div class="tablewrap narrow reveal">
-      <table class="data compact">
-        <caption class="mono">Downstream interactive head generation, fine-tuned on REACT 2024</caption>
-        <thead>
-          <tr>
-            <th scope="col">Pre-training</th>
-            <th scope="col">PerFRDiff FRCorr <span class="dir">↑</span></th>
-            <th scope="col">PerFRDiff FRDist <span class="dir">↓</span></th>
-            <th scope="col">ReactDiff FRCorr <span class="dir">↑</span></th>
-            <th scope="col">ReactDiff FRDist <span class="dir">↓</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">REACT 2024 only</th><td>37.21</td><td>94.72</td><td>24.19</td><td>86.70</td></tr>
-          <tr class="ours"><th scope="row">+ CHAT-AVD-50k</th><td><b>40.11</b></td><td><b>89.45</b></td><td><b>26.12</b></td><td><b>83.87</b></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <figure class="fig framed reveal">
-      <img src="assets/resolutions.webp" alt="Generated dialogue clips across identities and resolutions." loading="lazy" width="758" height="526">
-      <figcaption><b>Coverage.</b> Generated identities span ages, genders and visual styles.</figcaption>
-    </figure>
-
-    <div class="note reveal">
-      <span class="mono">Availability</span>
-      <p>
-        CHAT-AVD-50k will be released with provenance metadata and bias auditing for
-        responsible use. The code release is being prepared and will be linked here.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── POSTER ─────────────────────────── -->
-<section class="section alt">
-  <div class="wrap">
-    <div class="sechead reveal">
-      <span class="kicker mono">06 / Poster</span>
-      <h2>ECCV 2026 poster</h2>
-    </div>
-    <a class="poster reveal" href="assets/poster.webp" target="_blank" rel="noopener">
-      <img src="assets/poster.webp" alt="CHAT ECCV 2026 conference poster" loading="lazy" width="1500" height="1071">
-      <span class="poster-cue mono">open full size</span>
-    </a>
-  </div>
-</section>
-
-<!-- ─────────────────────────── LIMITATIONS ─────────────────────────── -->
-<section class="section">
-  <div class="wrap two-col">
-    <div class="col-side reveal">
-      <span class="kicker mono">07 / Honest limits</span>
-    </div>
-    <div class="col-main reveal">
-      <dl class="limits">
-        <dt>Inference cost</dt>
-        <dd>Each clip runs a language model, a speech model and several video diffusion
-            passes, so synthesis at dataset scale is slow. Here <i>scalable</i> means
-            demographic coverage, not a low per-clip cost.</dd>
-        <dt>Evaluation</dt>
-        <dd>The reaction metrics score the appropriateness and diversity of facial
-            behaviour, not turn-taking timing or dialogue-level semantics. A metric for
-            dialogue-level interaction quality remains open.</dd>
-        <dt>Scope</dt>
-        <dd>CHAT currently generates English dialogues, and the downstream study uses
-            REACT 2024, on which the refinement block is pre-trained.</dd>
-      </dl>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── CITE ─────────────────────────── -->
-<section id="cite" class="section alt">
-  <div class="wrap">
-    <div class="sechead reveal">
-      <span class="kicker mono">08 / Citation</span>
-      <h2>Cite this work</h2>
-      <p class="sub">The publisher record is pending the ECCV 2026 proceedings.</p>
-    </div>
-    <div class="bibtex reveal">
-      <button id="copybib" class="copy mono" type="button">copy</button>
+  <div class="bib" data-anim="up">
+    <button id="copybib" type="button">Copy</button>
 <pre><code>@inproceedings{song2026chat,
   title     = {Conversational Human Audio-visual Talking Dialogue Generation},
   author    = {Song, Junhao and Guasch, Lluis and He, Xilin and Yang, Zhongyu and
@@ -466,17 +371,26 @@
   booktitle = {European Conference on Computer Vision (ECCV)},
   year      = {2026}
 }</code></pre>
-    </div>
+  </div>
+  <p class="pending" data-anim="up">The publisher record is pending the ECCV 2026 proceedings.</p>
+
+  <div class="avail" data-anim="up">
+    <span>Code — coming soon</span>
+    <span>CHAT-AVD-50k — released separately, with provenance metadata and bias auditing</span>
   </div>
 </section>
 
+</main>
+
 <footer>
-  <div class="wrap foot">
-    <p class="mono">CHAT &middot; ECCV 2026 &middot; <a href="https://junhaosong.com">junhaosong.com</a></p>
-    <p class="mono dim">Page content follows the camera-ready paper. Generated faces are synthesised for research use.</p>
+  <div class="foot-in">
+    <p>CHAT · ECCV 2026 · <a href="https://junhaosong.com">junhaosong.com</a></p>
+    <p class="dim">Content follows the camera-ready paper. All faces shown are synthesised for research.</p>
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

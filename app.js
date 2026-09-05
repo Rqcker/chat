@@ -1,85 +1,45 @@
-/* ══════════════════════════════════════════════════════════════
-   CHAT · ECCV 2026 — project page behaviour
-   ══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   CHAT · ECCV 2026 — behaviour
+   ═══════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hasGSAP = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
 
-  /* ── 1. entrance + scroll reveals ─────────────────────────── */
-  function revealAll(sel) {
-    document.querySelectorAll(sel).forEach(function (el) { el.classList.add("in"); });
-  }
+  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
 
-  if (reduced) {
-    revealAll(".rev, .reveal");
-  } else {
-    requestAnimationFrame(function () { revealAll(".rev"); });
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-      });
-    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
-
-    document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
-  }
-
-  /* ── 2. scroll progress rail ──────────────────────────────── */
-  var bar = document.getElementById("scrollbar");
-  var ticking = false;
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function () {
-      var h = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + "%";
-      ticking = false;
+  /* ── 0. fallback: if GSAP is blocked, nothing stays invisible ────── */
+  function showAll() {
+    document.querySelectorAll("[data-anim]").forEach(function (el) {
+      el.style.opacity = 1;
+      el.style.transform = "none";
     });
   }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  if (!hasGSAP || reduced) showAll();
 
-  /* ── 3. dock active section ───────────────────────────────── */
-  var dockLinks = Array.prototype.slice.call(document.querySelectorAll(".dock a"));
-  var targets = dockLinks
-    .map(function (a) { return document.getElementById(a.dataset.dock); })
-    .filter(Boolean);
-
-  if (targets.length) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        dockLinks.forEach(function (a) {
-          a.classList.toggle("active", a.dataset.dock === e.target.id);
-        });
-      });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    targets.forEach(function (t) { spy.observe(t); });
-  }
-
-  /* ── 4. demo tabs ─────────────────────────────────────────── */
-  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tabs button"));
-  var panels = Array.prototype.slice.call(document.querySelectorAll(".players video"));
-  var notes = Array.prototype.slice.call(document.querySelectorAll(".stage-note p"));
+  /* ── 1. tabs: the segmented control ──────────────────────────────── */
+  var tabs = [].slice.call(document.querySelectorAll(".segmented button"));
+  var clips = [].slice.call(document.querySelectorAll(".player video"));
+  var notes = [].slice.call(document.querySelectorAll(".clip-note p"));
 
   function play(v) {
     if (!v) return;
     var p = v.play();
-    if (p && typeof p.catch === "function") p.catch(function () { /* autoplay blocked */ });
+    if (p && p.catch) p.catch(function () { /* autoplay may be blocked */ });
   }
 
   function select(key) {
     tabs.forEach(function (b) {
-      var on = b.dataset.tab === key;
+      var on = b.dataset.clip === key;
       b.setAttribute("aria-selected", String(on));
-      b.tabIndex = on ? 0 : -1;   // roving tabindex
+      b.tabIndex = on ? 0 : -1;
     });
-    panels.forEach(function (v) {
-      var on = v.dataset.panel === key;
+    clips.forEach(function (v) {
+      var on = v.dataset.clip === key;
       v.classList.toggle("on", on);
       if (on) { if (v.preload === "none") v.preload = "auto"; play(v); }
-      else { v.pause(); }
+      else v.pause();
     });
     notes.forEach(function (p) { p.classList.toggle("on", p.dataset.note === key); });
   }
@@ -88,12 +48,11 @@
     var n = tabs.length;
     var t = tabs[((i % n) + n) % n];
     t.focus();
-    select(t.dataset.tab);
+    select(t.dataset.clip);
   }
 
   tabs.forEach(function (b, i) {
-    b.addEventListener("click", function () { select(b.dataset.tab); });
-    // Arrow-key navigation, as a tablist is expected to provide.
+    b.addEventListener("click", function () { select(b.dataset.clip); });
     b.addEventListener("keydown", function (e) {
       if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); focusTab(i + 1); }
       else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); focusTab(i - 1); }
@@ -102,159 +61,170 @@
     });
   });
 
-  // Only run the visible clip, and only while the stage is on screen.
-  var stage = document.querySelector(".players");
-  if (stage) {
-    var vio = new IntersectionObserver(function (entries) {
+  // Play only what is on screen.
+  var player = document.querySelector(".player");
+  if (player && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        var current = panels.filter(function (v) { return v.classList.contains("on"); })[0];
-        if (e.isIntersecting) play(current);
-        else panels.forEach(function (v) { v.pause(); });
+        var cur = clips.filter(function (v) { return v.classList.contains("on"); })[0];
+        if (e.isIntersecting) play(cur);
+        else clips.forEach(function (v) { v.pause(); });
       });
-    }, { threshold: 0.25 });
-    vio.observe(stage);
+    }, { threshold: 0.25 }).observe(player);
   }
 
-  /* ── 5. copy BibTeX ───────────────────────────────────────── */
-  var copyBtn = document.getElementById("copybib");
-  if (copyBtn) {
-    copyBtn.addEventListener("click", function () {
-      var text = document.querySelector(".bibtex code").innerText;
+  /* ── 2. copy BibTeX ──────────────────────────────────────────────── */
+  var copy = document.getElementById("copybib");
+  if (copy) {
+    copy.addEventListener("click", function () {
+      var text = document.querySelector(".bib code").innerText;
       var done = function () {
-        copyBtn.textContent = "copied";
-        copyBtn.classList.add("done");
-        setTimeout(function () {
-          copyBtn.textContent = "copy";
-          copyBtn.classList.remove("done");
-        }, 1800);
+        copy.textContent = "Copied";
+        copy.classList.add("done");
+        setTimeout(function () { copy.textContent = "Copy"; copy.classList.remove("done"); }, 1800);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { });
+        navigator.clipboard.writeText(text).then(done, function () {});
       } else {
         var ta = document.createElement("textarea");
         ta.value = text; document.body.appendChild(ta); ta.select();
-        try { document.execCommand("copy"); done(); } catch (err) { }
+        try { document.execCommand("copy"); done(); } catch (err) {}
         document.body.removeChild(ta);
       }
     });
   }
 
-  /* ── 6. hero: turn-taking waveform ────────────────────────────
-     Two mirrored ribbons, one per speaker. Amplitude alternates on a
-     conversational cadence: while one speaks the other listens, with a
-     brief overlap at each hand-over. This is the paper's mechanism drawn
-     as the background, not a generic particle field.
-     ─────────────────────────────────────────────────────────── */
-  var cv = document.getElementById("turnwave");
-  if (!cv) return;
-  var ctx = cv.getContext("2d");
+  if (!hasGSAP || reduced) return;
 
-  var COOL = [63, 169, 245];
-  var WARM = [240, 164, 92];
+  /* ── 3. entrance + scroll reveals ────────────────────────────────
+     Short, critically damped, no overshoot. Motion here exists to
+     stage the reading order, not to be noticed.
+     ─────────────────────────────────────────────────────────────── */
+  var hero = [].slice.call(document.querySelectorAll(".hero [data-anim]"));
+  gsap.to(hero, {
+    opacity: 1, y: 0,
+    duration: 0.9, ease: "power3.out",
+    stagger: 0.08, delay: 0.05
+  });
 
-  var W = 0, H = 0, dpr = 1;
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = cv.clientWidth; H = cv.clientHeight;
-    cv.width = Math.round(W * dpr);
-    cv.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  resize();
-  window.addEventListener("resize", resize);
+  var rest = [].slice.call(document.querySelectorAll("[data-anim]")).filter(function (el) {
+    return !el.closest(".hero");
+  });
+  rest.forEach(function (el) {
+    gsap.to(el, {
+      opacity: 1, y: 0,
+      duration: 0.85, ease: "power3.out",
+      delay: (parseFloat(el.dataset.delay) || 0) * 0.09,
+      scrollTrigger: { trigger: el, start: "top 88%", once: true }
+    });
+  });
 
-  // Turn schedule: [speaker, seconds]. 0 = speaker i, 1 = speaker j.
-  var TURNS = [[0, 3.1], [1, 2.4], [0, 1.8], [1, 3.4], [0, 2.6], [1, 2.0]];
-  var CYCLE = TURNS.reduce(function (s, t) { return s + t[1]; }, 0);
-
-  // Smooth 0..1 activity for a given speaker at time t (seconds).
-  function activity(speaker, t) {
-    var u = ((t % CYCLE) + CYCLE) % CYCLE;
-    var acc = 0, level = 0;
-    for (var i = 0; i < TURNS.length; i++) {
-      var who = TURNS[i][0], dur = TURNS[i][1];
-      if (u >= acc && u < acc + dur) {
-        var local = (u - acc) / dur;
-        // ease in and out of each turn so hand-overs overlap softly
-        var env = Math.min(1, local / 0.18) * Math.min(1, (1 - local) / 0.18);
-        level = who === speaker ? env : 0;
-        break;
+  /* ── 4. teaser: the product reveal ───────────────────────────────
+     Scales up into place as it enters. Apple's move: the object
+     arrives rather than fades.
+     ─────────────────────────────────────────────────────────────── */
+  var teaser = document.getElementById("teaserFig");
+  if (teaser) {
+    gsap.fromTo(teaser,
+      { scale: 0.9, opacity: 0, y: 40 },
+      {
+        scale: 1, opacity: 1, y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: teaser,
+          start: "top 92%",
+          end: "top 42%",
+          scrub: 0.6
+        }
       }
-      acc += dur;
-    }
-    return 0.16 + 0.84 * level; // listeners keep a low idle motion
+    );
   }
 
-  function ribbon(t, speaker, rgb, baseY, dir) {
-    var amp = activity(speaker, t);
-    var pts = 84;
-    var span = W * 1.06;
-    var x0 = -W * 0.03;
-
-    ctx.beginPath();
-    for (var i = 0; i <= pts; i++) {
-      var p = i / pts;
-      var x = x0 + span * p;
-      // window so the ribbon fades at both edges
-      var win = Math.sin(Math.PI * p);
-      var phase = t * (speaker ? 1.35 : 1.62) + p * (speaker ? 7.4 : 9.1);
-      var y =
-        Math.sin(phase) * 44 +
-        Math.sin(phase * 0.47 + 1.7) * 27 +
-        Math.sin(phase * 2.11 + 0.6) * 11;
-      ctx.lineTo(x, baseY + dir * y * win * amp);
-    }
-
-    var g = ctx.createLinearGradient(0, 0, W, 0);
-    g.addColorStop(0, "rgba(" + rgb.join(",") + ",0)");
-    g.addColorStop(0.28, "rgba(" + rgb.join(",") + "," + (0.52 * amp + 0.07).toFixed(3) + ")");
-    g.addColorStop(0.72, "rgba(" + rgb.join(",") + "," + (0.52 * amp + 0.07).toFixed(3) + ")");
-    g.addColorStop(1, "rgba(" + rgb.join(",") + ",0)");
-    ctx.strokeStyle = g;
-    ctx.lineWidth = 1.25;
-    ctx.stroke();
+  /* ── 5. statement: words rise in sequence ────────────────────────── */
+  var lead = document.querySelector(".lead");
+  if (lead) {
+    // Wrap words without disturbing the two spans that carry meaning.
+    [].slice.call(lead.childNodes).forEach(function (node) {
+      if (node.nodeType === 3 && node.textContent.trim()) {
+        var frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach(function (tok) {
+          if (!tok.trim()) { frag.appendChild(document.createTextNode(tok)); return; }
+          var s = document.createElement("span");
+          s.className = "word"; s.textContent = tok;
+          frag.appendChild(s);
+        });
+        lead.replaceChild(frag, node);
+      } else if (node.nodeType === 1 && node.classList.contains("dim")) {
+        var inner = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach(function (tok) {
+          if (!tok.trim()) { inner.appendChild(document.createTextNode(tok)); return; }
+          var s = document.createElement("span");
+          s.className = "word"; s.textContent = tok;
+          inner.appendChild(s);
+        });
+        node.textContent = "";
+        node.appendChild(inner);
+      }
+    });
+    lead.style.opacity = 1;
+    gsap.from(lead.querySelectorAll(".word"), {
+      opacity: 0, y: "0.42em",
+      duration: 0.75, ease: "power3.out", stagger: 0.022,
+      scrollTrigger: { trigger: lead, start: "top 78%", once: true }
+    });
   }
 
-  function frame(now) {
-    var t = now / 1000;
-    ctx.clearRect(0, 0, W, H);
+  /* ── 6. pinned pipeline ──────────────────────────────────────────
+     One stage highlighted at a time; the orb shifts hue and scale as
+     text becomes audio becomes video.
+     ─────────────────────────────────────────────────────────────── */
+  var pinSection = document.querySelector(".pin-section");
+  var stages = [].slice.call(document.querySelectorAll(".stages li"));
+  var labels = [].slice.call(document.querySelectorAll(".pin-label"));
+  var orb1 = document.querySelector(".orb.o1");
 
-    var mid = H * 0.5;
-    // stacked ribbons give the band a woven, textile feel
-    for (var k = 0; k < 7; k++) {
-      var off = (k - 3) * (H * 0.036);
-      var fade = 1 - Math.abs(k - 3) / 4.6;
-      ctx.globalAlpha = 0.46 * fade;
-      ribbon(t + k * 0.42, 0, COOL, mid + off - H * 0.10, -1);
-      ribbon(t + k * 0.42, 1, WARM, mid + off + H * 0.10, 1);
-    }
-    ctx.globalAlpha = 1;
-
-    raf = requestAnimationFrame(frame);
+  function setStage(i) {
+    stages.forEach(function (li, k) { li.classList.toggle("active", k === i); });
+    labels.forEach(function (l, k) { l.classList.toggle("on", k === i); });
+    if (!orb1) return;
+    var looks = [
+      { scale: 0.82, background: "radial-gradient(circle at 34% 30%, #7fc4ff, #0071e3 62%, #0055b3)" },
+      { scale: 1.0,  background: "radial-gradient(circle at 34% 30%, #a8d8ff, #2b8cf0 60%, #0a63c9)" },
+      { scale: 1.16, background: "radial-gradient(circle at 34% 30%, #cfe9ff, #55a6f5 58%, #1d6fd6)" }
+    ][i];
+    gsap.to(orb1, { scale: looks.scale, duration: 0.7, ease: "power2.out" });
+    orb1.style.background = looks.background;
   }
 
-  var raf = null;
-  if (reduced) {
-    // one composed static frame
-    var t0 = 1.2;
-    ctx.clearRect(0, 0, W, H);
-    var mid0 = H * 0.5;
-    for (var k0 = 0; k0 < 7; k0++) {
-      var off0 = (k0 - 3) * (H * 0.036);
-      ctx.globalAlpha = 0.46 * (1 - Math.abs(k0 - 3) / 4.6);
-      ribbon(t0 + k0 * 0.42, 0, COOL, mid0 + off0 - H * 0.10, -1);
-      ribbon(t0 + k0 * 0.42, 1, WARM, mid0 + off0 + H * 0.10, 1);
-    }
-    ctx.globalAlpha = 1;
+  if (pinSection && stages.length && window.matchMedia("(min-width:901px)").matches) {
+    setStage(0);
+    ScrollTrigger.create({
+      trigger: pinSection,
+      start: "top top",
+      end: "+=" + (stages.length * 60) + "%",
+      pin: ".pin-inner",
+      pinSpacing: true,
+      onUpdate: function (self) {
+        var i = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
+        if (i !== setStage.last) { setStage(i); setStage.last = i; }
+      }
+    });
   } else {
-    raf = requestAnimationFrame(frame);
-    // stop painting once the hero has scrolled away
-    var hio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting && raf === null) raf = requestAnimationFrame(frame);
-        else if (!e.isIntersecting && raf !== null) { cancelAnimationFrame(raf); raf = null; }
-      });
-    }, { threshold: 0.01 });
-    hio.observe(cv);
+    stages.forEach(function (li) { li.classList.add("active"); });
   }
+
+  /* ── 7. stat counters ────────────────────────────────────────────── */
+  document.querySelectorAll(".stat b[data-count]").forEach(function (el) {
+    var target = parseFloat(el.dataset.count);
+    var obj = { v: 0 };
+    gsap.to(obj, {
+      v: target,
+      duration: 1.6, ease: "power2.out",
+      onUpdate: function () { el.textContent = Math.round(obj.v).toLocaleString("en-US"); },
+      scrollTrigger: { trigger: el, start: "top 86%", once: true }
+    });
+  });
+
+  /* ── 8. keep positions honest once media has loaded ──────────────── */
+  window.addEventListener("load", function () { ScrollTrigger.refresh(); });
 })();
