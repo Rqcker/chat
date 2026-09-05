@@ -20,7 +20,7 @@
 
 <header class="nav" id="nav">
   <div class="nav-in">
-    <a class="nav-brand" href="#top">CHAT</a>
+    <a class="nav-brand" href="#top"><img src="assets/logo.webp" alt="" width="284" height="360" aria-hidden="true"><span>CHAT</span></a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#results">Results</a>
       <a href="#overview">Overview</a>
@@ -36,15 +36,17 @@
 
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero" id="top">
-  <p class="eyebrow" data-anim="up">ECCV 2026</p>
-  <h1 class="wordmark" data-anim="up" data-delay="1" aria-label="CHAT"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></h1>
-  <p class="hero-sub" data-anim="up" data-delay="2">
+  <img class="hero-mark" src="assets/logo.webp" alt="The CHAT project mark"
+       width="284" height="360" data-anim="up">
+  <p class="eyebrow" data-anim="up" data-delay="1">ECCV 2026</p>
+  <h1 class="wordmark" data-anim="up" data-delay="2" aria-label="CHAT"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></h1>
+  <p class="hero-sub" data-anim="up" data-delay="3">
     A whole conversation.<br class="br-m"> From one line of text.
   </p>
-  <p class="hero-note" data-anim="up" data-delay="3">
+  <p class="hero-note" data-anim="up" data-delay="4">
     Conversational Human Audio-visual Talking Dialogue Generation
   </p>
-  <div class="hero-cta" data-anim="up" data-delay="4">
+  <div class="hero-cta" data-anim="up" data-delay="5">
     <a class="btn" href="#results">See it in motion</a>
     <a class="btn ghost" href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">ECCV page ›</a>
   </div>
@@ -53,7 +55,7 @@
 <!-- teaser, scaling in on scroll -->
 <section class="reveal-stage">
   <figure class="reveal-figure" id="teaserFig">
-    <img src="assets/teaser.webp" alt="CHAT compared with condition-driven face video generation, face video editing, facial reaction generation and interactive talking-face pair generation." width="2400" height="969">
+    <img src="assets/teaser.webp" alt="CHAT compared with condition-driven face video generation, face video editing, facial reaction generation and interactive talking-face pair generation." width="2600" height="1053">
   </figure>
   <p class="caption wide" data-anim="up">
     Other methods animate one face from a condition, edit a clip you already have,
@@ -76,48 +78,69 @@
     <p class="kicker" data-anim="up">Generated dialogues</p>
     <h2 class="title" data-anim="up" data-delay="1">Watch them take turns.</h2>
     <p class="sub" data-anim="up" data-delay="2">
-      Every clip is produced end to end from a text prompt. Both faces are generated
-      as a responsive pair, so the one listening reacts to the one speaking, inside
-      the same clip.
+      Six prompts, six conversations, twelve identities that were never paired by hand.
+      Both faces in a clip are generated as a responsive pair, so the one listening
+      reacts to the one speaking, inside the same clip.
     </p>
   </header>
 
   <div class="player-wrap" data-anim="up">
     <div class="player" id="player">
-      <video data-clip="hq1" class="on" src="assets/video/hq1.mp4" poster="assets/video/hq1.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation 1"></video>
-      <video data-clip="hq2" src="assets/video/hq2.mp4" poster="assets/video/hq2.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 2"></video>
-      <video data-clip="hq3" src="assets/video/hq3.mp4" poster="assets/video/hq3.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 3"></video>
-      <video data-clip="hq4" src="assets/video/hq4.mp4" poster="assets/video/hq4.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 4"></video>
-      <video data-clip="hq5" src="assets/video/hq5.mp4" poster="assets/video/hq5.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 5"></video>
-      <video data-clip="d4_stylised" src="assets/video/d4_stylised.mp4" poster="assets/video/d4_stylised.jpg" muted loop playsinline preload="none" aria-label="Generated conversation with illustrated identities"></video>
-      <button class="sound" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
-        <svg viewBox="0 0 20 20" aria-hidden="true">
-          <path class="spk" d="M4 8h3l4-3.5v11L7 12H4z"/>
-          <g class="waves"><path d="M13.4 7.4a3.6 3.6 0 0 1 0 5.2"/><path d="M15.6 5.4a6.6 6.6 0 0 1 0 9.2"/></g>
-          <line class="slash" x1="4.6" y1="15.6" x2="15.8" y2="4.4"/>
-        </svg>
-        <span>Sound</span>
-      </button>
+      <video data-clip="cafe" class="on" src="assets/video/cafe.mp4" poster="assets/video/cafe.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation in a cafe"></video>
+      <video data-clip="hallway" src="assets/video/hallway.mp4" poster="assets/video/hallway.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an apartment hallway"></video>
+      <video data-clip="studio" src="assets/video/studio.mp4" poster="assets/video/studio.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a studio"></video>
+      <video data-clip="living" src="assets/video/living.mp4" poster="assets/video/living.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a living room"></video>
+      <video data-clip="classroom" src="assets/video/classroom.mp4" poster="assets/video/classroom.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a classroom"></video>
+      <video data-clip="illustrated" src="assets/video/illustrated.mp4" poster="assets/video/illustrated.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two illustrated identities"></video>
+      <div class="volume" id="volume">
+        <button class="vol-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path class="spk" d="M4 8h3l4-3.5v11L7 12H4z"/>
+            <g class="waves"><path d="M13.4 7.4a3.6 3.6 0 0 1 0 5.2"/><path d="M15.6 5.4a6.6 6.6 0 0 1 0 9.2"/></g>
+            <line class="slash" x1="4.6" y1="15.6" x2="15.8" y2="4.4"/>
+          </svg>
+          <span class="vol-label">Sound</span>
+        </button>
+        <input class="vol-range" id="volRange" type="range" min="0" max="100" step="1" value="70"
+               aria-label="Volume" title="Volume">
+      </div>
     </div>
   </div>
 
+  <figure class="turns" id="turns" data-anim="up">
+    <figcaption class="turns-cap">Who is speaking, on the one shared timeline</figcaption>
+    <div class="turns-grid" aria-hidden="true">
+      <span class="turns-name">Left</span>  <div class="lane" data-lane="i"></div>
+      <span class="turns-name">Right</span> <div class="lane" data-lane="j"></div>
+      <span></span> <div class="turns-axis"><i>0s</i><i>5s</i><i>10s</i></div>
+    </div>
+  </figure>
+
   <div class="segmented" role="tablist" aria-label="Examples" data-anim="up">
-    <button role="tab" aria-selected="true" data-clip="hq1">Turn-taking</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq2">Listening</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq3">Diversity</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq4">Emotion</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq5">Long exchange</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="d4_stylised">Illustrated</button>
+    <button role="tab" aria-selected="true" data-clip="cafe">Cafe</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hallway">Hallway</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="studio">Studio</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="living">Living room</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="classroom">Classroom</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="illustrated">Illustrated</button>
   </div>
 
   <div class="clip-note" data-anim="up">
-    <p data-note="hq1" class="on">Both sides are generated together. Sentences and back-channels sit on one shared timeline, so the turn passes between them the way it does in a real exchange. Turn the sound on to hear the synthesised speech.</p>
-    <p data-note="hq2">A listener is not a still frame. The silent stretches are generated too, and the joins between segments are blended away.</p>
-    <p data-note="hq3">One prompt yields many conversations, each with different content and different faces.</p>
-    <p data-note="hq4">Per-turn emotion reaches the voice, so the delivery changes with what is being said rather than staying flat.</p>
-    <p data-note="hq5">Turns keep alternating across the whole clip, not only at the start.</p>
-    <p data-note="d4_stylised">Identities need not be photorealistic. The same method drives illustrated faces with no change.</p>
+    <p data-note="cafe" class="on">Five turns in ten seconds. Each speaker talks twice and drops a back-channel into the other's turn, all on one shared timeline.</p>
+    <p data-note="hallway">Both sides interrupt politely: an "uh-huh" at two seconds, a "yeah" at eight, each landing inside the other speaker's sentence.</p>
+    <p data-note="studio">One speaker holds the floor for eight seconds. The listener is generated for that whole stretch, not frozen, and answers at the end.</p>
+    <p data-note="living">Two generations talking. The voices are sampled independently of the faces, so a pair like this is a draw from the model, not a casting choice.</p>
+    <p data-note="classroom">A tutor and a student. The student's reply opens with a hesitation, which the audio stage renders rather than smoothing away.</p>
+    <p data-note="illustrated">Identities need not be photorealistic. The same method drives illustrated faces with no change. This clip comes from the conference video, so it is lower resolution than the others.</p>
   </div>
+
+  <p class="foot provenance" data-anim="up">
+    Each clip is the full CHAT output for one prompt, at 512&nbsp;px per face, then
+    passed through the CodeFormer face upscaler that Hallo2 ships, so it holds up on a
+    large screen. Every number on this page is measured before that step. Both speakers'
+    audio tracks are mixed at their own level, and each clip is normalised to the same
+    loudness.
+  </p>
 </section>
 
 <!-- ══════════════ PIPELINE (pinned) ══════════════ -->
@@ -160,9 +183,18 @@
   </div>
 </section>
 
-<section class="section tight">
-  <figure class="fig" data-anim="up">
-    <img src="assets/framework.webp" alt="The CHAT pipeline: textual dialogue generation, dyadic audio dialogue generation, and interactive facial behaviour generation." width="2400" height="1159" loading="lazy">
+<section class="section tight bleed" id="figures">
+  <figure class="fig fig-bleed" data-anim="up">
+    <a class="fig-open" href="assets/framework.webp" target="_blank" rel="noopener"
+       aria-label="Open the pipeline figure at full size">
+      <img src="assets/framework.webp" alt="The CHAT pipeline: textual dialogue generation, dyadic audio dialogue generation, and interactive facial behaviour generation." width="2800" height="1349" loading="lazy">
+      <span class="fig-marks" aria-hidden="true">
+        <span class="fig-dim" data-stage="0" style="--x:0;--y:0;--w:.172;--h:1"></span>
+        <span class="fig-dim" data-stage="1" style="--x:.172;--y:.038;--w:.828;--h:.202"></span>
+        <span class="fig-dim" data-stage="2" style="--x:.172;--y:.240;--w:.828;--h:.760"></span>
+      </span>
+      <span class="fig-zoom" aria-hidden="true">Open full size</span>
+    </a>
   </figure>
   <p class="caption wide" data-anim="up">
     The full pipeline. TDG writes the dialogue pairs and identity descriptors,
@@ -170,10 +202,12 @@
     synthesises the responsive face-video pair.
   </p>
 
-
-
-  <figure class="fig slim" data-anim="up">
-    <img src="assets/resolutions.webp" alt="The responsive facial behaviour generation sub-block: identity and partner behaviour are downsampled to several scales, fused by cross-attention, and injected into the diffusion transformer across denoising steps." width="1440" height="989" loading="lazy">
+  <figure class="fig fig-bleed narrow-bleed" data-anim="up">
+    <a class="fig-open" href="assets/resolutions.webp" target="_blank" rel="noopener"
+       aria-label="Open the responsive block figure at full size">
+      <img src="assets/resolutions.webp" alt="The responsive facial behaviour generation sub-block: identity and partner behaviour are downsampled to several scales, fused by cross-attention, and injected into the diffusion transformer across denoising steps." width="2400" height="1653" loading="lazy">
+      <span class="fig-zoom" aria-hidden="true">Open full size</span>
+    </a>
   </figure>
   <p class="caption wide" data-anim="up">
     Inside the responsive block. Identity and the partner's behaviour are fused at
@@ -359,8 +393,12 @@
     </div>
   </div>
 
-  <figure class="fig" data-anim="up">
-    <img src="assets/qualitative_results.webp" alt="Qualitative comparison against talking-face and facial-reaction baselines." width="2400" height="1278" loading="lazy">
+  <figure class="fig fig-bleed" data-anim="up">
+    <a class="fig-open" href="assets/qualitative_results.webp" target="_blank" rel="noopener"
+       aria-label="Open the qualitative comparison at full size">
+    <img src="assets/qualitative_results.webp" alt="Qualitative comparison against talking-face and facial-reaction baselines." width="2800" height="1488" loading="lazy">
+      <span class="fig-zoom" aria-hidden="true">Open full size</span>
+    </a>
   </figure>
   <p class="caption wide" data-anim="up">
     Talking-face methods run twice give two unrelated monologues. Reaction methods

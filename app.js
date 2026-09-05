@@ -38,11 +38,12 @@
     clips.forEach(function (v) {
       var on = v.dataset.clip === key;
       v.classList.toggle("on", on);
-      v.muted = !soundOn;
+      v.muted = !soundOn; v.volume = level;
       if (on) { if (v.preload === "none") v.preload = "auto"; play(v); }
       else { v.pause(); v.currentTime = 0; }
     });
     notes.forEach(function (p) { p.classList.toggle("on", p.dataset.note === key); });
+    drawTurns(key); turnsIdle = false;
   }
 
   function focusTab(i) {
@@ -74,27 +75,116 @@
     }, { threshold: 0.25 }).observe(player);
   }
 
-  /* ── 1b. sound ───────────────────────────────────────────────────
-     Clips start muted because browsers require it. The toggle is the
-     only way to hear the synthesised speech, which is half the paper.
+  /* ── 1b. sound and level ────────────────────────────────────────
+     Clips start muted because browsers require it. The button unmutes;
+     the slider sets the level, because these clips carry speech at very
+     different loudnesses and one fixed volume suits nobody. Both are
+     remembered per viewer.
      ─────────────────────────────────────────────────────────────── */
+  var volume  = document.getElementById("volume");
   var soundBtn = document.getElementById("soundBtn");
+  var volRange = document.getElementById("volRange");
   var soundOn = false;
+  var level = 0.7;
+
+  try {
+    var savedLevel = localStorage.getItem("chat.volume");
+    if (savedLevel !== null) {
+      var n = parseFloat(savedLevel);
+      if (n >= 0 && n <= 1) level = n;
+    }
+  } catch (err) {}
+
   function applySound() {
-    clips.forEach(function (v) { v.muted = !soundOn; });
+    clips.forEach(function (v) { v.muted = !soundOn; v.volume = level; });
+    if (volume) volume.classList.toggle("on", soundOn);
     if (soundBtn) {
       soundBtn.setAttribute("aria-pressed", String(soundOn));
       soundBtn.setAttribute("aria-label", soundOn ? "Turn sound off" : "Turn sound on");
     }
+    if (volRange) {
+      volRange.value = String(Math.round(level * 100));
+      volRange.style.setProperty("--fill", Math.round(level * 100) + "%");
+    }
+    try { localStorage.setItem("chat.volume", String(level)); } catch (err2) {}
   }
+  applySound();
+
   if (soundBtn) {
     soundBtn.addEventListener("click", function () {
       soundOn = !soundOn;
+      // Unmuting at zero would look broken, so give it an audible level.
+      if (soundOn && level < 0.05) level = 0.7;
       applySound();
       var cur = clips.filter(function (v) { return v.classList.contains("on"); })[0];
       if (soundOn && cur) play(cur);
     });
   }
+  if (volRange) {
+    volRange.addEventListener("input", function () {
+      level = Math.max(0, Math.min(1, parseInt(volRange.value, 10) / 100));
+      // Dragging the slider up is itself a request for sound.
+      if (level > 0 && !soundOn) {
+        soundOn = true;
+        var cur2 = clips.filter(function (v) { return v.classList.contains("on"); })[0];
+        if (cur2) play(cur2);
+      }
+      if (level === 0) soundOn = false;
+      applySound();
+    });
+  }
+
+  /* ── 1c. turn-taking timeline ────────────────────────────────────
+     The unit boundaries the generator itself produced, on one axis, moving
+     with the clip. The point it makes is the paper's: a back-channel bar
+     sits inside the other speaker's sentence bar, on a timeline both faces
+     share. No timings are drawn by hand.
+     ─────────────────────────────────────────────────────────────── */
+  var TURNS = {"cafe":[{"s":"i","k":"sent","a":0.0,"b":3.38},{"s":"j","k":"word","a":1.44,"b":1.94},{"s":"j","k":"sent","a":3.57,"b":8.34},{"s":"i","k":"word","a":5.7,"b":6.2},{"s":"i","k":"sent","a":8.56,"b":9.96}],"hallway":[{"s":"i","k":"sent","a":0.0,"b":5.2},{"s":"j","k":"word","a":2.35,"b":2.85},{"s":"j","k":"sent","a":5.45,"b":9.96},{"s":"i","k":"word","a":7.86,"b":8.36}],"studio":[{"s":"i","k":"sent","a":0.0,"b":7.88},{"s":"j","k":"word","a":3.69,"b":4.19},{"s":"j","k":"sent","a":8.14,"b":9.96}],"living":[{"s":"i","k":"sent","a":0.0,"b":7.29},{"s":"j","k":"word","a":3.39,"b":3.89},{"s":"j","k":"sent","a":7.54,"b":9.96},{"s":"i","k":"word","a":9.47,"b":9.96}],"classroom":[{"s":"i","k":"sent","a":0.0,"b":8.01},{"s":"j","k":"word","a":3.76,"b":4.26},{"s":"j","k":"sent","a":8.23,"b":9.96}]};
+  var SPAN = 9.96;
+  var turnsFig = document.getElementById("turns");
+  var lanes = turnsFig ? { i: turnsFig.querySelector('[data-lane="i"]'),
+                           j: turnsFig.querySelector('[data-lane="j"]') } : null;
+  var bars = [];
+
+  function drawTurns(key) {
+    if (!turnsFig || !lanes) return;
+    var units = TURNS[key];
+    bars = [];
+    lanes.i.innerHTML = ""; lanes.j.innerHTML = "";
+    // No published unit list for a clip means no timeline, rather than a guess.
+    if (!units) { turnsFig.classList.remove("ready"); return; }
+    units.forEach(function (u) {
+      var el = document.createElement("span");
+      if (u.k === "word") el.className = "word";
+      el.style.setProperty("--a", (u.a / SPAN).toFixed(4));
+      el.style.setProperty("--w", Math.max((u.b - u.a) / SPAN, 0.006).toFixed(4));
+      lanes[u.s].appendChild(el);
+      bars.push({ el: el, a: u.a, b: u.b });
+    });
+    turnsFig.classList.add("ready");
+  }
+
+  var turnsIdle = false;
+  function tickTurns() {
+    if (turnsFig && bars.length) {
+      var v = clips.filter(function (c) { return c.classList.contains("on"); })[0];
+      if (v && !v.paused && v.duration) {
+        turnsIdle = false;
+        var t = v.currentTime;
+        turnsFig.style.setProperty("--t", Math.min(t / SPAN, 1).toFixed(4));
+        turnsFig.style.setProperty("--head", "0.55");
+        bars.forEach(function (b) { b.el.classList.toggle("live", t >= b.a && t <= b.b); });
+      } else if (!turnsIdle) {
+        // Clear once when playback stops, then stop touching the DOM every frame.
+        turnsIdle = true;
+        turnsFig.style.setProperty("--head", "0");
+        bars.forEach(function (b) { b.el.classList.remove("live"); });
+      }
+    }
+    requestAnimationFrame(tickTurns);
+  }
+  if (turnsFig) { drawTurns(clips[0] && clips[0].dataset.clip); requestAnimationFrame(tickTurns); }
 
   /* ── 2. copy BibTeX ──────────────────────────────────────────────── */
   var copy = document.getElementById("copybib");
@@ -429,6 +519,26 @@
       p: 1, ease: "none",
       onUpdate: function () { render(st.p); },
       scrollTrigger: { trigger: "#mechBlend", start: "top 76%", end: "bottom 50%", scrub: 0.5 }
+    });
+  })();
+
+  /* ── 7b. walk the pipeline figure, one stage at a time ───────────
+     The figure carries its own (a) (b) (c) labels, so the walk-through adds
+     no new text: it veils the two panels you are not being shown, holds,
+     moves on, then hands the whole figure back. Runs once, on arrival.
+     ─────────────────────────────────────────────────────────────── */
+  (function () {
+    var dims = [].slice.call(document.querySelectorAll(".fig-dim"));
+    if (dims.length !== 3 || reduced) return;
+    var VEIL = 0.72, HOLD = 0.95;
+    var tl = gsap.timeline({
+      scrollTrigger: { trigger: ".fig-marks", start: "top 72%", once: true },
+      defaults: { duration: 0.45, ease: "power2.inOut" }
+    });
+    [0, 1, 2].forEach(function (k) {
+      var others = dims.filter(function (_, n) { return n !== k; });
+      tl.to(others, { opacity: VEIL }, k === 0 ? 0.35 : ">" + HOLD)
+        .to(others, { opacity: 0 }, ">" + HOLD);
     });
   })();
 

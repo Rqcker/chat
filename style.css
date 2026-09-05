@@ -46,6 +46,10 @@ body{
 }
 
 img,video{ display:block; max-width:100%; }
+/* width/height attributes are presentational hints: an <img> set to width:100%
+   keeps the attribute height and stretches. height:auto hands the shape back
+   to the file's own aspect ratio. */
+img{ height:auto; }
 a{ color:var(--blue); text-decoration:none; }
 a:hover{ text-decoration:underline; }
 
@@ -75,6 +79,7 @@ a:hover{ text-decoration:underline; }
 .nav-brand{
   font-size:18px; font-weight:600; letter-spacing:-0.02em;
   color:var(--ink); text-decoration:none;
+  display:inline-flex; align-items:center; gap:9px;
 }
 .nav-links{ display:flex; gap:28px; margin-left:auto; }
 .nav-links a{
@@ -206,7 +211,8 @@ a:hover{ text-decoration:underline; }
 
 /* ─────────── teaser reveal ─────────── */
 .reveal-stage{
-  max-width:var(--w-wide); margin-inline:auto;
+  max-width:min(1360px, calc(100vw - 2 * var(--gut) - 10px));
+  margin-inline:auto;
   padding:0 var(--gut) clamp(72px,10vh,128px);
 }
 .reveal-figure{
@@ -625,3 +631,184 @@ footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
 .sound[aria-pressed="true"] .waves{ opacity:1; }
 .sound[aria-pressed="true"] .slash{ opacity:0; }
 @media (max-width:560px){ .sound span{ display:none; } .sound{ padding:9px; } }
+
+
+/* ─────────── project mark ─────────── */
+.nav-brand img{ width:19px; height:auto; display:block; }
+.nav-brand span{ display:block; }
+
+.hero-mark{
+  width:clamp(52px, 6vw, 72px); height:auto;
+  display:block; margin:0 auto clamp(18px, 2.4vh, 28px);
+}
+
+/* ─────────── volume ─────────── */
+/* One control: the button mutes, the slider sets the level. The slider stays
+   hidden until the pointer or keyboard is on the control, so a muted player
+   shows one affordance rather than two. */
+.volume{
+  position:absolute; right:14px; bottom:14px; z-index:2;
+  display:flex; align-items:center; gap:0;
+  padding:0 4px 0 0; border-radius:980px;
+  background:rgba(0,0,0,.42);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+          backdrop-filter:blur(18px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);
+  transition:background .25s var(--ease);
+}
+.volume:hover, .volume:focus-within{ background:rgba(0,0,0,.55); }
+
+.vol-btn{
+  appearance:none; -webkit-appearance:none;
+  display:inline-flex; align-items:center; gap:7px;
+  padding:8px 12px; border:0; background:transparent; cursor:pointer;
+  color:#fff; font:inherit; font-size:12px; letter-spacing:.01em;
+  border-radius:980px;
+}
+.vol-btn svg{ width:19px; height:19px; fill:none; stroke:#fff; stroke-width:1.5;
+  stroke-linecap:round; stroke-linejoin:round; }
+.vol-btn .spk{ fill:#fff; stroke:none; }
+.vol-btn .waves{ opacity:0; transition:opacity .25s var(--ease); }
+.vol-btn .slash{ opacity:1; transition:opacity .25s var(--ease); }
+.volume.on .vol-btn .waves{ opacity:1; }
+.volume.on .vol-btn .slash{ opacity:0; }
+.vol-btn:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+
+.vol-range{
+  appearance:none; -webkit-appearance:none;
+  width:0; opacity:0; margin:0; background:transparent; cursor:pointer;
+  transition:width .32s var(--ease), opacity .24s var(--ease), margin .32s var(--ease);
+}
+.volume:hover .vol-range,
+.volume:focus-within .vol-range,
+.volume.on .vol-range{ width:78px; opacity:1; margin:0 10px 0 2px; }
+.vol-range::-webkit-slider-runnable-track{
+  height:3px; border-radius:3px;
+  background:linear-gradient(to right, #fff 0 var(--fill,70%), rgba(255,255,255,.28) var(--fill,70%) 100%);
+}
+.vol-range::-moz-range-track{ height:3px; border-radius:3px; background:rgba(255,255,255,.28); }
+.vol-range::-moz-range-progress{ height:3px; border-radius:3px; background:#fff; }
+.vol-range::-webkit-slider-thumb{
+  appearance:none; -webkit-appearance:none;
+  width:11px; height:11px; margin-top:-4px; border-radius:50%; background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.vol-range::-moz-range-thumb{
+  width:11px; height:11px; border:0; border-radius:50%; background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.vol-range:focus-visible{ outline:2px solid #fff; outline-offset:4px; }
+
+/* ─────────── wide figures ─────────── */
+/* The paper figures carry small type, so they get more width than the text
+   column: the artwork is the content here, not an illustration beside it.
+   max(100%, ...) keeps them from shrinking below the column on narrow screens. */
+.fig-bleed{
+  --bleed-w: max(100%, min(1360px, calc(100vw - 2 * var(--gut) - 10px)));
+  width:var(--bleed-w);
+  margin-inline:calc((100% - var(--bleed-w)) / 2);
+}
+/* The responsive-block figure is nearly square and reads fine on the text
+   column, so it stays there rather than bleeding with the wide ones. */
+.fig-bleed.narrow-bleed{ --bleed-w: 100%; }
+.fig-open{
+  display:block; position:relative; line-height:0;
+  border-radius:clamp(8px,1vw,14px); overflow:hidden;
+  text-decoration:none;
+}
+.fig-open img{ width:100%; display:block; }
+.fig-zoom{
+  position:absolute; right:12px; bottom:12px;
+  padding:6px 11px; border-radius:980px;
+  font-size:12px; line-height:1.2; letter-spacing:.01em; color:#fff;
+  background:rgba(0,0,0,.44);
+  -webkit-backdrop-filter:blur(14px) saturate(180%);
+          backdrop-filter:blur(14px) saturate(180%);
+  opacity:0; transform:translateY(4px);
+  transition:opacity .28s var(--ease), transform .28s var(--ease);
+}
+.fig-open:hover .fig-zoom, .fig-open:focus-visible .fig-zoom{ opacity:1; transform:none; }
+/* No hover on touch, and the small type in these figures is exactly where a
+   phone reader needs the full-size link, so show it outright. */
+@media (hover: none){ .fig-zoom{ opacity:1; transform:none; } }
+.fig-open:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+
+/* Guided read of the pipeline figure. The figure already prints its own
+   (a) (b) (c) labels, so nothing is added on top: the two stages you are not
+   being shown are simply veiled, one after the other, and then all three
+   return. The boxes tile the figure exactly, so nothing is veiled twice. */
+.fig-marks{ position:absolute; inset:0; pointer-events:none; }
+.fig-dim{
+  position:absolute;
+  left:calc(var(--x) * 100%); top:calc(var(--y) * 100%);
+  width:calc(var(--w) * 100%); height:calc(var(--h) * 100%);
+  background:#fff; opacity:0;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .vol-range{ transition:none; }
+  .fig-zoom{ transition:none; }
+}
+
+/* Provenance note, set under the clip note and on the same optical column. */
+.foot.provenance{
+  max-width:640px; margin:22px 0 0;
+  font-size:13px; line-height:1.55; color:var(--ink-3); letter-spacing:0;
+}
+
+/* ─────────── turn-taking timeline ───────────
+   The clips' own unit boundaries, drawn on one shared axis. It is here because
+   the shared timeline is the claim: a back-channel bar sitting inside the other
+   speaker's sentence bar is the thing to see, and it is hard to see in the video
+   alone. Timings come from the generated plan, not from anything hand-drawn. */
+.turns{
+  margin:0 0 22px; padding:0;
+  /* Height is reserved whether or not a clip has a published unit list, so
+     switching to one that has none does not shift the tabs under it. */
+  min-height:86px;
+  opacity:0; transition:opacity .4s var(--ease);
+}
+.turns.ready{ opacity:1; }
+.turns-cap{
+  font-size:12px; letter-spacing:.02em; color:var(--ink-3);
+  margin:0 0 10px;
+}
+.turns-grid{
+  display:grid; grid-template-columns:auto 1fr; gap:6px 12px; align-items:center;
+}
+.turns-name{
+  font-size:11px; letter-spacing:.03em; color:var(--ink-3);
+  text-align:right; white-space:nowrap;
+}
+.lane{
+  position:relative; height:14px; border-radius:7px;
+  background:var(--bg-2);
+}
+.lane span{
+  position:absolute; top:0; bottom:0;
+  left:calc(var(--a) * 100%); width:calc(var(--w) * 100%);
+  border-radius:7px; background:var(--ink);
+  opacity:.26; transition:opacity .18s var(--ease), background .18s var(--ease);
+}
+.lane span.word{ top:3px; bottom:3px; border-radius:4px; }
+.lane span.live{ opacity:1; background:var(--blue); }
+.turns-axis{
+  position:relative; height:12px;
+  font-size:10px; color:var(--ink-3); letter-spacing:.03em;
+}
+.turns-axis i{ position:absolute; top:0; font-style:normal; }
+.turns-axis i:nth-child(1){ left:0; }
+.turns-axis i:nth-child(2){ left:50%; transform:translateX(-50%); }
+.turns-axis i:nth-child(3){ right:0; }
+/* One playhead per lane, both driven by --t on the figure, so the two rows
+   cannot drift apart. */
+.lane::after{
+  content:""; position:absolute; top:-3px; bottom:-3px;
+  left:calc(var(--t, 0) * 100%); width:1.5px;
+  background:var(--blue); opacity:var(--head, 0);
+  pointer-events:none;
+}
+@media (max-width:560px){
+  .turns-name{ font-size:10px; }
+  .turns-cap{ font-size:11px; }
+}
