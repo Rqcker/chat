@@ -487,7 +487,7 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 
 /* ─────────── poster ─────────── */
 .poster{
-  display:block; border-radius:clamp(12px,1.4vw,20px); overflow:hidden;
+  display:block; position:relative; border-radius:clamp(12px,1.4vw,20px); overflow:hidden;
   background:#fff;
   box-shadow:0 2px 8px rgba(0,0,0,.04), 0 18px 56px rgba(0,0,0,.08);
 }
@@ -875,4 +875,92 @@ footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
 @media (max-width:560px){
   .turns-name{ font-size:10px; }
   .turns-cap{ font-size:11px; }
+}
+
+/* ─────────── figure viewer ───────────
+   Opening a figure should not leave the page. The dialog dims the site behind
+   a blurred scrim, grows the artwork out of the thumbnail it came from, and
+   lets a dense figure be zoomed to its own pixels and panned. */
+.lb{
+  position:fixed; inset:0; z-index:150;   /* above the sticky nav at 100 */
+  display:flex; align-items:center; justify-content:center;
+}
+.lb[hidden]{ display:none; }
+.lb-scrim{
+  position:absolute; inset:0;
+  background:rgba(12,12,14,.72);
+  -webkit-backdrop-filter:blur(26px) saturate(150%);
+          backdrop-filter:blur(26px) saturate(150%);
+  opacity:0;
+}
+.lb-frame{
+  position:relative; z-index:1;
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+  width:min(1560px, 94vw); max-height:92vh;
+}
+.lb-stage{
+  display:flex; align-items:center; justify-content:center;
+  max-width:100%; max-height:calc(92vh - 84px);
+  border-radius:clamp(10px,1.1vw,16px);
+  overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+  background:#fff;
+}
+.lb-stage img{
+  display:block; max-width:100%; max-height:calc(92vh - 84px);
+  width:auto; height:auto;
+  cursor:zoom-in; user-select:none; -webkit-user-drag:none;
+}
+/* Zoomed: the stage becomes the scroller and the artwork takes its own size. */
+.lb-stage.zoom{ overflow:auto; -webkit-overflow-scrolling:touch; cursor:grab; }
+.lb-stage.zoom.drag{ cursor:grabbing; }
+.lb-stage.zoom img{ max-width:none; max-height:none; cursor:inherit; }
+
+.lb-bar{
+  display:flex; align-items:baseline; justify-content:center; gap:18px;
+  flex-wrap:wrap; max-width:760px;
+}
+.lb-cap{
+  margin:0; text-align:center;
+  font-size:14px; line-height:1.5; letter-spacing:0;
+  color:rgba(255,255,255,.78);
+}
+.lb-orig{
+  flex:none; font-size:13px; color:#fff; text-decoration:none;
+  padding:7px 14px; border-radius:980px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.2);
+  transition:background .22s var(--ease);
+}
+.lb-orig:hover{ background:rgba(255,255,255,.24); text-decoration:none; }
+.lb-orig[hidden]{ display:none; }
+
+.lb-btn{
+  position:absolute; z-index:2;
+  width:42px; height:42px; padding:0;
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.18); border-radius:50%;
+  background:rgba(255,255,255,.12); color:#fff; cursor:pointer;
+  -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  transition:background .22s var(--ease), transform .18s var(--ease), opacity .22s var(--ease);
+}
+.lb-btn svg{ width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; }
+.lb-btn:hover{ background:rgba(255,255,255,.24); }
+.lb-btn:active{ transform:scale(.94); }
+.lb-btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+.lb-close{ top:clamp(14px,2.4vh,26px); right:clamp(14px,2.4vw,26px); }
+.lb-prev{ left:clamp(10px,1.8vw,26px); top:50%; margin-top:-21px; }
+.lb-next{ right:clamp(10px,1.8vw,26px); top:50%; margin-top:-21px; }
+.lb-hint{
+  position:absolute; left:50%; translate:-50% 0; bottom:clamp(10px,2vh,20px);
+  margin:0; font-size:12px; letter-spacing:.02em; color:rgba(255,255,255,.5);
+  pointer-events:none; transition:opacity .3s var(--ease);
+}
+@media (max-width:700px){
+  .lb-prev, .lb-next{ top:auto; bottom:clamp(10px,2vh,20px); margin-top:0; }
+  .lb-hint{ display:none; }
+}
+body.lb-open{ overflow:hidden; }
+@media (prefers-reduced-motion: reduce){
+  .lb-btn, .lb-orig, .lb-hint{ transition:none; }
 }

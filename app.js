@@ -339,6 +339,161 @@
     });
   }
 
+  /* ── 2b. figure viewer ───────────────────────────────────────────
+     Opening a figure keeps you on the page. The thumbnails stay real links,
+     so this only takes over the plain left click: a middle click, a modified
+     click and a session without JavaScript all still fetch the file.
+     ─────────────────────────────────────────────────────────────── */
+  (function () {
+    var lb = document.getElementById("lb");
+    var items = [].slice.call(document.querySelectorAll("[data-lb]"));
+    if (!lb || !items.length) return;
+
+    var img = document.getElementById("lbImg");
+    var stage = document.getElementById("lbStage");
+    var cap = document.getElementById("lbCap");
+    var orig = document.getElementById("lbOrig");
+    var hint = document.getElementById("lbHint");
+    var btnClose = document.getElementById("lbClose");
+    var btnPrev = document.getElementById("lbPrev");
+    var btnNext = document.getElementById("lbNext");
+    var scrim = lb.querySelector(".lb-scrim");
+    var frame = lb.querySelector(".lb-frame");
+    var index = -1, lastFocus = null, open = false;
+
+    function srcOf(a) { return a.getAttribute("data-img") || a.getAttribute("href"); }
+
+    function unzoom() {
+      stage.classList.remove("zoom", "drag");
+      stage.scrollTop = stage.scrollLeft = 0;
+      img.style.width = "";
+      if (hint) hint.textContent = "Click to zoom";
+    }
+
+    function show(i, dir) {
+      index = (i + items.length) % items.length;
+      var a = items[index];
+      unzoom();
+      img.src = srcOf(a);
+      img.alt = a.getAttribute("data-cap") || "";
+      cap.textContent = a.getAttribute("data-cap") || "";
+      var o = a.getAttribute("data-orig");
+      if (o) { orig.href = o; orig.hidden = false; } else { orig.hidden = true; }
+      if (hasGSAP && !reduced && dir) {
+        gsap.fromTo(frame, { x: dir * 26, opacity: 0.4 },
+                    { x: 0, opacity: 1, duration: 0.34, ease: "power2.out" });
+      }
+    }
+
+    function openAt(i, from) {
+      lastFocus = document.activeElement;
+      lb.hidden = false;
+      document.body.classList.add("lb-open");
+      open = true;
+      show(i, 0);
+      btnClose.focus({ preventScroll: true });
+
+      if (!hasGSAP || reduced) { gsapless(); return; }
+      gsap.set(scrim, { opacity: 0 });
+      gsap.to(scrim, { opacity: 1, duration: 0.32, ease: "power2.out" });
+      // Grow out of the thumbnail the reader clicked, so the two are one object.
+      var thumb = from && from.querySelector("img");
+      var run = function () {
+        var to = img.getBoundingClientRect();
+        if (thumb && to.width) {
+          var fr = thumb.getBoundingClientRect();
+          gsap.fromTo(frame,
+            { x: fr.left + fr.width / 2 - (to.left + to.width / 2),
+              y: fr.top + fr.height / 2 - (to.top + to.height / 2),
+              scale: fr.width / to.width, opacity: 0.6 },
+            { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.46, ease: "power3.out" });
+        } else {
+          gsap.fromTo(frame, { opacity: 0, scale: 0.96 },
+                      { opacity: 1, scale: 1, duration: 0.36, ease: "power2.out" });
+        }
+      };
+      if (img.complete && img.naturalWidth) run();
+      else img.addEventListener("load", run, { once: true });
+    }
+    function gsapless() { scrim.style.opacity = "1"; frame.style.opacity = "1"; }
+
+    function close() {
+      if (!open) return;
+      open = false;
+      var done = function () {
+        lb.hidden = true;
+        document.body.classList.remove("lb-open");
+        img.removeAttribute("src");
+        unzoom();
+        if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+      };
+      if (!hasGSAP || reduced) { done(); return; }
+      gsap.to(frame, { opacity: 0, scale: 0.97, duration: 0.22, ease: "power2.in" });
+      gsap.to(scrim, { opacity: 0, duration: 0.26, ease: "power2.in", onComplete: done });
+    }
+
+    items.forEach(function (a, i) {
+      a.addEventListener("click", function (e) {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        openAt(i, a);
+      });
+    });
+
+    btnClose.addEventListener("click", close);
+    btnPrev.addEventListener("click", function () { show(index - 1, -1); });
+    btnNext.addEventListener("click", function () { show(index + 1, 1); });
+    lb.addEventListener("click", function (e) {
+      if (e.target.hasAttribute && e.target.hasAttribute("data-lb-dismiss")) close();
+    });
+
+    // Zoom to the file's own pixels, and scroll to the point that was clicked.
+    img.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (stage.classList.contains("zoom")) { unzoom(); return; }
+      var r = img.getBoundingClientRect();
+      var fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+      if (img.naturalWidth <= r.width + 8) return;      // nothing more to show
+      stage.classList.add("zoom");
+      img.style.width = img.naturalWidth + "px";
+      stage.scrollLeft = fx * img.naturalWidth - stage.clientWidth / 2;
+      stage.scrollTop = fy * img.offsetHeight - stage.clientHeight / 2;
+      if (hint) hint.textContent = "Click to fit";
+    });
+
+    // Drag to pan while zoomed.
+    var dragging = false, sx = 0, sy = 0, sl = 0, st = 0;
+    stage.addEventListener("pointerdown", function (e) {
+      if (!stage.classList.contains("zoom")) return;
+      dragging = true; sx = e.clientX; sy = e.clientY;
+      sl = stage.scrollLeft; st = stage.scrollTop;
+      stage.classList.add("drag");
+      stage.setPointerCapture(e.pointerId);
+    });
+    stage.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      stage.scrollLeft = sl - (e.clientX - sx);
+      stage.scrollTop = st - (e.clientY - sy);
+    });
+    ["pointerup", "pointercancel"].forEach(function (ev) {
+      stage.addEventListener(ev, function () { dragging = false; stage.classList.remove("drag"); });
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (!open) return;
+      if (e.key === "Escape") { e.preventDefault(); close(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); show(index - 1, -1); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); show(index + 1, 1); }
+      else if (e.key === "Tab") {
+        // Keep focus inside the dialog.
+        var f = [btnClose, btnPrev, btnNext].concat(orig.hidden ? [] : [orig]);
+        var at = f.indexOf(document.activeElement);
+        e.preventDefault();
+        f[((at + (e.shiftKey ? -1 : 1)) + f.length) % f.length].focus();
+      }
+    });
+  })();
+
   if (!hasGSAP || reduced) return;
 
   /* ── 3. entrance + scroll reveals ────────────────────────────────

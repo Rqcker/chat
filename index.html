@@ -63,7 +63,12 @@
 <!-- teaser, scaling in on scroll -->
 <section class="reveal-stage">
   <figure class="reveal-figure" id="teaserFig">
+    <a class="fig-open" href="assets/teaser.webp" data-lb
+       data-cap="CHAT beside condition-driven face video generation, face video editing, facial reaction generation and interactive talking-face pair generation."
+       aria-label="View the comparison figure larger">
     <img src="assets/teaser.webp" alt="CHAT compared with condition-driven face video generation, face video editing, facial reaction generation and interactive talking-face pair generation." width="2600" height="1053">
+      <span class="fig-zoom" aria-hidden="true">View larger</span>
+    </a>
   </figure>
   <p class="caption wide" data-anim="up">
     Other methods animate one face from a condition, edit a clip you already have,
@@ -194,7 +199,7 @@
 
 <section class="section tight bleed" id="figures">
   <figure class="fig fig-bleed" data-anim="up">
-    <a class="fig-open" href="assets/framework.webp" target="_blank" rel="noopener"
+    <a class="fig-open" href="assets/framework.webp" data-lb data-cap="The full pipeline. TDG writes the dialogue pairs and identity descriptors, DADG turns each dialogue into interactive emotion-aware audio, and IFBG synthesises the responsive face-video pair."
        aria-label="Open the pipeline figure at full size">
       <img src="assets/framework.webp" alt="The CHAT pipeline: textual dialogue generation, dyadic audio dialogue generation, and interactive facial behaviour generation." width="2800" height="1349" loading="lazy">
       <span class="fig-marks" aria-hidden="true">
@@ -202,7 +207,7 @@
         <span class="fig-dim" data-stage="1" style="--x:.172;--y:.038;--w:.828;--h:.202"></span>
         <span class="fig-dim" data-stage="2" style="--x:.172;--y:.240;--w:.828;--h:.760"></span>
       </span>
-      <span class="fig-zoom" aria-hidden="true">Open full size</span>
+      <span class="fig-zoom" aria-hidden="true">View larger</span>
     </a>
   </figure>
   <p class="caption wide" data-anim="up">
@@ -212,10 +217,10 @@
   </p>
 
   <figure class="fig fig-bleed narrow-bleed" data-anim="up">
-    <a class="fig-open" href="assets/resolutions.webp" target="_blank" rel="noopener"
+    <a class="fig-open" href="assets/resolutions.webp" data-lb data-cap="Inside the responsive block. Identity and the partner's behaviour are fused at several spatial scales, then fed into the diffusion transformer coarse first and fine last."
        aria-label="Open the responsive block figure at full size">
       <img src="assets/resolutions.webp" alt="The responsive facial behaviour generation sub-block: identity and partner behaviour are downsampled to several scales, fused by cross-attention, and injected into the diffusion transformer across denoising steps." width="2400" height="1653" loading="lazy">
-      <span class="fig-zoom" aria-hidden="true">Open full size</span>
+      <span class="fig-zoom" aria-hidden="true">View larger</span>
     </a>
   </figure>
   <p class="caption wide" data-anim="up">
@@ -403,10 +408,10 @@
   </div>
 
   <figure class="fig fig-bleed" data-anim="up">
-    <a class="fig-open" href="assets/qualitative_results.webp" target="_blank" rel="noopener"
+    <a class="fig-open" href="assets/qualitative_results.webp" data-lb data-cap="Qualitative comparison against talking-face and facial-reaction baselines."
        aria-label="Open the qualitative comparison at full size">
     <img src="assets/qualitative_results.webp" alt="Qualitative comparison against talking-face and facial-reaction baselines." width="2800" height="1488" loading="lazy">
-      <span class="fig-zoom" aria-hidden="true">Open full size</span>
+      <span class="fig-zoom" aria-hidden="true">View larger</span>
     </a>
   </figure>
   <p class="caption wide" data-anim="up">
@@ -460,10 +465,14 @@
       <a href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">Conference page ›</a>
     </p>
   </header>
-  <a class="poster" href="assets/8120_Song_poster.pdf" target="_blank" rel="noopener" data-anim="up">
+  <a class="poster" href="assets/8120_Song_poster.pdf" data-lb
+     data-img="assets/poster.webp" data-orig="assets/8120_Song_poster.pdf"
+     data-cap="CHAT at ECCV 2026, poster 8120. The printed sheet is 1400 by 1000 mm."
+     data-anim="up">
     <img src="assets/poster.webp" alt="CHAT ECCV 2026 conference poster" width="2400" height="1714" loading="lazy">
+    <span class="fig-zoom" aria-hidden="true">View larger</span>
   </a>
-  <p class="caption wide" data-anim="up">Open the full poster as a PDF, 1400 by 1000&nbsp;mm.</p>
+  <p class="caption wide" data-anim="up">Open the poster to read it, or take the printed PDF, 1400 by 1000&nbsp;mm.</p>
 </section>
 
 <!-- ══════════════ LIMITATIONS ══════════════ -->
@@ -543,6 +552,31 @@
 </section>
 
 </main>
+
+<!-- ══════════════ LIGHTBOX ══════════════ -->
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Figure viewer">
+  <div class="lb-scrim" data-lb-dismiss></div>
+  <div class="lb-frame">
+    <div class="lb-stage" id="lbStage" data-lb-dismiss>
+      <img id="lbImg" alt="">
+    </div>
+    <div class="lb-bar">
+      <p class="lb-cap" id="lbCap"></p>
+      <a class="lb-orig" id="lbOrig" download hidden>Download the PDF</a>
+    </div>
+  </div>
+  <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>
+  </button>
+  <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous figure">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg>
+  </button>
+  <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next figure">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5L16 12l-6.5 6.5"/></svg>
+  </button>
+  <p class="lb-hint" id="lbHint" aria-hidden="true">Click to zoom</p>
+</div>
+
 
 <footer>
   <div class="foot-in">
