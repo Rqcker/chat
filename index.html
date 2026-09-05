@@ -46,7 +46,7 @@
   </p>
   <div class="hero-cta" data-anim="up" data-delay="4">
     <a class="btn" href="#results">See it in motion</a>
-    <a class="btn ghost" href="assets/poster.webp" target="_blank" rel="noopener">Read the poster ›</a>
+    <a class="btn ghost" href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">ECCV page ›</a>
   </div>
 </section>
 
@@ -147,10 +147,24 @@
 </section>
 
 <section class="section tight">
-  <figure class="fig card" data-anim="up">
+  <figure class="fig" data-anim="up">
     <img src="assets/framework.webp" alt="The CHAT pipeline: textual dialogue generation, dyadic audio dialogue generation, and interactive facial behaviour generation." width="1618" height="782" loading="lazy">
   </figure>
-  <p class="caption wide" data-anim="up">The full pipeline, end to end.</p>
+  <p class="caption wide" data-anim="up">
+    The full pipeline. TDG writes the dialogue pairs and identity descriptors,
+    DADG turns each dialogue into interactive emotion-aware audio, and IFBG
+    synthesises the responsive face-video pair.
+  </p>
+
+  <figure class="fig slim" data-anim="up">
+    <img src="assets/resolutions.webp" alt="The responsive facial behaviour generation sub-block: identity and partner behaviour are downsampled to several scales, fused by cross-attention, and injected into the diffusion transformer across denoising steps." width="756" height="526" loading="lazy">
+  </figure>
+  <p class="caption wide" data-anim="up">
+    Inside the responsive block. Identity and the partner's behaviour are fused at
+    several spatial scales, then fed into the diffusion transformer coarse first
+    and fine last, so early steps settle the shape of a movement and later steps
+    bring in the detail.
+  </p>
 </section>
 
 <!-- ══════════════ OVERVIEW / ABSTRACT ══════════════ -->
@@ -251,7 +265,7 @@
     </div>
   </div>
 
-  <figure class="fig card" data-anim="up">
+  <figure class="fig" data-anim="up">
     <img src="assets/qualitative_results.webp" alt="Qualitative comparison against talking-face and facial-reaction baselines." width="1866" height="996" loading="lazy">
   </figure>
   <p class="caption wide" data-anim="up">
@@ -293,9 +307,6 @@
     </table>
   </div>
 
-  <figure class="fig card slim" data-anim="up">
-    <img src="assets/resolutions.webp" alt="Generated identities across ages, genders and visual styles." width="758" height="526" loading="lazy">
-  </figure>
 </section>
 
 <!-- ══════════════ POSTER ══════════════ -->
@@ -303,6 +314,10 @@
   <header class="sec-head narrow">
     <p class="kicker" data-anim="up">Poster</p>
     <h2 class="title" data-anim="up" data-delay="1">ECCV 2026.</h2>
+    <p class="sub" data-anim="up" data-delay="2">
+      Thursday 10 September 2026, 7:30&ndash;9:30 PDT, ExHall #163.
+      <a href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">Conference page ›</a>
+    </p>
   </header>
   <a class="poster" href="assets/poster.webp" target="_blank" rel="noopener" data-anim="up">
     <img src="assets/poster.webp" alt="CHAT ECCV 2026 conference poster" width="1500" height="1071" loading="lazy">
@@ -342,23 +357,21 @@
   </header>
 
   <p class="authors" data-anim="up">
-    <a href="https://junhaosong.com">Junhao Song</a><sup>1</sup>,
-    Lluis Guasch<sup>2</sup>, Xilin He<sup>3</sup>, Zhongyu Yang<sup>4</sup>,
-    Yingfang Yuan<sup>5</sup>, Weicheng Xie<sup>6</sup>, Linlin Shen<sup>7,8</sup>,
-    Haijun Lin<sup>9</sup>, Shizhe Liu<sup>10</sup>, Wei Pang<sup>4</sup>,
-    Siyang Song<sup>11,†</sup>
+    Junhao Song<sup>1</sup>, Lluis Guasch<sup>1</sup>, Xilin He<sup>2</sup>,
+    Zhongyu Yang<sup>3</sup>, Yingfang Yuan<sup>4</sup>, Weicheng Xie<sup>5</sup>,
+    Linlin Shen<sup>5</sup>, Haijun Lin<sup>6</sup>, Shizhe Liu<sup>7</sup>,
+    Wei Pang<sup>3</sup>, Siyang Song<sup>8,&dagger;</sup>
   </p>
   <p class="affils" data-anim="up">
-    <span><sup>1</sup>Imperial College London, Computing</span>
-    <span><sup>2</sup>Imperial College London, Earth Science &amp; Engineering</span>
-    <span><sup>3</sup>MBZUAI</span>
-    <span><sup>4</sup>Heriot-Watt University</span>
-    <span><sup>5</sup>Northumbria University</span>
-    <span><sup>6,7,8</sup>Shenzhen University</span>
-    <span><sup>9</sup>Hunan Normal University</span>
-    <span><sup>10</sup>University of Oxford</span>
-    <span><sup>11</sup>University of Exeter</span>
-    <span class="corr"><sup>†</sup>Corresponding author</span>
+    <span><sup>1</sup>Imperial College London</span>
+    <span><sup>2</sup>Mohamed bin Zayed University of Artificial Intelligence</span>
+    <span><sup>3</sup>Heriot-Watt University</span>
+    <span><sup>4</sup>Northumbria University</span>
+    <span><sup>5</sup>Shenzhen University</span>
+    <span><sup>6</sup>Hunan Normal University</span>
+    <span><sup>7</sup>University of Oxford</span>
+    <span><sup>8</sup>University of Exeter</span>
+    <span class="corr"><sup>&dagger;</sup>Corresponding author</span>
   </p>
 
   <div class="bib" data-anim="up">
@@ -376,6 +389,7 @@
 
   <div class="avail" data-anim="up">
     <span>Code — coming soon</span>
+    <span><a href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">ECCV 2026 conference page</a></span>
     <span>CHAT-AVD-50k — released separately, with provenance metadata and bias auditing</span>
   </div>
 </section>

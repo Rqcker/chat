@@ -35,8 +35,9 @@ body{
   color:var(--ink);
   font-family:var(--sans);
   font-size:17px;
-  line-height:1.5;
+  line-height:1.53;
   letter-spacing:-0.011em;
+  font-synthesis:none;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
@@ -119,20 +120,22 @@ a:hover{ text-decoration:underline; }
 
 .kicker{
   margin:0 0 10px;
-  font-size:19px; font-weight:600; letter-spacing:-0.01em;
+  font-size:19px; font-weight:600; letter-spacing:-0.014em;
   color:var(--blue);
 }
 .title{
   margin:0 0 18px;
-  font-size:clamp(32px,4.6vw,56px);
-  line-height:1.07;
-  letter-spacing:-0.022em;
+  font-size:clamp(33px,4.4vw,54px);
+  line-height:1.06;
+  letter-spacing:-0.025em;
   font-weight:600;
+  text-wrap:balance;
 }
+.sub a{ white-space:nowrap; }
 .sub{
-  margin:0; max-width:620px;
-  font-size:19px; line-height:1.47; letter-spacing:0;
-  color:var(--ink-2);
+  margin:0; max-width:640px;
+  font-size:19px; line-height:1.5; letter-spacing:-0.003em;
+  color:var(--ink-2); text-wrap:pretty;
 }
 
 /* ─────────── hero ─────────── */
@@ -143,14 +146,14 @@ a:hover{ text-decoration:underline; }
 }
 .eyebrow{
   margin:0 0 clamp(14px,2vh,22px);
-  font-size:21px; font-weight:600; letter-spacing:-0.01em;
+  font-size:21px; font-weight:600; letter-spacing:-0.014em;
   color:var(--blue);
 }
 .wordmark{
   margin:0;
-  font-size:clamp(84px,17vw,196px);
-  line-height:.92;
-  letter-spacing:-0.045em;   /* large type reads too loose without this */
+  font-size:clamp(80px,16vw,188px);
+  line-height:.9;
+  letter-spacing:-0.048em;   /* large type reads too loose without this */
   font-weight:700;
   background:linear-gradient(180deg,#1d1d1f 0%,#3a3a3f 100%);
   -webkit-background-clip:text; background-clip:text;
@@ -158,8 +161,8 @@ a:hover{ text-decoration:underline; }
 }
 .hero-sub{
   margin:clamp(16px,2.6vh,30px) auto 0; max-width:16ch;
-  font-size:clamp(28px,4.2vw,50px);
-  line-height:1.09; letter-spacing:-0.022em; font-weight:600;
+  font-size:clamp(27px,4vw,48px);
+  line-height:1.08; letter-spacing:-0.026em; font-weight:600;
 }
 .hero-note{
   margin:18px auto 0; max-width:52ch;
@@ -193,15 +196,13 @@ a:hover{ text-decoration:underline; }
   padding:0 var(--gut) clamp(72px,10vh,128px);
 }
 .reveal-figure{
-  margin:0; border-radius:clamp(14px,1.6vw,22px); overflow:hidden;
-  background:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.04), 0 18px 60px rgba(0,0,0,.07);
+  margin:0;
   transform-origin:center top;
 }
 .reveal-figure img{ width:100%; }
 
 .caption{
-  margin:26px auto 0;
+  margin:30px auto 0;
   font-size:15px; line-height:1.5; color:var(--ink-3); letter-spacing:0;
 }
 .caption.wide{ max-width:660px; text-align:center; }
@@ -213,8 +214,9 @@ a:hover{ text-decoration:underline; }
 }
 .lead{
   margin:0;
-  font-size:clamp(30px,4.4vw,54px);
-  line-height:1.12; letter-spacing:-0.022em; font-weight:600;
+  font-size:clamp(29px,4.2vw,52px);
+  line-height:1.13; letter-spacing:-0.025em; font-weight:600;
+  text-wrap:balance;
 }
 .lead .dim{ color:var(--ink-3); display:block; }
 .lead .word{ display:inline-block; }
@@ -289,7 +291,7 @@ a:hover{ text-decoration:underline; }
   letter-spacing:.04em; display:block; margin-bottom:8px;
 }
 .stages h3{
-  margin:0 0 7px; font-size:22px; font-weight:600; letter-spacing:-0.015em;
+  margin:0 0 7px; font-size:22px; font-weight:600; letter-spacing:-0.018em;
 }
 .stages p{ margin:0; font-size:16px; line-height:1.5; color:var(--ink-2); letter-spacing:0; }
 
@@ -332,22 +334,18 @@ a:hover{ text-decoration:underline; }
 }
 
 /* ─────────── figures ─────────── */
+/* The artwork is keyed to alpha, so it sits straight on the page rather than
+   inside a white card. A card here would just reintroduce the white block. */
 .fig{ margin:0; }
-.fig.card img{
-  width:100%;
-  border-radius:clamp(12px,1.4vw,20px);
-  background:#fff;
-  padding:clamp(14px,2vw,30px);
-  box-shadow:0 2px 8px rgba(0,0,0,.04), 0 16px 50px rgba(0,0,0,.06);
-}
-.fig.slim{ max-width:720px; margin-inline:auto; }
+.fig img{ width:100%; }
+.fig.slim{ max-width:680px; margin-inline:auto; }
 
 /* ─────────── prose ─────────── */
 .prose{ max-width:660px; }
 .prose.center{ margin-inline:auto; text-align:center; }
 .prose p{
-  margin:0 0 20px; font-size:19px; line-height:1.53;
-  color:var(--ink-2); letter-spacing:0;
+  margin:0 0 20px; font-size:19px; line-height:1.55;
+  color:var(--ink-2); letter-spacing:-0.003em; text-wrap:pretty;
 }
 .prose p:last-child{ margin-bottom:0; }
 .prose b{ color:var(--ink); font-weight:600; }
@@ -412,8 +410,8 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 @media (max-width:760px){ .stats{ grid-template-columns:1fr 1fr; gap:34px 20px; } }
 .stat b{
   display:block;
-  font-size:clamp(38px,5.4vw,68px);
-  line-height:1; letter-spacing:-0.03em; font-weight:600;
+  font-size:clamp(38px,5.2vw,66px);
+  line-height:1; letter-spacing:-0.035em; font-weight:600;
   font-variant-numeric:tabular-nums;
   background:linear-gradient(180deg,#1d1d1f,#4a4a50);
   -webkit-background-clip:text; background-clip:text;
