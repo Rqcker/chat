@@ -37,7 +37,7 @@
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero" id="top">
   <p class="eyebrow" data-anim="up">ECCV 2026</p>
-  <h1 class="wordmark" data-anim="up" data-delay="1">CHAT</h1>
+  <h1 class="wordmark" data-anim="up" data-delay="1" aria-label="CHAT"><span class="c" aria-hidden="true">C</span><span class="h" aria-hidden="true">H</span><span class="a" aria-hidden="true">A</span><span class="t" aria-hidden="true">T</span></h1>
   <p class="hero-sub" data-anim="up" data-delay="2">
     A whole conversation.<br class="br-m"> From one line of text.
   </p>
@@ -84,9 +84,11 @@
 
   <div class="player-wrap" data-anim="up">
     <div class="player" id="player">
-      <video data-clip="hq_a" class="on" src="assets/video/hq_a.mp4" poster="assets/video/hq_a.jpg" muted loop playsinline preload="metadata" aria-label="A generated dyadic conversation"></video>
-      <video data-clip="hq_b" src="assets/video/hq_b.mp4" poster="assets/video/hq_b.jpg" muted loop playsinline preload="none" aria-label="A second generated conversation"></video>
-      <video data-clip="hq_c" src="assets/video/hq_c.mp4" poster="assets/video/hq_c.jpg" muted loop playsinline preload="none" aria-label="A third generated conversation"></video>
+      <video data-clip="hq1" class="on" src="assets/video/hq1.mp4" poster="assets/video/hq1.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation 1"></video>
+      <video data-clip="hq2" src="assets/video/hq2.mp4" poster="assets/video/hq2.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 2"></video>
+      <video data-clip="hq3" src="assets/video/hq3.mp4" poster="assets/video/hq3.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 3"></video>
+      <video data-clip="hq4" src="assets/video/hq4.mp4" poster="assets/video/hq4.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 4"></video>
+      <video data-clip="hq5" src="assets/video/hq5.mp4" poster="assets/video/hq5.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation 5"></video>
       <video data-clip="d4_stylised" src="assets/video/d4_stylised.mp4" poster="assets/video/d4_stylised.jpg" muted loop playsinline preload="none" aria-label="Generated conversation with illustrated identities"></video>
       <button class="sound" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
         <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -100,16 +102,20 @@
   </div>
 
   <div class="segmented" role="tablist" aria-label="Examples" data-anim="up">
-    <button role="tab" aria-selected="true" data-clip="hq_a">Conversation I</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq_b">Conversation II</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq_c">Conversation III</button>
+    <button role="tab" aria-selected="true" data-clip="hq1">Turn-taking</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq2">Listening</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq3">Diversity</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq4">Emotion</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hq5">Long exchange</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="d4_stylised">Illustrated</button>
   </div>
 
   <div class="clip-note" data-anim="up">
-    <p data-note="hq_a" class="on">Both sides are generated together. Sentences and back-channels sit on one shared timeline, so the turn passes between them the way it does in a real exchange. Turn the sound on to hear the synthesised speech.</p>
-    <p data-note="hq_b">A listener is not a still frame. The silent stretches are generated too, and the joins between segments are blended away.</p>
-    <p data-note="hq_c">One prompt yields many conversations, each with different content and different faces.</p>
+    <p data-note="hq1" class="on">Both sides are generated together. Sentences and back-channels sit on one shared timeline, so the turn passes between them the way it does in a real exchange. Turn the sound on to hear the synthesised speech.</p>
+    <p data-note="hq2">A listener is not a still frame. The silent stretches are generated too, and the joins between segments are blended away.</p>
+    <p data-note="hq3">One prompt yields many conversations, each with different content and different faces.</p>
+    <p data-note="hq4">Per-turn emotion reaches the voice, so the delivery changes with what is being said rather than staying flat.</p>
+    <p data-note="hq5">Turns keep alternating across the whole clip, not only at the start.</p>
     <p data-note="d4_stylised">Identities need not be photorealistic. The same method drives illustrated faces with no change.</p>
   </div>
 </section>

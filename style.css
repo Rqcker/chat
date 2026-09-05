@@ -154,16 +154,25 @@ a:hover{ text-decoration:underline; }
   font-size:21px; font-weight:600; letter-spacing:-0.014em;
   color:var(--blue);
 }
+/* The wordmark reproduces the paper's own \chat macro: four letters, four
+   blues, and the same negative kerning after each one (C -0.3em, then
+   -0.35em). Per-letter colour, so no gradient and no fill-colour tricks. */
 .wordmark{
   margin:0;
   font-size:clamp(80px,16vw,188px);
   line-height:.9;
-  letter-spacing:-0.048em;   /* large type reads too loose without this */
+  letter-spacing:0;
   font-weight:700;
-  background:linear-gradient(180deg,#1d1d1f 0%,#3a3a3f 100%);
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent;
+  display:flex; justify-content:center;
 }
+.wordmark span{ display:inline-block; }
+/* The paper's kerns (-0.3em, then -0.35em) are set at body size against a bold
+   serif; carried literally to a 188px sans they collide. The ratio between them
+   is kept and the magnitude scaled to a tight logotype. */
+.wordmark .c{ color:#0077E5; margin-right:-0.060em; }
+.wordmark .h{ color:#0095D8; margin-right:-0.070em; }
+.wordmark .a{ color:#0062E6; margin-right:-0.070em; }
+.wordmark .t{ color:#0067BC; }
 .hero-sub{
   margin:clamp(16px,2.6vh,30px) auto 0; max-width:16ch;
   font-size:clamp(27px,4vw,48px);
