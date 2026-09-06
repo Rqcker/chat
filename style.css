@@ -7,8 +7,8 @@
   --bg:        #ffffff;
   --bg-2:      #f5f5f7;   /* the alternating band */
   --ink:       #1d1d1f;
-  --ink-2:     #6e6e73;
-  --ink-3:     #86868b;
+  --ink-2:     #5f5f65;   /* 6.34:1 on white, 5.82 on the band */
+  --ink-3:     #70707a;   /* 4.90:1 on white, 4.51 on the band */
   --hair:      #d2d2d7;
   --hair-soft: #e8e8ed;
   /* Blue is reserved for two jobs: the mark itself, and live values in the
@@ -195,7 +195,7 @@ a:hover{ text-decoration:underline; }
   opacity:0;
   will-change:transform, opacity;
 }
-@media (max-width:760px){ .hero-faces{ display:none; } }
+@media (max-width:1099px){ .hero-faces{ display:none; } }
 
 .hero-ring{
   position:absolute; left:50%; top:50%; translate:-50% -50%;
@@ -431,7 +431,6 @@ a:hover{ text-decoration:underline; }
    figure sits on a white section, so no card is needed to separate it. */
 .fig{ margin:0; }
 .fig img{ width:100%; }
-.fig.slim{ max-width:680px; margin-inline:auto; }
 
 /* ─────────── prose ─────────── */
 .prose{ max-width:660px; }
@@ -481,14 +480,13 @@ a:hover{ text-decoration:underline; }
 .table-card td{ font-size:15px; color:var(--ink-2); }
 .table-card .best{ color:var(--ink); font-weight:600; }
 .table-card .second{ color:var(--ink); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--hair); }
-.table-card .na{ color:#b0b0b6; }
+.table-card .na{ color:var(--ink-3); }
 .table-card tr.ours{ background:rgba(0,113,227,.045); }
 .table-card tr.ours th[scope="row"]{ font-weight:600; color:var(--ink); }
 .table-card .foot{
   margin:0; padding:14px 26px 20px;
   font-size:13px; color:var(--ink-3); letter-spacing:0;
 }
-.table-card.compact-wrap table{ font-size:14px; }
 table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 
 .two-up{ display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:26px; }
@@ -574,7 +572,7 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 .avail dd{
   margin:0; font-size:15px; line-height:1.55; color:var(--ink-2); letter-spacing:0;
 }
-.avail dd .sep{ color:var(--hair); padding:0 8px; }
+.avail dd .sep{ color:var(--ink-3); padding:0 8px; }
 @media (max-width:620px){
   .avail{ grid-template-columns:1fr; gap:3px 0; }
   .avail dt{ margin-top:14px; }
@@ -713,25 +711,6 @@ footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
 }
 
 /* ─────────── sound toggle ─────────── */
-.sound{
-  position:absolute; right:14px; bottom:14px; z-index:3;
-  display:inline-flex; align-items:center; gap:7px;
-  appearance:none; border:0; cursor:pointer;
-  background:rgba(0,0,0,.44); color:#fff;
-  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
-  padding:8px 14px; border-radius:980px;
-  font-family:inherit; font-size:13px; letter-spacing:0;
-  transition:background .25s var(--ease), transform .18s var(--ease);
-}
-.sound:hover{ background:rgba(0,0,0,.6); }
-.sound:active{ transform:scale(.96); }
-.sound svg{ width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; }
-.sound .spk{ fill:currentColor; stroke:none; }
-.sound .waves{ opacity:0; transition:opacity .2s var(--ease); }
-.sound .slash{ opacity:1; transition:opacity .2s var(--ease); }
-.sound[aria-pressed="true"] .waves{ opacity:1; }
-.sound[aria-pressed="true"] .slash{ opacity:0; }
-@media (max-width:560px){ .sound span{ display:none; } .sound{ padding:9px; } }
 
 
 /* ─────────── project mark ─────────── */

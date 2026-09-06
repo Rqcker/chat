@@ -386,7 +386,10 @@
     }
 
     function openAt(i, from) {
-      lastFocus = document.activeElement;
+      // A mouse click leaves focus on <body>; send it back to the thumbnail
+      // instead, so closing returns the reader to where they were.
+      lastFocus = (document.activeElement && document.activeElement !== document.body)
+        ? document.activeElement : from;
       lb.hidden = false;
       document.body.classList.add("lb-open");
       open = true;
