@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CHAT — Conversational Human Audio-visual Talking Dialogue Generation</title>
 <meta name="description" content="CHAT (ECCV 2026) generates diverse, paired, mutually responsive audio-visual dialogue clips from a single textual prompt.">
-<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
-<link rel="alternate icon" href="assets/logo.webp">
+<link rel="icon" href="assets/logo.webp">
 <meta property="og:title" content="CHAT — Conversational Human Audio-visual Talking Dialogue Generation">
 <meta property="og:description" content="ECCV 2026. A whole dyadic conversation, from one line of text.">
 <meta property="og:image" content="https://junhaosong.com/chat/assets/teaser.webp">
@@ -21,7 +20,7 @@
 
 <header class="nav" id="nav">
   <div class="nav-in">
-    <a class="nav-brand" href="#top"><img src="assets/mark.svg" alt="" width="24" height="30" aria-hidden="true"><span>CHAT</span></a>
+    <a class="nav-brand" href="#top"><img src="assets/logo.webp" alt="" width="284" height="360" aria-hidden="true"><span>CHAT</span></a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#results">Results</a>
       <a href="#overview">Overview</a>
@@ -56,8 +55,16 @@
   </p>
   <div class="hero-cta" data-anim="up" data-delay="5">
     <a class="btn" href="#results">See it in motion</a>
-    <a class="btn ghost" href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">ECCV page ›</a>
   </div>
+  <nav class="hero-links" aria-label="Paper and resources" data-anim="up" data-delay="6">
+    <a href="https://arxiv.org/abs/2607.02799" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.5 2.5H5.6A1.6 1.6 0 0 0 4 4.1v11.8a1.6 1.6 0 0 0 1.6 1.6h8.8a1.6 1.6 0 0 0 1.6-1.6V7z"/><path d="M11.5 2.5V7H16"/></svg>arXiv</a>
+    <a href="https://youtu.be/VCSAmHkA_wo" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.4" y="4.2" width="15.2" height="11.6" rx="3.2"/><path d="M8.6 7.9l4.4 2.4-4.4 2.4z"/></svg>Video</a>
+    <a href="https://github.com/Rqcker/chat" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.7 17c-3.2.9-3.2-1.6-4.5-2m9 3.4v-2.6c0-.8-.1-1.1-.5-1.5 2.2-.2 4.4-1.1 4.4-4.9a3.8 3.8 0 0 0-1-2.6 3.5 3.5 0 0 0-.1-2.6s-.8-.3-2.7 1a9.2 9.2 0 0 0-4.8 0C5.6 3.5 4.8 3.8 4.8 3.8a3.5 3.5 0 0 0-.1 2.6 3.8 3.8 0 0 0-1 2.6c0 3.8 2.2 4.7 4.4 4.9-.3.3-.5.8-.5 1.5v2.4"/></svg>Code</a>
+    <a href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.8" y="4.2" width="14.4" height="13" rx="2.6"/><path d="M2.8 8.2h14.4M6.8 2.6v3.2M13.2 2.6v3.2"/></svg>ECCV page</a>
+  </nav>
+  <p class="hero-fine" data-anim="up" data-delay="7">
+    The repository opens after the conference.
+  </p>
 </section>
 
 <!-- teaser, scaling in on scroll -->
@@ -153,7 +160,9 @@
     so neither voice sits under the other, and every clip is normalised to one level.
     Each timeline is drawn from that clip's own generated unit list, except the
     illustrated one, whose list was not kept and whose turns are measured back from
-    the clip by pitch.
+    the clip by pitch. Identity descriptors carry no gender, so a face and a voice
+    are drawn independently and need not agree; these five were picked from runs
+    where they do.
   </p>
 </section>
 
@@ -475,37 +484,6 @@
   <p class="caption wide" data-anim="up">Open the poster to read it, or take the printed PDF, 1400 by 1000&nbsp;mm.</p>
 </section>
 
-<!-- ══════════════ LIMITATIONS ══════════════ -->
-<section class="section band">
-  <header class="sec-head narrow">
-    <p class="kicker" data-anim="up">Limitations</p>
-    <h2 class="title" data-anim="up" data-delay="1">What it does not do yet.</h2>
-  </header>
-  <div class="limits">
-    <div data-anim="up">
-      <h3>Cost</h3>
-      <p>Every clip runs a language model, a speech model and several video diffusion
-         passes. Here <i>scalable</i> means demographic coverage, not a cheap clip.</p>
-    </div>
-    <div data-anim="up" data-delay="1">
-      <h3>Metrics</h3>
-      <p>The reaction metrics score facial behaviour, not turn-taking timing or
-         dialogue-level meaning. A metric for interaction quality is still open.</p>
-    </div>
-    <div data-anim="up" data-delay="2">
-      <h3>Scope</h3>
-      <p>English only for now, and the downstream study uses REACT 2024, on which the
-         refinement block is pre-trained.</p>
-    </div>
-    <div data-anim="up" data-delay="3">
-      <h3>Voice and face</h3>
-      <p>Identity descriptors carry no gender, so a face and a voice are drawn
-         independently and need not agree. The clips above were picked from runs
-         where they do.</p>
-    </div>
-  </div>
-</section>
-
 <!-- ══════════════ AUTHORS + CITE ══════════════ -->
 <section class="section" id="cite">
   <header class="sec-head narrow">
@@ -545,8 +523,8 @@
   <p class="pending" data-anim="up">The publisher record is pending the ECCV 2026 proceedings.</p>
 
   <div class="avail" data-anim="up">
-    <span>Code — coming soon</span>
-    <span><a href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">ECCV 2026 conference page</a></span>
+    <span><a href="https://github.com/Rqcker/chat" target="_blank" rel="noopener">Code</a> — opens after the conference</span>
+    <span><a href="https://arxiv.org/abs/2607.02799" target="_blank" rel="noopener">arXiv:2607.02799</a> · <a href="https://youtu.be/VCSAmHkA_wo" target="_blank" rel="noopener">video</a> · <a href="https://eccv.ecva.net/virtual/2026/poster/4941" target="_blank" rel="noopener">ECCV 2026 page</a></span>
     <span>CHAT-AVD-50k — released separately, with provenance metadata and bias auditing</span>
   </div>
 </section>
