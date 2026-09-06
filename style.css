@@ -17,8 +17,12 @@
   --blue:      #0071e3;
   --blue-ink:  #0062c4;
   --link:      #0062c4;
-  --ctrl:      #1d1d1f;
-  --ctrl-ink:  #000000;
+  /* Controls take the navy the shield is drawn in, sampled from the mark:
+     related to the wordmark without competing with it, and warmer than the
+     flat black it replaces. */
+  --ctrl:      #0b1a42;
+  --ctrl-ink:  #01153c;
+  --ctrl-soft: rgba(11,26,66,.16);
 
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
           "Helvetica Neue", "Segoe UI", Roboto, system-ui, sans-serif;
@@ -250,9 +254,10 @@ a:hover{ text-decoration:underline; }
   background:var(--ctrl); color:#fff;
   padding:13px 26px; border-radius:980px;
   font-size:17px; letter-spacing:0; text-decoration:none;
-  transition:background .25s var(--ease), transform .18s var(--ease);
+  box-shadow:0 1px 2px rgba(11,26,66,.18), 0 8px 22px rgba(11,26,66,.14);
+  transition:background .25s var(--ease), box-shadow .25s var(--ease), transform .18s var(--ease);
 }
-.btn:hover{ background:var(--ctrl-ink); text-decoration:none; }
+.btn:hover{ background:var(--ctrl-ink); box-shadow:0 1px 2px rgba(11,26,66,.22), 0 12px 30px rgba(11,26,66,.20); text-decoration:none; }
 .btn:active{ transform:scale(.975); }
 /* Paper, video, code, conference: hairline pills, ink on white. They sit
    under the one solid button so the page has a single loudest control. */
@@ -267,7 +272,7 @@ a:hover{ text-decoration:underline; }
   color:var(--ink); font-size:15px; letter-spacing:-0.006em; text-decoration:none;
   transition:background .22s var(--ease), border-color .22s var(--ease), transform .18s var(--ease);
 }
-.hero-links a:hover{ background:var(--bg-2); border-color:var(--hair-soft); text-decoration:none; }
+.hero-links a:hover{ background:var(--bg-2); border-color:var(--ctrl-soft); text-decoration:none; }
 .hero-links a:active{ transform:scale(.98); }
 .hero-links svg{
   width:15px; height:15px; flex:none;
@@ -524,18 +529,57 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 
 /* ─────────── authors + bibtex ─────────── */
 .authors{
-  margin:0 0 12px; max-width:820px;
-  font-size:17px; line-height:1.72; letter-spacing:0;
+  margin:0 0 20px; max-width:800px;
+  font-size:18px; line-height:1.78; letter-spacing:-0.004em;
+  color:var(--ink);
 }
-.authors sup{ color:var(--ink-3); font-size:.68em; }
+/* Each name and its marker travel together, so no author is split over a line
+   break and the commas stay where they belong. */
+.authors .au{ white-space:nowrap; }
+.authors sup{
+  font-size:.6em; font-weight:500; color:var(--ink-3);
+  vertical-align:super; line-height:0; margin-left:1px;
+}
+
+/* Eight affiliations on a grid, the number hanging in its own column, so the
+   institutions line up instead of running together across the measure. */
 .affils{
-  margin:0 0 clamp(34px,5vh,54px); max-width:900px;
-  display:flex; flex-wrap:wrap; gap:2px 22px;
-  font-size:13px; line-height:1.9; color:var(--ink-3); letter-spacing:0;
+  margin:0 0 clamp(30px,4.4vh,48px); max-width:820px;
+  display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px 44px;
+  font-size:13.5px; line-height:1.5; color:var(--ink-2); letter-spacing:0;
 }
-.affils > span{ white-space:nowrap; }
-.affils sup{ color:var(--ink-3); }
-.corr{ flex-basis:100%; }
+.affils > span{
+  display:grid; grid-template-columns:14px 1fr;
+  align-items:baseline; column-gap:2px; white-space:normal;
+}
+.affils sup{
+  font-size:1em; vertical-align:baseline; color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+.affils .corr{ grid-column:1 / -1; color:var(--ink-3); }
+@media (max-width:720px){ .affils{ grid-template-columns:1fr; gap:7px; } }
+
+/* ── availability ──
+   One label column, three rows. The pills this replaces were three different
+   widths carrying three different kinds of thing. */
+.avail{
+  margin:clamp(30px,4.6vh,50px) 0 0; max-width:780px;
+  padding-top:22px; border-top:1px solid var(--hair-soft);
+  display:grid; grid-template-columns:max-content 1fr; gap:14px 32px;
+}
+.avail dt{
+  margin:0; font-size:13px; letter-spacing:.02em; color:var(--ink-3);
+}
+.avail dd{
+  margin:0; font-size:15px; line-height:1.55; color:var(--ink-2); letter-spacing:0;
+}
+.avail dd .sep{ color:var(--hair); padding:0 8px; }
+@media (max-width:620px){
+  .avail{ grid-template-columns:1fr; gap:3px 0; }
+  .avail dt{ margin-top:14px; }
+  .avail dt:first-of-type{ margin-top:0; }
+}
 
 .bib{
   position:relative; background:var(--bg-2);
@@ -560,14 +604,7 @@ table.compact th, table.compact td{ padding:11px 14px; font-size:14px; }
 
 .pending{ margin:14px 0 0; font-size:14px; color:var(--ink-3); letter-spacing:0; }
 
-.avail{
-  margin-top:clamp(34px,5vh,54px);
-  display:flex; flex-wrap:wrap; gap:12px;
-}
-.avail span{
-  font-size:14px; color:var(--ink-2); letter-spacing:0;
-  background:var(--bg-2); border-radius:980px; padding:9px 18px;
-}
+
 
 /* ─────────── footer ─────────── */
 footer{ background:var(--bg-2); border-top:1px solid var(--hair-soft); }
