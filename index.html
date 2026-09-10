@@ -119,7 +119,7 @@
     <p class="kicker" data-anim="up">Generated dialogues</p>
     <h2 class="title" data-anim="up" data-delay="1">Watch them take turns.</h2>
     <p class="sub" data-anim="up" data-delay="2">
-      Five prompts, five conversations, ten identities that were never paired by hand.
+      Nine prompts, nine conversations, eighteen identities that were never paired by hand.
       Both faces in a clip are generated as a responsive pair, so the one listening
       reacts to the one speaking, inside the same clip.
     </p>
@@ -130,7 +130,11 @@
       <video data-clip="cafe" class="on" src="assets/video/cafe.mp4" poster="assets/video/cafe.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation in a cafe"></video>
       <video data-clip="hallway" src="assets/video/hallway.mp4" poster="assets/video/hallway.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an apartment hallway"></video>
       <video data-clip="office" src="assets/video/office.mp4" poster="assets/video/office.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an office"></video>
-      <video data-clip="kitchen" src="assets/video/kitchen.mp4" poster="assets/video/kitchen.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a kitchen"></video>
+      <video data-clip="studio" src="assets/video/studio.mp4" poster="assets/video/studio.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a studio"></video>
+      <video data-clip="living" src="assets/video/living.mp4" poster="assets/video/living.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a living room"></video>
+      <video data-clip="quiet" src="assets/video/quiet.mp4" poster="assets/video/quiet.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a quiet room"></video>
+      <video data-clip="backyard" src="assets/video/backyard.mp4" poster="assets/video/backyard.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a suburban backyard"></video>
+      <video data-clip="festival" src="assets/video/festival.mp4" poster="assets/video/festival.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation at an outdoor festival"></video>
       <video data-clip="illustrated" src="assets/video/illustrated.mp4" poster="assets/video/illustrated.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two illustrated identities"></video>
       <div class="volume" id="volume">
         <button class="vol-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
@@ -161,29 +165,36 @@
     <button role="tab" aria-selected="true" data-clip="cafe">Cafe</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="hallway">Hallway</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="office">Office</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="kitchen">Kitchen</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="studio">Studio</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="living">Living room</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="quiet">Quiet room</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="backyard">Backyard</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="festival">Festival</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="illustrated">Illustrated</button>
   </div>
 
   <div class="clip-note" data-anim="up">
-    <p data-note="cafe" class="on">Five turns in ten seconds. Each speaker talks twice and drops a back-channel into the other's turn, all on one shared timeline.</p>
-    <p data-note="hallway">Both sides interrupt politely: an "uh-huh" at two seconds, a "yeah" at eight, each landing inside the other speaker's sentence.</p>
+    <p data-note="cafe" class="on">Five turns in ten seconds. Each speaker talks twice and drops a back-channel into the other’s turn, all on one shared timeline.</p>
+    <p data-note="hallway">Both sides interrupt politely: an "uh-huh" at two seconds, a "yeah" at eight, each landing inside the other speaker’s sentence.</p>
     <p data-note="office">A disagreement about which database to use. The reply cuts in as soon as the first speaker stops, with a back-channel halfway through.</p>
-    <p data-note="kitchen">Two male voices this time. Voices are sampled independently of faces, so a same-gender pair is as likely a draw as a mixed one.</p>
+    <p data-note="studio">An interview about a startup. The listener’s back-channel lands at 3.7 seconds, and the follow-up question waits for the answer to finish.</p>
+    <p data-note="living">A grandparent and a grandchild. Four spans here, and the last back-channel starts in the final half second of the clip.</p>
+    <p data-note="quiet">Talking someone down before they go on. Reassurance and doubt each get a sentence, and each takes a back-channel inside it.</p>
+    <p data-note="backyard">A neighbour raises the mess left after a party. The apology begins two tenths of a second after the complaint ends.</p>
+    <p data-note="festival">Two organisers before the gates open. The reply runs five and a half seconds and takes a "yeah" at 8.2.</p>
     <p data-note="illustrated">Identities need not be photorealistic. The same method drives illustrated faces with no change. This clip comes from the conference video, so it is lower resolution than the others.</p>
   </div>
 
   <p class="foot provenance" data-anim="up">
-    Each clip is the full CHAT output for one prompt, at 512&nbsp;px per face, then
-    passed through the CodeFormer face upscaler that Hallo2 ships, so it holds up on a
-    large screen. Every number on this page is measured before that step. The four
-    real-identity clips play without sound on this page; the illustrated clip keeps
-    the soundtrack from the conference video. Each timeline is drawn from that clip's
+    Each clip is the full CHAT output for one prompt, generated at 512&nbsp;px per face
+    and then passed through the CodeFormer face upscaler that Hallo2 ships, which doubles
+    it to 1024&nbsp;px a side. Every number on this page is measured before that step.
+    The eight real-identity clips play without sound on this page; the illustrated clip
+    keeps the soundtrack from the conference video. Each timeline is drawn from that clip's
     own generated unit list, except the
     illustrated one, whose list was not kept and whose turns are measured back from
     the clip by pitch. Identity descriptors carry no gender, so a face and a voice
-    are drawn independently and need not agree; these five were picked from runs
-    where they do.
+    are drawn independently and need not agree.
   </p>
 </section>
 

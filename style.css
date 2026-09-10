@@ -337,9 +337,14 @@ a:hover{ text-decoration:underline; }
   display:inline-flex; padding:2px; gap:2px;
   background:var(--bg-2); border-radius:980px;
   margin-bottom:20px;
+  /* Nine tabs outgrow the column before the phone breakpoint, so the pill
+     scrolls at whatever width it stops fitting rather than at one guess. */
+  max-width:100%; overflow-x:auto; overscroll-behavior-x:contain;
+  scrollbar-width:none;
 }
+.segmented::-webkit-scrollbar{ display:none; }
 .segmented button{
-  appearance:none; border:0; cursor:pointer;
+  appearance:none; border:0; cursor:pointer; flex:0 0 auto;
   background:transparent; color:var(--ink);
   font-family:inherit; font-size:14px; letter-spacing:0;
   padding:8px 18px; border-radius:980px;
@@ -351,8 +356,7 @@ a:hover{ text-decoration:underline; }
   box-shadow:0 1px 3px rgba(0,0,0,.10), 0 0 0 .5px rgba(0,0,0,.04);
 }
 @media (max-width:560px){
-  .segmented{ display:flex; width:100%; overflow-x:auto; }
-  .segmented button{ flex:0 0 auto; }
+  .segmented{ display:flex; width:100%; }
 }
 
 .clip-note{ position:relative; min-height:3.2em; max-width:640px; }
