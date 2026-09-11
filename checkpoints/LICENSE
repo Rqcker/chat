@@ -1,0 +1,22 @@
+Weights licence
+===============
+
+This file covers the two model files in this directory:
+
+    rfbg_qknorm_ft_030500.pt
+    sfbg_pre_020000.pt
+
+They are NOT covered by the MIT licence in the repository root, which applies to
+the source code only.
+
+Released for non-commercial research use only.
+
+These weights are derived from the HDTF and NoXI corpora. The terms under which
+you obtained those corpora bind any use of these weights, and nothing here grants
+rights that those terms withhold. They are reproduction artefacts trained at
+reduced scale, not the models behind the paper's reported tables, and they are
+provided without warranty of fitness for any downstream purpose.
+
+Copyright (c) 2026 Junhao Song, Lluis Guasch, Xilin He, Zhongyu Yang,
+Yingfang Yuan, Weicheng Xie, Linlin Shen, Haijun Lin, Shizhe Liu, Wei Pang
+and Siyang Song

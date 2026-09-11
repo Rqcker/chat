@@ -1,0 +1,37 @@
+# Stages 3-6 (x1_faces, x1_video, x1_refine, x1_compose): portraits, talking
+# heads, IFBR refinement, composition and scoring.
+# Python 3.10.20. Versions as measured 2026-08-17.
+#
+# transformers and diffusers are held at the versions Hallo2 and Arc2Face were
+# validated against; newer releases change their APIs. numpy stays on 1.x here
+# because the video stack has not been ported to numpy 2.
+torch==2.11.0+cu128
+torchaudio==2.11.0+cu128
+torchvision==0.26.0+cu128
+numpy==1.26.4
+scipy==1.15.3
+diffusers==0.32.2
+transformers==4.39.2
+accelerate==0.28.0
+safetensors==0.8.0
+insightface==0.7.3
+# Evaluation and stage 6. The metric scripts run in this environment.
+# cd-fvd is not pinned: FVD was retired from the reported set after a floor
+# control, so scripts/fvd_video.py is kept but unused. Install `cdfvd` yourself
+# if you want to run it.
+moviepy==1.0.3
+pytorch-fid==0.3.0
+speechbrain==1.1.0
+
+opencv-python==4.9.0.80
+av==12.1.0
+ImageIO==2.37.3
+imageio-ffmpeg==0.6.0
+librosa==0.10.2.post1
+soundfile==0.14.0
+einops==0.8.0
+omegaconf==2.3.0
+pillow==10.3.0
+PyYAML==6.0.3
+requests==2.34.2
+tqdm==4.66.4

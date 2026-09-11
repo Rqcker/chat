@@ -1,0 +1,50 @@
+# Ignore rules for the CHAT working copy.
+# Bulk artefacts (training weights, evaluation sets, generated media) live on
+# scratch storage outside the repository and must never enter version control.
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# OS and tool cruft
+.DS_Store
+.firecrawl/
+.claude/
+
+# Maintenance leftovers
+*.bak
+*.bak_*
+*.orig
+_archive_backups/
+
+# Credentials: never commit, in any form
+.secrets/
+.env
+.netrc
+*.key
+*wandb_key*
+
+# Model weights and other large binaries: these belong on scratch storage
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.bin
+
+# Exception: the two released IFBR checkpoints. Optimiser state is stripped, so
+# they are 13 MB and 5.3 MB, and without them stage 5 cannot run at all, which
+# would leave the paper's core contribution unverifiable from this repository.
+!checkpoints/*.pt
+
+# Hugging Face caches. Their blobs are named by content hash with no extension,
+# so the patterns above do not catch them and the directory must be named.
+wav2vec2_checkpoints/
+pretrained_models/
+.hf_cache/
+
+# Run outputs
+*.log
+slurm-*.out
+slurm_*.out
+slurm_*.err
