@@ -48,6 +48,12 @@ Siyang Song<sup>8,&dagger;</sup>
 
 </div>
 
+<p align="center">
+  <a href="https://youtu.be/9C436tP0OEA"><img src="assets/video.jpg" width="100%" alt="Watch the CHAT film on YouTube (3:47)"></a>
+  <br>
+  <sub>The paper in under four minutes, narrated with a synthetic voice.</sub>
+</p>
+
 ## 📖 Introduction
 
 Collecting dyadic interactive audio-visual dialogue (DIAD) data is slow, expensive
