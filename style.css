@@ -319,8 +319,8 @@ a:hover{ text-decoration:underline; }
 .lead .word{ display:inline-block; }
 
 /* ─────────── the film ───────────
-   The poster is a frame from the film itself, and the control sits in the
-   frame's empty lower band, so it covers nothing. The YouTube player is
+   The poster is the film's opening frame, the prompt alone, and the control
+   sits under the prompt, so it covers nothing. The YouTube player is
    requested only when the poster is pressed. */
 .film{
   position:relative; aspect-ratio:16/9;
@@ -336,7 +336,7 @@ a:hover{ text-decoration:underline; }
 .film-poster:hover img{ transform:scale(1.014); }
 .film-poster:focus-visible{ outline:2px solid #fff; outline-offset:-6px; border-radius:inherit; }
 .film-cta{
-  position:absolute; left:50%; top:87%; translate:-50% -50%;
+  position:absolute; left:50%; top:62%; translate:-50% -50%;
   display:inline-flex; align-items:center; gap:10px;
   padding:6px 19px 6px 6px; border-radius:980px;
   font-size:15px; font-weight:500; letter-spacing:-0.006em; white-space:nowrap;
@@ -358,13 +358,10 @@ a:hover{ text-decoration:underline; }
   font-size:13px; line-height:1.55; color:var(--ink-3); letter-spacing:0;
 }
 .film-foot a{ white-space:nowrap; }
-/* On a phone the frame's lower band is about fifty pixels tall, so the control
-   keeps the disc and the running time and drops the words. */
 @media (max-width:560px){
-  .film-cta{ gap:7px; padding:3px 11px 3px 3px; font-size:12px; }
-  .film-label{ display:none; }
-  .film-disc{ width:22px; height:22px; }
-  .film-disc svg{ width:8px; height:8px; }
+  .film-cta{ top:66%; gap:6px; padding:3px 11px 3px 3px; font-size:12px; }
+  .film-disc{ width:20px; height:20px; }
+  .film-disc svg{ width:7px; height:7px; }
 }
 @media (prefers-reduced-motion: reduce){
   .film-poster img, .film-cta{ transition:none; }
