@@ -42,7 +42,7 @@ Siyang Song<sup>8,&dagger;</sup>
 [![Springer](https://img.shields.io/badge/Springer-ECCV%202026-0b1a42.svg)](https://link.springer.com/chapter/10.1007/978-3-032-37252-9_33)
 [![arXiv](https://img.shields.io/badge/arXiv-2607.02799-b31b1b.svg)](https://arxiv.org/abs/2607.02799)
 [![Project Page](https://img.shields.io/badge/Project-Page-1a73e8.svg)](https://junhaosong.com/chat/)
-[![Video](https://img.shields.io/badge/YouTube-Talk-ff0000.svg)](https://youtu.be/VCSAmHkA_wo)
+[![Video](https://img.shields.io/badge/YouTube-Video-ff0000.svg)](https://youtu.be/9C436tP0OEA)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/release-v1.0.0-0b1a42.svg)](https://github.com/Rqcker/chat/releases/tag/v1.0.0)
 
