@@ -497,6 +497,30 @@
     });
   })();
 
+  /* ── 2b. the film ────────────────────────────────────────────────
+     The poster is a link to YouTube, so the film is one press away with or
+     without script. With script, the press swaps the poster for the player
+     in place; nothing is requested from YouTube before it. A press with a
+     modifier key keeps the browser's own behaviour (a new tab).
+     ─────────────────────────────────────────────────────────────── */
+  (function () {
+    var poster = document.getElementById("filmPoster");
+    if (!poster) return;
+    poster.addEventListener("click", function (e) {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + poster.getAttribute("data-yt") +
+              "?autoplay=1&rel=0&playsinline=1";
+      f.title = "CHAT: the paper in under four minutes";
+      f.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture";
+      f.allowFullscreen = true;
+      f.referrerPolicy = "strict-origin-when-cross-origin";
+      poster.replaceWith(f);
+      f.focus();
+    });
+  })();
+
   if (!hasGSAP || reduced) return;
 
   /* ── 3. entrance + scroll reveals ────────────────────────────────

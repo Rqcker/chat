@@ -318,6 +318,59 @@ a:hover{ text-decoration:underline; }
 .lead .dim{ color:var(--ink-3); display:block; }
 .lead .word{ display:inline-block; }
 
+/* ─────────── the film ───────────
+   The poster is a frame from the film itself, and the control sits in the
+   frame's empty lower band, so it covers nothing. The YouTube player is
+   requested only when the poster is pressed. */
+.film{
+  position:relative; aspect-ratio:16/9;
+  border-radius:clamp(14px,1.6vw,22px); overflow:hidden;
+  background:var(--ctrl);
+  box-shadow:0 2px 8px rgba(0,0,0,.05), 0 20px 64px rgba(0,0,0,.10);
+  isolation:isolate;
+}
+.film > a, .film > iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.film-poster{ display:block; color:#fff; text-decoration:none; }
+.film-poster:hover{ text-decoration:none; }
+.film-poster img{ width:100%; height:100%; object-fit:cover; transition:transform .9s var(--ease); }
+.film-poster:hover img{ transform:scale(1.014); }
+.film-poster:focus-visible{ outline:2px solid #fff; outline-offset:-6px; border-radius:inherit; }
+.film-cta{
+  position:absolute; left:50%; top:87%; translate:-50% -50%;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:6px 19px 6px 6px; border-radius:980px;
+  font-size:15px; font-weight:500; letter-spacing:-0.006em; white-space:nowrap;
+  background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+          backdrop-filter:blur(16px) saturate(160%);
+  transition:background .25s var(--ease), transform .18s var(--ease);
+}
+.film-disc{
+  width:30px; height:30px; flex:none; border-radius:50%;
+  background:#fff; display:grid; place-items:center;
+}
+.film-disc svg{ width:11px; height:11px; fill:var(--ctrl); translate:1px 0; }
+.film-len{ color:rgba(255,255,255,.62); font-weight:400; font-variant-numeric:tabular-nums; }
+.film-poster:hover .film-cta{ background:rgba(255,255,255,.22); }
+.film-poster:active .film-cta{ transform:scale(.97); }
+.film-foot{
+  margin:20px 0 0; max-width:720px;
+  font-size:13px; line-height:1.55; color:var(--ink-3); letter-spacing:0;
+}
+.film-foot a{ white-space:nowrap; }
+/* On a phone the frame's lower band is about fifty pixels tall, so the control
+   keeps the disc and the running time and drops the words. */
+@media (max-width:560px){
+  .film-cta{ gap:7px; padding:3px 11px 3px 3px; font-size:12px; }
+  .film-label{ display:none; }
+  .film-disc{ width:22px; height:22px; }
+  .film-disc svg{ width:8px; height:8px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .film-poster img, .film-cta{ transition:none; }
+  .film-poster:hover img{ transform:none; }
+}
+
 /* ─────────── video player ─────────── */
 .player-wrap{ margin-bottom:22px; }
 .player{
