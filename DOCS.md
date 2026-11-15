@@ -5,8 +5,6 @@ default configuration follows the paper's method; the table below records each
 place the implementation resolves something the paper states differently, and
 everything beyond the paper is off unless you switch it on.
 
-Measurements for a given version, and the protocol each one depends on, ship with
-that [release](https://github.com/Rqcker/chat/releases).
 [`CHANGELOG.md`](CHANGELOG.md) records what each version changes.
 
 **Contents**

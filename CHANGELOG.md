@@ -1,8 +1,6 @@
 # Changelog
 
-Versions follow [semantic versioning](https://semver.org). Measurements for a
-release live in that release's notes, not here, because they depend on the
-protocol of the version that produced them.
+Versions follow [semantic versioning](https://semver.org).
 
 ## v1.0.0 — 2026-09-11
 
