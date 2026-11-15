@@ -229,6 +229,5 @@ repository never sets it for you.
   the training scripts document the expected layout.
 - **REACT 2024** annotations come from the challenge organisers under their own
   licence.
-- **CHAT-AVD-50k** is released separately, with provenance metadata and bias
-  auditing.
+- **CHAT-AVD-50k**: in preparation.
 - **Third-party weights** are installed from their own sources.

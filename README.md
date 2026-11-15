@@ -153,7 +153,7 @@ this repository ships a face, a voice or a clip of any real person. For the
 paper's own synthetic-identity path, run `x1_faces.py --script` without
 `--hdtf-dir`.
 
-CHAT-AVD-50k is released separately, with provenance metadata and bias auditing.
+CHAT-AVD-50k: in preparation.
 
 ## 📄 Licence
 
