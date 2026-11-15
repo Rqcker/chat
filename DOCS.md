@@ -56,7 +56,7 @@ plainly:
   work came from it — the measured path takes a real frame and selects nothing.
 
 Training scale: RFBG holds 1,707,836 trainable parameters and SFBG 1,375,492,
-trained primarily on a single 16 GB GPU. Neither saw CHAT-AVD-50k.
+trained primarily on a single 16 GB GPU.
 
 To use the paper's language model, both the provider and the endpoint must be set:
 
@@ -229,5 +229,5 @@ repository never sets it for you.
   the training scripts document the expected layout.
 - **REACT 2024** annotations come from the challenge organisers under their own
   licence.
-- **CHAT-AVD-50k**: in preparation.
+- **CHAT-AVD-50k** is being prepared for release, pending compliance and ethics review.
 - **Third-party weights** are installed from their own sources.
