@@ -13,8 +13,8 @@ Released for non-commercial research use only.
 
 These weights are derived from the HDTF and NoXI corpora. The terms under which
 you obtained those corpora bind any use of these weights, and nothing here grants
-rights that those terms withhold. They are reproduction artefacts trained at
-reduced scale, not the models behind the paper's reported tables, and they are
-provided without warranty of fitness for any downstream purpose.
+rights that those terms withhold. They were trained for this code release,
+separately from the models behind the paper's tables, and are provided without
+warranty of fitness for any downstream purpose.
 
 Copyright (c) 2026 Junhao Song

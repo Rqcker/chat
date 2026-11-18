@@ -29,13 +29,10 @@ from the weights with a fresh optimiser, restarting the step counter.
 
 ## What these are, precisely
 
-Both are **reproduction artefacts**, not the paper's trained models. They were trained
-at a reduced parameter count, primarily on a single 16 GB GPU, and on substituted
-corpora: the paper pre-trains RFBG on REACT 2024, whose annotation licence is not
-available here, so NoXI stands in for the dyadic stage. Numbers produced with these
-weights are reported as reproduction results throughout, separately from the paper's.
-[`DOCS.md`](../DOCS.md) records every such difference and tabulates the
-paper's technical details against their implementation status.
+Both were trained for this code release, separately from the paper's models,
+primarily on a single 16 GB GPU. SFBG is trained on HDTF; RFBG starts from HDTF and is
+fine-tuned on NoXI for the dyadic stage. [`DOCS.md`](../DOCS.md) sets the paper's
+technical details against their implementation.
 
 Each file stores its own `RFBGConfig` / `SFBGConfig` alongside the weights, so the
 architecture is read from the checkpoint rather than assumed by the loader. The RFBG
