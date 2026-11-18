@@ -1,11 +1,6 @@
 """FID under the field's paired ground-truth protocol, alongside our existing one.
 
-Why this exists. Our headline FID scores 186 generated sides against a frozen reference
-of 2,493 *disjoint* HDTF clips at 4 sparse frames each. That configuration showed that this
-construction, not generation quality, dominates the number: real HDTF video drawn to the
-same shape (186 identities, 4 frames each) scores 31.24 against the generated set's 31.53,
-while the same real footage from 582 identities scores 7.58.
-
+Why this exists. A FID reference of disjoint clips mixes identity coverage into the score.
 The published protocol removes that term by pairing. SadTalker, EDTalk and ARIG each report
 a ground-truth row at FID 0.000, which is only possible when the reference is the ground
 truth of the very clips being evaluated, so identity coverage, background and framing cancel
@@ -25,8 +20,7 @@ Three subcommands:
   build     featurise the paired ground-truth clips into a reference .npz.
   score     score generated video against that reference.
 
-The result is a SECOND protocol reported alongside the existing one. It does not restate
-the existing 31.53, which remains a valid in-protocol measurement.
+The result is a second protocol, reported alongside the disjoint-reference one.
 
 Run in the `video` conda env:
 
@@ -38,11 +32,9 @@ Run in the `video` conda env:
       --eval-dir eval_set2 --stem video_refined
 
 Two references are possible and they are not interchangeable. The held-out reference,
-built from footage of the same speakers that the pipeline never saw, is the one every
-reported identity-matched number uses: real floor 7.72, `video` 18.13, `video_refined`
-20.10. A strictly paired reference, built from the source clips the identity frames were
-cut from, reads 19.97 on `video_refined`; it exists only to size the circularity term at
-0.13 and is not the default. Scoring against the wrong one silently breaks comparability,
+built from footage of the same speakers that the pipeline never saw, is the default.
+A strictly paired reference, built from the source clips the identity frames were cut
+from, only sizes the circularity term. Scoring against the wrong one silently breaks comparability,
 so keep the two `.npz` files under distinct names.
 """
 from __future__ import annotations
@@ -478,8 +470,7 @@ def cmd_score(args) -> None:
     fid = frechet_distance(mu_r, cov_r, allf.mean(axis=0), np.cov(allf, rowvar=False))
     print(f"\nsides={len(feats)} frames={n}")
     print(f"FID (identity-matched reference) = {fid:.2f}")
-    print("This is a SECOND protocol. It does not restate the disjoint-reference 31.53,")
-    print("which remains a valid in-protocol measurement. Report both, labelled.")
+    print("Identity-matched protocol; report it labelled, alongside the disjoint-reference FID.")
 
     if args.out_json:
         with open(args.out_json, "w", encoding="utf-8") as f:

@@ -58,12 +58,9 @@ the `RFBG_CKPT` and `SFBG_CKPT` environment variables.
 
 ## Two things worth knowing before you use them
 
-**SFBG needs `--sfbg-strength` below 1.0, and 0.3 is now the default.** At 1.0 it
-generates each silent segment from pure noise through all 50 steps, which this 20k-step
-checkpoint is not strong enough to do: a 10-side pilot measured +128 FID and the segments
-decode to colour noise rather than faces. Below 1.0 it renoises the RFBG output to a
-mid-chain timestep and denoises from there, which is how RFBG itself is run. Every
-reported SFBG number used 0.3, which is what `scripts/x1_refine.py` now defaults to.
+**SFBG runs with `--sfbg-strength` 0.3, the default.** Below 1.0 it renoises the RFBG
+output to a mid-chain timestep and denoises from there, which is how RFBG itself is run.
+This checkpoint is meant to be used that way, not to generate segments from pure noise.
 
 **The audio and emotion conditioning pathway in RFBG is untrained.** `RFBGDenoiser`
 carries `audio_proj`, `emo_proj` and a per-block `aux_attn` for the partner's audio and

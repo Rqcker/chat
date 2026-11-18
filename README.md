@@ -65,8 +65,6 @@ where the listener reacts to the speaker inside the same clip.
 This is the reference implementation of CHAT, versioned and released on its own
 cadence. [`DOCS.md`](DOCS.md) covers the implementation choices behind each module,
 how they relate to the paper's description, and the evaluation protocol.
-Per-release measurements ship with each
-[release](https://github.com/Rqcker/chat/releases), and
 [`CHANGELOG.md`](CHANGELOG.md) records what every version changes.
 
 ## 🏗️ Framework

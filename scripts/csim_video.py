@@ -3,7 +3,7 @@
 
 Extracts the ArcFace (antelopev2/glintr100) embedding of the reference identity
 image and of every sampled generated frame, then reports the mean pairwise cosine
-via chat.eval.identity_similarity plus the beats/meets verdict.
+via chat.eval.identity_similarity.
 
 Run in the `video` conda env:
   python scripts/csim_video.py --ref-image portrait.png --videos out.mp4 dir/ \
@@ -20,7 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CODE_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, CODE_ROOT)
 
-from chat.eval import TARGETS, identity_similarity, meets_paper  # noqa: E402
+from chat.eval import identity_similarity  # noqa: E402
 from chat.eval.extractors import ArcFaceExtractor  # noqa: E402
 from fid_video import collect_mp4s  # noqa: E402  (same frame-decoding conventions)
 
@@ -66,12 +66,10 @@ def main() -> None:
     embs = np.concatenate(embs, axis=0)
 
     csim = identity_similarity(embs, np.tile(ref, (embs.shape[0], 1)))
-    target = TARGETS["CSIM"][0]
     total = embs.shape[0] + skipped
     rate = skipped / total if total else 0.0
-    print(f"\nCSIM = {csim:.4f}  (paper Full CHAT target: {target}, higher better; "
+    print(f"\nCSIM = {csim:.4f}  (higher is better; "
           f"{embs.shape[0]} faces, {skipped} skipped, {rate:.1%})")
-    print("meets paper (never worse):", meets_paper("CSIM", csim))
     print("NOTE: frames with no detectable face are excluded from the mean. The reference")
     print("      portrait is never excluded, so this metric is scored only where the")
     print("      generator produced a detectable face, which biases it upward.")

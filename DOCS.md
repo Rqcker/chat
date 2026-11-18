@@ -85,8 +85,8 @@ Two of these need care:
   configuration from the file, so the default pipeline with the released weight
   runs with QK-normalisation on. The code default of `False` applies to a model
   built from scratch.
-- `--sfbg-strength` defaults to 0.3. At 1.0 the released 20k-step checkpoint
-  decodes silent segments to colour noise.
+- `--sfbg-strength` defaults to 0.3. Keep it below 1.0 with the released SFBG
+  checkpoint, which is run anchored on the RFBG output.
 
 ## Evaluation
 

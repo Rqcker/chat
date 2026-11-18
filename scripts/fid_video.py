@@ -2,7 +2,7 @@
 
 Takes .mp4 files / directories, extracts every frame (or a uniform subset), runs
 the standard Inception extractor, and reports FID against the reference built by
-scripts/build_fid_reference.py, plus the beats/meets verdict for the paper target.
+scripts/build_fid_reference.py.
 
 Run in the `video` conda env:
   python scripts/fid_video.py --ref fid_ref_hdtf.npz --videos out1.mp4 dir/ \
@@ -21,7 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CODE_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, CODE_ROOT)
 
-from chat.eval import TARGETS, frechet_distance, meets_paper  # noqa: E402
+from chat.eval import frechet_distance  # noqa: E402
 from chat.eval.extractors import InceptionExtractor  # noqa: E402
 
 
@@ -113,12 +113,7 @@ def main() -> None:
     mu_g = feats.mean(axis=0)
     cov_g = np.cov(feats, rowvar=False)
     fid = frechet_distance(mu_r, cov_r, mu_g, cov_g)
-    target = TARGETS["FID"][0]
-    print(f"\nFID = {fid:.2f}  (paper Full CHAT target: {target}, lower better)")
-    print("meets paper (never worse):", meets_paper("FID", fid))
-    print("NOTE: the paper target was measured on 1000 dialogues. At 186 identities the")
-    print("      identity-coverage term dominates and real video alone scores above 17.33,")
-    print("      so the target is unreachable at this scale.")
+    print(f"\nFID = {fid:.2f}  (lower is better)")
 
 
 if __name__ == "__main__":

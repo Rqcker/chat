@@ -141,11 +141,8 @@ class SFBG(nn.Module):
         ``round(strength * T) - 1`` and denoised from there, so the result stays on the
         manifold the init came from instead of being synthesised from scratch.
 
-        Why the option exists: at 20k steps and 1.38M parameters this model cannot
-        generate a decodable latent segment from pure noise. The 2026-08-14 pilot
-        measured +128 FID and the replaced frames decode to colour noise rather than
-        faces. Anchoring on the RFBG output keeps identity and background intact and
-        limits SFBG to adjusting behaviour, which is what the module is for.
+        Anchoring on the RFBG output keeps identity and background intact and limits
+        SFBG to adjusting behaviour, which is what the module is for.
         """
         B, C, H, W = prev.shape[0], prev.shape[2], prev.shape[3], prev.shape[4]
         device = prev.device

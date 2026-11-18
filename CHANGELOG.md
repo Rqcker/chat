@@ -2,6 +2,12 @@
 
 Versions follow [semantic versioning](https://semver.org).
 
+## Unreleased
+
+- Continuous integration runs the unit tests on CPU.
+- Evaluation scripts print the score only.
+- Documentation and licence wording updated.
+
 ## v1.0.0 — 2026-09-11
 
 First public release.

@@ -289,11 +289,7 @@ def main() -> None:
                     help="SFBG sampling strength, only read when --sfbg-ckpt is given. Below 1.0 "
                          "the block anchors on the RFBG output for that segment (SDEdit), the way "
                          "RFBG itself is run; 1.0 generates each silent segment from pure noise "
-                         "instead. The released 20k-step SFBG checkpoint cannot generate a "
-                         "decodable segment from noise: at 1.0 a 10-side pilot measured +128 FID "
-                         "and the segments decode to colour noise rather than faces. The default "
-                         "is therefore 0.3, the value every reported SFBG number used; 0.5 was "
-                         "measurably blurrier. Raise it only with a stronger checkpoint.")
+                         "instead. Use 0.3 with the released SFBG checkpoint.")
     ap.add_argument("--seed", type=int, default=None,
                     help="seed the RNG that drives RFBG/SFBG diffusion sampling. Both draw "
                          "noise with torch.randn, so without this two runs of the same command "

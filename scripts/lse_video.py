@@ -26,7 +26,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CODE_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, CODE_ROOT)
 
-from chat.eval import TARGETS, meets_paper  # noqa: E402
 
 MIN_SEG = 1.2   # seconds; SyncNet needs a healthy window of frames
 PAD = 0.15      # seconds of context kept around each speech region
@@ -132,9 +131,7 @@ def main():
                     help="shift the crop square down by this fraction of its side (--crop s3fd "
                          "only), so the mouth sits nearer the centre. Default 0.1429 reproduces "
                          "LatentSync's framing (my-bs to my+1.8*bs on a 2.8*bs side, "
-                         "eval/syncnet_detect.py:191-204). The crop-alignment study showed the vertical bias "
-                         "contributes -1.12 of the -0.51 paired LSE-D improvement; scale alone "
-                         "(+0.62) is worse.")
+                         "eval/syncnet_detect.py:191-204).")
     ap.add_argument("--paper-lsed", action="store_true",
                     help="additionally report an alternative LSE-D reading, the mean L2 "
                          "distance between consecutive SyncNet lip embeddings, in raw, "
@@ -305,12 +302,8 @@ def main():
     lse_d = float(mdist.min())                # LSE-D
     lse_c = float(np.median(mdist) - mdist.min())  # LSE-C (== returned conf)
     print(f"video={os.path.basename(args.video)}  AV offset(s)={offsets}")
-    print(f"LSE-C = {lse_c:.3f}  (paper target {TARGETS['LSE-C'][0]}, higher better) "
-          f"meets={meets_paper('LSE-C', lse_c)}")
-    print(f"LSE-D = {lse_d:.3f}  (paper target {TARGETS['LSE-D'][0]}, lower better) "
-          f"meets={meets_paper('LSE-D', lse_d)}")
-    print("NOTE: the paper targets were measured on 1000 dialogues under the paper's "
-          "protocol. Do not place this number beside a paper number; see DOCS.md.")
+    print(f"LSE-C = {lse_c:.3f}  (higher is better)")
+    print(f"LSE-D = {lse_d:.3f}  (lower is better)")
 
     if args.paper_lsed:
         if not lip_feats:

@@ -31,7 +31,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CODE_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, CODE_ROOT)
 
-from chat.eval import TARGETS, meets_paper  # noqa: E402
 
 # our IAR emotion categories -> IEMOCAP 4-class {neu, ang, hap, sad}
 DEFAULT_MAP = {
@@ -110,8 +109,6 @@ def main():
     for cls in sorted(per_class):
         hits, n = per_class[cls]
         print(f"  {cls}: {100.0 * hits / n:.1f}% ({hits}/{n})")
-    print(f"  (paper ablation Full CHAT target: {TARGETS['Emo-Acc'][0]}%, higher better)")
-    print("meets paper (never worse):", meets_paper("Emo-Acc", acc))
     if args.out_json:
         with open(args.out_json, "w", encoding="utf-8") as f:
             json.dump({"acc": acc, "total": total, "unmapped_skipped": unknown,

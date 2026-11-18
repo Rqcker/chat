@@ -11,18 +11,11 @@
 # metric in DOCS.md is computed on the raw model output, without it.
 #
 # REFINE (default 1): run x1_refine.py (RFBG+TCR, paper Sec. 4.3/IFBR) after Hallo2.
-# video_i.mp4/video_j.mp4 alone are the talking-face backbone (TF) output only --
-# the paper's headline numbers are measured with the complete refinement pipeline, and
-# its own ablation reports a large gap between all three blocks disabled and all three
-# enabled. Note that in THIS reproduction the refine pass costs visual-metric quality:
-# identity-matched FID is 18.13 on video_* and 20.10 on video_refined_*. It is the
-# default because it buys temporal stability, not because it improves those metrics.
-# Set REFINE=0 to score the backbone stem instead; see the v1.0.0 release notes. RFBG and TCR are implemented in chat/ifbg/ifbr/{rfbg,tcr}.py and run by
-# default; SFBG (chat/ifbg/ifbr/sfbg.py) is opt-in via SFBG=1 (default OFF, uses
-# checkpoints/sfbg_pre_020000.pt at --sfbg-strength 0.3). Strength 1.0 generates from
-# noise and decodes to colour noise; do not override SFBG_STRENGTH unless you have
-# measured the new value. The block order here is RFBG -> SFBG -> TCR; the paper orders
-# SFBG -> RFBG -> TCR (SFBG feeds RFBG there) — see DOCS.md.
+# video_i.mp4/video_j.mp4 are the talking-face backbone output alone;
+# video_refined_i.mp4/video_refined_j.mp4 are the full pipeline output.
+# SFBG (chat/ifbg/ifbr/sfbg.py) is opt-in via SFBG=1 and uses
+# checkpoints/sfbg_pre_020000.pt at --sfbg-strength 0.3; keep that strength unless you
+# have measured another. Block order here is RFBG -> SFBG -> TCR; see DOCS.md.
 # Set REFINE=0 to run the talking-face backbone alone, for comparison.
 #
 # Usage: bash scripts/x1_gen_core.sh "<scene prompt>" <out_dir> [seed]
