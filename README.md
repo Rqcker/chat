@@ -54,6 +54,12 @@ Siyang Song<sup>8,&dagger;</sup>
   <sub>The paper in under four minutes, narrated with a synthetic voice. The cover faces come from the public CHAT code with HDTF identities.</sub>
 </p>
 
+<p align="center">
+  <a href="https://junhaosong.com/chat/#results"><img src="assets/samples.jpg" width="100%" alt="Four generated dialogue pairs from CHAT-AVD"></a>
+  <br>
+  <sub>Preview samples from CHAT-AVD, each generated from one text prompt. Watch them with sound on the <a href="https://junhaosong.com/chat/#results">project page</a>.</sub>
+</p>
+
 ## 📖 Introduction
 
 Collecting dyadic interactive audio-visual dialogue (DIAD) data is slow, expensive
