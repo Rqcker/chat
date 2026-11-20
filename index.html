@@ -152,14 +152,14 @@
 
   <div class="player-wrap" data-anim="up">
     <div class="player" id="player">
-      <video data-clip="cafe" class="on" src="assets/video/cafe.mp4" poster="assets/video/cafe.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation in a cafe"></video>
-      <video data-clip="hallway" src="assets/video/hallway.mp4" poster="assets/video/hallway.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an apartment hallway"></video>
-      <video data-clip="office" src="assets/video/office.mp4" poster="assets/video/office.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in an office"></video>
-      <video data-clip="studio" src="assets/video/studio.mp4" poster="assets/video/studio.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a studio"></video>
-      <video data-clip="living" src="assets/video/living.mp4" poster="assets/video/living.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a living room"></video>
-      <video data-clip="quiet" src="assets/video/quiet.mp4" poster="assets/video/quiet.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a quiet room"></video>
-      <video data-clip="backyard" src="assets/video/backyard.mp4" poster="assets/video/backyard.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation in a suburban backyard"></video>
-      <video data-clip="festival" src="assets/video/festival.mp4" poster="assets/video/festival.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation at an outdoor festival"></video>
+      <video data-clip="theatre" class="on" src="assets/video/theatre.mp4" poster="assets/video/theatre.jpg" muted loop playsinline preload="metadata" aria-label="Generated dyadic conversation between a ticket seller and a guest"></video>
+      <video data-clip="rehearsal" src="assets/video/rehearsal.mp4" poster="assets/video/rehearsal.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two friends rehearsing an entrance"></video>
+      <video data-clip="paperwork" src="assets/video/paperwork.mp4" poster="assets/video/paperwork.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between a client and an accountant"></video>
+      <video data-clip="home" src="assets/video/home.mp4" poster="assets/video/home.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two spouses"></video>
+      <video data-clip="catchup" src="assets/video/catchup.mp4" poster="assets/video/catchup.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two old friends"></video>
+      <video data-clip="shipment" src="assets/video/shipment.mp4" poster="assets/video/shipment.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between a buyer and a seller"></video>
+      <video data-clip="neighbours" src="assets/video/neighbours.mp4" poster="assets/video/neighbours.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between a neighbour and a new resident"></video>
+      <video data-clip="clinic" src="assets/video/clinic.mp4" poster="assets/video/clinic.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between a nurse and a patient"></video>
       <video data-clip="illustrated" src="assets/video/illustrated.mp4" poster="assets/video/illustrated.jpg" muted loop playsinline preload="none" aria-label="Generated dyadic conversation between two illustrated identities"></video>
       <div class="volume" id="volume">
         <button class="vol-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on">
@@ -187,39 +187,39 @@
   </figure>
 
   <div class="segmented" role="tablist" aria-label="Examples" data-anim="up">
-    <button role="tab" aria-selected="true" data-clip="cafe">Cafe</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="hallway">Hallway</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="office">Office</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="studio">Studio</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="living">Living room</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="quiet">Quiet room</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="backyard">Backyard</button>
-    <button role="tab" aria-selected="false" tabindex="-1" data-clip="festival">Festival</button>
+    <button role="tab" aria-selected="true" data-clip="theatre">Theatre</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="rehearsal">Rehearsal</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="paperwork">Paperwork</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="home">Home</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="catchup">Catch-up</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="shipment">Shipment</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="neighbours">Neighbours</button>
+    <button role="tab" aria-selected="false" tabindex="-1" data-clip="clinic">Clinic</button>
     <button role="tab" aria-selected="false" tabindex="-1" data-clip="illustrated">Illustrated</button>
   </div>
 
   <div class="clip-note" data-anim="up">
-    <p data-note="cafe" class="on">Five turns in ten seconds. Each speaker talks twice and drops a back-channel into the other’s turn, all on one shared timeline.</p>
-    <p data-note="hallway">Both sides interrupt politely: an "uh-huh" at two seconds, a "yeah" at eight, each landing inside the other speaker’s sentence.</p>
-    <p data-note="office">A disagreement about which database to use. The reply cuts in as soon as the first speaker stops, with a back-channel halfway through.</p>
-    <p data-note="studio">An interview about a startup. The listener’s back-channel lands at 3.7 seconds, and the follow-up question waits for the answer to finish.</p>
-    <p data-note="living">A grandparent and a grandchild. Four spans here, and the last back-channel starts in the final half second of the clip.</p>
-    <p data-note="quiet">Talking someone down before they go on. Reassurance and doubt each get a sentence, and each takes a back-channel inside it.</p>
-    <p data-note="backyard">A neighbour raises the mess left after a party. The apology begins two tenths of a second after the complaint ends.</p>
-    <p data-note="festival">Two organisers before the gates open. The reply runs five and a half seconds and takes a "yeah" at 8.2.</p>
+    <p data-note="theatre" class="on">A ticket seller and a guest joke about applauding the wrong painting. The guest’s “yeah” lands two seconds into the seller’s sentence.</p>
+    <p data-note="rehearsal">Two friends rehearse a surprise entrance. The reply starts two tenths of a second after the first sentence ends, and each speaker drops a back-channel into the other’s turn.</p>
+    <p data-note="paperwork">A client and an accountant face a mountain of receipts. The offer to help begins two tenths of a second after the plea for it ends.</p>
+    <p data-note="home">Two spouses talk about a porch they would like one day. The reply picks up the wind chimes from the sentence before it.</p>
+    <p data-note="catchup">Two old friends tease each other about a shelf that never went up. The last back-channel arrives inside the final second.</p>
+    <p data-note="shipment">A buyer chases a late parcel and the seller pushes back. The seller’s “uh-huh” lands at 2.6 seconds, inside the complaint.</p>
+    <p data-note="neighbours">A neighbour tells a new resident about a lost laundry basket. Each listener drops a back-channel into the other’s sentence.</p>
+    <p data-note="clinic">A nurse and a patient go through a new medication schedule. The reassurance starts two tenths of a second after the patient finishes.</p>
     <p data-note="illustrated">Identities need not be photorealistic. The same method drives illustrated faces with no change. This clip comes from the conference video, so it is lower resolution than the others.</p>
   </div>
 
   <p class="foot provenance" data-anim="up">
-    Each clip is the full CHAT output for one prompt, generated at 512&nbsp;px per face
-    and then passed through the CodeFormer face upscaler that Hallo2 ships, which doubles
-    it to 1024&nbsp;px a side. Every number on this page is measured before that step.
-    The eight real-identity clips play without sound on this page; the illustrated clip
-    keeps the soundtrack from the conference video. Each timeline is drawn from that clip's
-    own generated unit list, except the
-    illustrated one, whose list was not kept and whose turns are measured back from
-    the clip by pitch. Identity descriptors carry no gender, so a face and a voice
-    are drawn independently and need not agree.
+    The eight photorealistic clips are preview samples from CHAT-AVD. Each one is generated
+    from a single text prompt and cut to ten seconds from a longer dialogue. The faces are
+    synthetic portraits, and each voice is cloned from a VCTK speaker (CC&nbsp;BY&nbsp;4.0)
+    chosen to match its portrait. Each face is generated at 512&nbsp;px and doubled to
+    1024&nbsp;px a side by the CodeFormer face upscaler that Hallo2 ships. The numbers on
+    this page are measured on the paper’s evaluation set, not on these clips. The
+    illustrated clip comes from the conference video and keeps its soundtrack; its unit list
+    was not kept, so its turns are measured back from the clip by pitch. Every other
+    timeline is drawn from that clip’s own unit list.
   </p>
 </section>
 
